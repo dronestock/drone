@@ -33,7 +33,7 @@ func Bootstrap(plugin plugin, opts ...option) (err error) {
 	}
 
 	// 加载配置
-	_configuration := plugin.configuration()
+	_configuration := plugin.Configuration()
 	if err = mengpo.Set(_configuration); nil != err {
 		logger.Error(`加载配置出错`, _configuration.fields().Connect(field.Error(err))...)
 	} else {
@@ -58,8 +58,8 @@ func Bootstrap(plugin plugin, opts ...option) (err error) {
 
 	// 执行插件
 	wg := new(sync.WaitGroup)
-	for _, _step := range plugin.steps() {
-		err = execStep(_step, wg, config, logger)
+	for _, step := range plugin.Steps() {
+		err = execStep(step, wg, config, logger)
 	}
 	wg.Wait()
 
@@ -78,7 +78,7 @@ func Bootstrap(plugin plugin, opts ...option) (err error) {
 	return
 }
 
-func execStep(step *step, wg *sync.WaitGroup, config *Config, logger simaqian.Logger) (err error) {
+func execStep(step *Step, wg *sync.WaitGroup, config *Config, logger simaqian.Logger) (err error) {
 	if step.options.parallelism {
 		err = execStepAsync(step, wg, config, logger)
 	} else {
@@ -88,11 +88,11 @@ func execStep(step *step, wg *sync.WaitGroup, config *Config, logger simaqian.Lo
 	return
 }
 
-func execStepSync(step *step, config *Config, logger simaqian.Logger) error {
+func execStepSync(step *Step, config *Config, logger simaqian.Logger) error {
 	return execDo(step.do, step.options, config, logger)
 }
 
-func execStepAsync(step *step, wg *sync.WaitGroup, config *Config, logger simaqian.Logger) (err error) {
+func execStepAsync(step *Step, wg *sync.WaitGroup, config *Config, logger simaqian.Logger) (err error) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()

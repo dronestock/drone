@@ -1,9 +1,9 @@
 package drone
 
 type plugin interface {
-	// 加载配置
-	configuration() (configuration configuration)
+	// Configuration 加载配置
+	Configuration() (configuration Configuration)
 
-	// 插件运行步骤
-	steps() []*step
+	// Steps 插件运行步骤
+	Steps() []*Step
 }

@@ -4,7 +4,8 @@ import (
 	`github.com/storezhang/gox`
 )
 
-type configuration interface {
+// Configuration 配置
+type Configuration interface {
 	// 导出所有字段
 	fields() gox.Fields
 

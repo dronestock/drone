@@ -9,13 +9,14 @@ var (
 	steps = 1
 )
 
-type step struct {
+// Step 步骤
+type Step struct {
 	do      do
 	options *stepOptions
 }
 
 // NewStep 创建一个步骤
-func NewStep(do do, opts ...stepOption) *step {
+func NewStep(do do, opts ...stepOption) *Step {
 	_options := defaultStepOption()
 	for _, opt := range opts {
 		opt.applyStep(_options)
@@ -25,7 +26,7 @@ func NewStep(do do, opts ...stepOption) *step {
 		steps++
 	}
 
-	return &step{
+	return &Step{
 		do:      do,
 		options: _options,
 	}
