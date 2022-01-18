@@ -2,8 +2,10 @@ package drone
 
 import (
 	`fmt`
+	`sync`
 	`time`
 
+	`github.com/storezhang/gox`
 	`github.com/storezhang/gox/field`
 	`github.com/storezhang/mengpo`
 	`github.com/storezhang/simaqian`
@@ -54,19 +56,70 @@ func Bootstrap(plugin plugin, opts ...option) (err error) {
 	}
 
 	// 执行插件
-	for count := 0; count < config.Counts; count++ {
-		if err = plugin.run(logger); (nil == err) || (0 == count && !config.Retry) {
-			break
-		} else {
-			time.Sleep(config.Backoff)
-		}
+	wg := new(sync.WaitGroup)
+	for _, _step := range plugin.steps() {
+		err = execStep(_step, wg, config, logger)
 	}
+	wg.Wait()
 
 	// 记录日志
 	if nil != err {
 		logger.Error(fmt.Sprintf(`%s插件执行出错，请检查`, _options.name))
 	} else {
 		logger.Info(fmt.Sprintf(`%s插件执行成功，恭喜`, _options.name))
+	}
+
+	return
+}
+
+func execStep(step *step, wg *sync.WaitGroup, config *Config, logger simaqian.Logger) (err error) {
+	if step.options.parallelism {
+		err = execStepAsync(step, wg, config, logger)
+	} else {
+		err = execStepSync(step, config, logger)
+	}
+
+	return
+}
+
+func execStepSync(step *step, config *Config, logger simaqian.Logger) error {
+	return execDo(step.do, step.options, config, logger)
+}
+
+func execStepAsync(step *step, wg *sync.WaitGroup, config *Config, logger simaqian.Logger) (err error) {
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		if err = execDo(step.do, step.options, config, logger); nil != err {
+			panic(err)
+		}
+	}()
+
+	return
+}
+
+func execDo(do do, options *stepOptions, config *Config, logger simaqian.Logger) (err error) {
+	for count := 0; count < config.Counts; count++ {
+		if err = do(logger); (nil == err) || (0 == count && !config.Retry) {
+			break
+		} else {
+			time.Sleep(config.Backoff)
+			logger.Info(`步骤执行遇到错误`, field.String(`name`, options.name), field.Int(`count`, count), field.Error(err))
+		}
+	}
+
+	if nil != err {
+		fields := gox.Fields{
+			field.String(`name`, options.name),
+			field.Error(err),
+		}
+		if config.Retry {
+			logger.Error(`步骤执行尝试所有重试后出错`, fields...)
+		} else {
+			logger.Error(`步骤执行出错`, fields...)
+		}
+	} else {
+		logger.Info(`步骤执行成功`, field.String(`name`, options.name))
 	}
 
 	return

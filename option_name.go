@@ -1,8 +1,9 @@
 package drone
 
 var (
-	_        = Name
-	_ option = (*optionName)(nil)
+	_            = Name
+	_ option     = (*optionName)(nil)
+	_ stepOption = (*optionName)(nil)
 )
 
 type optionName struct {
@@ -17,5 +18,9 @@ func Name(name string) *optionName {
 }
 
 func (n *optionName) apply(options *options) {
+	options.name = n.name
+}
+
+func (n *optionName) applyStep(options *stepOptions) {
 	options.name = n.name
 }
