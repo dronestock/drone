@@ -6,7 +6,7 @@ import (
 	`strings`
 )
 
-func parseEnvs(envs ...string) (err error) {
+func parseConfigs(envs ...string) (err error) {
 	for _, env := range envs {
 		if err = parseStrings(env); nil != err {
 			return

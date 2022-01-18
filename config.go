@@ -16,7 +16,7 @@ type Config struct {
 	// 是否重试
 	Retry bool `default:"${PLUGIN_RETRY=${RETRY=true}}"`
 	// 重试次数
-	Times int `default:"${PLUGIN_TIMES=${TIMES=true}}"`
+	Counts int `default:"${PLUGIN_COUNTS=${COUNTS=true}}"`
 	// 重试间隔
 	Backoff time.Duration `default:"${PLUGIN_BACKOFF=${BACKOFF=5s}}"`
 }

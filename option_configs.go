@@ -1,7 +1,7 @@
 package drone
 
 var (
-	_        = NewConfigs
+	_        = Configs
 	_ option = (*optionConfigs)(nil)
 )
 
@@ -9,8 +9,8 @@ type optionConfigs struct {
 	configs []string
 }
 
-// NewConfigs 配置组
-func NewConfigs(configs ...string) *optionConfigs {
+// Configs 配置组
+func Configs(configs ...string) *optionConfigs {
 	return &optionConfigs{
 		configs: configs,
 	}
