@@ -6,7 +6,7 @@ import (
 
 type plugin interface {
 	// 加载配置
-	load() (config *Config, err error)
+	configuration() (configuration configuration)
 
 	// 插件运行
 	run(logger simaqian.Logger) (err error)

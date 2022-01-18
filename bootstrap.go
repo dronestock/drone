@@ -4,7 +4,10 @@ import (
 	`fmt`
 	`time`
 
+	`github.com/storezhang/gox/field`
+	`github.com/storezhang/mengpo`
 	`github.com/storezhang/simaqian`
+	`github.com/storezhang/validatorx`
 )
 
 var _ = Bootstrap
@@ -27,11 +30,24 @@ func Bootstrap(plugin plugin, opts ...option) (err error) {
 	}
 
 	// 加载配置
-	var config *Config
-	if config, err = plugin.load(); nil != err {
+	_configuration := plugin.configuration()
+	if err = mengpo.Set(_configuration); nil != err {
+		logger.Error(`加载配置出错`, _configuration.fields().Connect(field.Error(err))...)
+	} else {
+		logger.Info(`加载配置成功`, _configuration.fields()...)
+	}
+	if nil != err {
 		return
 	}
 
+	// 数据验证
+	if err = validatorx.Struct(_configuration); nil != err {
+		logger.Error(`配置验证未通过`, _configuration.fields().Connect(field.Error(err))...)
+	} else {
+		logger.Info(`配置验证通过，继续执行`)
+	}
+
+	config := _configuration.config()
 	// 设置日志级别
 	if config.Debug {
 		logger.Sets(simaqian.Level(simaqian.LevelDebug))

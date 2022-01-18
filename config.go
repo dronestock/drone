@@ -2,6 +2,9 @@ package drone
 
 import (
 	`time`
+
+	`github.com/storezhang/gox`
+	`github.com/storezhang/gox/field`
 )
 
 // Config 插件基础配置
@@ -19,4 +22,20 @@ type Config struct {
 	Counts int `default:"${PLUGIN_COUNTS=${COUNTS=true}}"`
 	// 重试间隔
 	Backoff time.Duration `default:"${PLUGIN_BACKOFF=${BACKOFF=5s}}"`
+}
+
+func (c *Config) fields() gox.Fields {
+	return gox.Fields{
+		field.Bool(`defaults`, c.Defaults),
+		field.Bool(`verbose`, c.Verbose),
+		field.Bool(`debug`, c.Debug),
+
+		field.Bool(`retry`, c.Retry),
+		field.Int(`counts`, c.Counts),
+		field.Duration(`backoff`, c.Backoff),
+	}
+}
+
+func (c *Config) config() *Config {
+	return c
 }
