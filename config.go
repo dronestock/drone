@@ -1,6 +1,7 @@
 package drone
 
 import (
+	`strings`
 	`time`
 
 	`github.com/storezhang/gox`
@@ -26,6 +27,18 @@ type Config struct {
 	Backoff time.Duration `default:"${PLUGIN_BACKOFF=${BACKOFF=5s}}"`
 }
 
+func (c *Config) Parse(to map[string]string, configs ...string) {
+	for _, config := range configs {
+		c.parse(config, c.put(to))
+	}
+}
+
+func (c *Config) Parses(to map[string][]string, configs ...string) {
+	for _, config := range configs {
+		c.parse(config, c.puts(to))
+	}
+}
+
 func (c *Config) Setup() (err error) {
 	return
 }
@@ -44,4 +57,66 @@ func (c *Config) Fields() gox.Fields {
 
 func (c *Config) Basic() *Config {
 	return c
+}
+
+func (c *Config) parse(original string, put func(configs []string)) {
+	var _configs []string
+	defer func() {
+		put(_configs)
+	}()
+
+	if _configs = strings.Split(original, "@"); 2 <= len(_configs) {
+		return
+	}
+	if _configs = strings.Split(original, "=>"); 2 <= len(_configs) {
+		return
+	}
+	if _configs = strings.Split(original, "->"); 2 <= len(_configs) {
+		return
+	}
+	if _configs = strings.Split(original, " "); 2 <= len(_configs) {
+		return
+	}
+
+	return
+}
+
+func (c *Config) puts(cache map[string][]string) func(configs []string) {
+	return func(configs []string) {
+		if nil != configs && 2 <= len(configs) {
+			value := strings.TrimSpace(configs[1])
+			if `` == value {
+				return
+			}
+
+			cache[strings.TrimSpace(configs[0])] = c.splits(value, `,`, `|`, `||`)
+		}
+	}
+}
+
+func (c *Config) put(cache map[string]string) func(configs []string) {
+	return func(configs []string) {
+		if nil != configs && 2 <= len(configs) {
+			value := strings.TrimSpace(configs[1])
+			if `` == value {
+				return
+			}
+
+			cache[strings.TrimSpace(configs[0])] = value
+		}
+
+		return
+	}
+}
+
+func (c *Config) splits(config string, seps ...string) (configs []string) {
+	configs = []string{config}
+	for _, sep := range seps {
+		if strings.Contains(config, sep) {
+			configs = strings.Split(config, sep)
+			break
+		}
+	}
+
+	return
 }
