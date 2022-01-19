@@ -6,13 +6,13 @@ type (
 	}
 
 	stepOptions struct {
-		name        string
-		parallelism bool
+		name  string
+		async bool
 	}
 )
 
 func defaultStepOption() *stepOptions {
 	return &stepOptions{
-		parallelism: false,
+		async: false,
 	}
 }

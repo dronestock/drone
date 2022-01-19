@@ -80,7 +80,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 }
 
 func execStep(step *Step, wg *sync.WaitGroup, config *Config, logger simaqian.Logger) (err error) {
-	if step.options.parallelism {
+	if step.options.async {
 		err = execStepAsync(step, wg, config, logger)
 	} else {
 		err = execStepSync(step, config, logger)
