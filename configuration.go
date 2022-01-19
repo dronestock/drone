@@ -6,6 +6,9 @@ import (
 
 // Configuration 配置
 type Configuration interface {
+	// Setup 设置配置信息
+	Setup() (err error)
+
 	// Fields 导出所有字段
 	Fields() gox.Fields
 

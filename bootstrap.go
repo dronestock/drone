@@ -50,6 +50,19 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	} else {
 		logger.Info(`配置验证通过，继续执行`)
 	}
+	if nil != err {
+		return
+	}
+
+	// 设置配置信息
+	if err = _configuration.Setup(); nil != err {
+		logger.Error(`设置配置信息出错`, _configuration.Fields().Connect(field.Error(err))...)
+	} else {
+		logger.Info(`设置配置信息完成，继续执行`)
+	}
+	if nil != err {
+		return
+	}
 
 	config := _configuration.Basic()
 	// 设置日志级别

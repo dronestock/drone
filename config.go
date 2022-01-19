@@ -7,6 +7,8 @@ import (
 	`github.com/storezhang/gox/field`
 )
 
+var _ Configuration = (*Config)(nil)
+
 // Config 插件基础配置
 type Config struct {
 	// 是否启用默认配置
@@ -22,6 +24,10 @@ type Config struct {
 	Counts int `default:"${PLUGIN_COUNTS=${COUNTS=5}}"`
 	// 重试间隔
 	Backoff time.Duration `default:"${PLUGIN_BACKOFF=${BACKOFF=5s}}"`
+}
+
+func (c *Config) Setup() (err error) {
+	return
 }
 
 func (c *Config) Fields() gox.Fields {
