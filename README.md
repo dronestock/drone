@@ -145,3 +145,19 @@ type config struct {
 	Clear bool `default:"${PLUGIN_CLEAR=${CLEAR=true}}"`
 }
 ```
+
+### 启动文件`main.go`
+
+启动文件负责启动整个程序，是一个非常轻量的壳
+
+```go
+package main
+
+import (
+	`github.com/dronestock/drone`
+)
+
+func main() {
+	panic(drone.Bootstrap(newPlugin, drone.Configs(`FOLDERS`)))
+}
+```
