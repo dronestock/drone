@@ -4,4 +4,4 @@ import (
 	`github.com/storezhang/simaqian`
 )
 
-type do func(logger simaqian.Logger) (err error)
+type do func(logger simaqian.Logger) (undo bool, err error)

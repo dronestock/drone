@@ -16,7 +16,8 @@ import (
 var _ = Bootstrap
 
 // Bootstrap 启动插件
-func Bootstrap(plugin plugin, opts ...option) (err error) {
+func Bootstrap(constructor constructor, opts ...option) (err error) {
+	_plugin := constructor()
 	_options := defaultOptions()
 	for _, opt := range opts {
 		opt.apply(_options)
@@ -33,11 +34,11 @@ func Bootstrap(plugin plugin, opts ...option) (err error) {
 	}
 
 	// 加载配置
-	_configuration := plugin.Configuration()
+	_configuration := _plugin.Configuration()
 	if err = mengpo.Set(_configuration); nil != err {
-		logger.Error(`加载配置出错`, _configuration.fields().Connect(field.Error(err))...)
+		logger.Error(`加载配置出错`, _configuration.Fields().Connect(field.Error(err))...)
 	} else {
-		logger.Info(`加载配置成功`, _configuration.fields()...)
+		logger.Info(`加载配置成功`, _configuration.Fields()...)
 	}
 	if nil != err {
 		return
@@ -45,12 +46,12 @@ func Bootstrap(plugin plugin, opts ...option) (err error) {
 
 	// 数据验证
 	if err = validatorx.Struct(_configuration); nil != err {
-		logger.Error(`配置验证未通过`, _configuration.fields().Connect(field.Error(err))...)
+		logger.Error(`配置验证未通过`, _configuration.Fields().Connect(field.Error(err))...)
 	} else {
 		logger.Info(`配置验证通过，继续执行`)
 	}
 
-	config := _configuration.config()
+	config := _configuration.Basic()
 	// 设置日志级别
 	if config.Debug {
 		logger.Sets(simaqian.Level(simaqian.LevelDebug))
@@ -58,7 +59,7 @@ func Bootstrap(plugin plugin, opts ...option) (err error) {
 
 	// 执行插件
 	wg := new(sync.WaitGroup)
-	for _, step := range plugin.Steps() {
+	for _, step := range _plugin.Steps() {
 		err = execStep(step, wg, config, logger)
 	}
 	wg.Wait()
@@ -105,8 +106,9 @@ func execStepAsync(step *Step, wg *sync.WaitGroup, config *Config, logger simaqi
 }
 
 func execDo(do do, options *stepOptions, config *Config, logger simaqian.Logger) (err error) {
+	undo := false
 	for count := 0; count < config.Counts; count++ {
-		if err = do(logger); (nil == err) || (0 == count && !config.Retry) {
+		if undo, err = do(logger); (nil == err) || (0 == count && !config.Retry) || undo {
 			break
 		} else {
 			time.Sleep(config.Backoff)
@@ -125,7 +127,11 @@ func execDo(do do, options *stepOptions, config *Config, logger simaqian.Logger)
 			logger.Error(`步骤执行出错`, fields...)
 		}
 	} else {
-		logger.Info(`步骤执行成功`, field.String(`name`, options.name))
+		if undo {
+			logger.Info(`步骤未执行`, field.String(`name`, options.name))
+		} else {
+			logger.Info(`步骤执行成功`, field.String(`name`, options.name))
+		}
 	}
 
 	return

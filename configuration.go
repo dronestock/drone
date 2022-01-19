@@ -6,9 +6,9 @@ import (
 
 // Configuration 配置
 type Configuration interface {
-	// 导出所有字段
-	fields() gox.Fields
+	// Fields 导出所有字段
+	Fields() gox.Fields
 
-	// 基础配置
-	config() *Config
+	// Basic 基础配置
+	Basic() *Config
 }

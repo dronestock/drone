@@ -19,12 +19,12 @@ type Config struct {
 	// 是否重试
 	Retry bool `default:"${PLUGIN_RETRY=${RETRY=true}}"`
 	// 重试次数
-	Counts int `default:"${PLUGIN_COUNTS=${COUNTS=true}}"`
+	Counts int `default:"${PLUGIN_COUNTS=${COUNTS=5}}"`
 	// 重试间隔
 	Backoff time.Duration `default:"${PLUGIN_BACKOFF=${BACKOFF=5s}}"`
 }
 
-func (c *Config) fields() gox.Fields {
+func (c *Config) Fields() gox.Fields {
 	return gox.Fields{
 		field.Bool(`defaults`, c.Defaults),
 		field.Bool(`verbose`, c.Verbose),
@@ -36,6 +36,6 @@ func (c *Config) fields() gox.Fields {
 	}
 }
 
-func (c *Config) config() *Config {
+func (c *Config) Basic() *Config {
 	return c
 }

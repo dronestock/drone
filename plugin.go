@@ -1,6 +1,7 @@
 package drone
 
-type plugin interface {
+// Plugin 插件
+type Plugin interface {
 	// Configuration 加载配置
 	Configuration() (configuration Configuration)
 
