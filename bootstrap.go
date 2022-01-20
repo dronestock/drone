@@ -34,19 +34,19 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	}
 
 	// 加载配置
-	_configuration := _plugin.Configuration()
-	if err = mengpo.Set(_configuration); nil != err {
-		logger.Error(`加载配置出错`, _configuration.Fields().Connect(field.Error(err))...)
+	configuration := _plugin.Configuration()
+	if err = mengpo.Set(configuration); nil != err {
+		logger.Error(`加载配置出错`, configuration.Fields().Connect(field.Error(err))...)
 	} else {
-		logger.Info(`加载配置成功`, _configuration.Fields()...)
+		logger.Info(`加载配置成功`, configuration.Fields()...)
 	}
 	if nil != err {
 		return
 	}
 
 	// 数据验证
-	if err = validatorx.Struct(_configuration); nil != err {
-		logger.Error(`配置验证未通过`, _configuration.Fields().Connect(field.Error(err))...)
+	if err = validatorx.Struct(configuration); nil != err {
+		logger.Error(`配置验证未通过`, configuration.Fields().Connect(field.Error(err))...)
 	} else {
 		logger.Info(`配置验证通过，继续执行`)
 	}
@@ -55,8 +55,8 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	}
 
 	// 设置配置信息
-	if unset, setErr := _configuration.Setup(); nil != setErr {
-		logger.Error(`设置配置信息出错`, _configuration.Fields().Connect(field.Error(err))...)
+	if unset, setErr := configuration.Setup(); nil != setErr {
+		logger.Error(`设置配置信息出错`, configuration.Fields().Connect(field.Error(err))...)
 		err = setErr
 	} else if !unset {
 		logger.Info(`设置配置信息完成，继续执行`)
@@ -65,7 +65,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 		return
 	}
 
-	config := _configuration.Basic()
+	config := configuration.Basic()
 	// 设置日志级别
 	if config.Debug {
 		logger.Sets(simaqian.Level(simaqian.LevelDebug))
