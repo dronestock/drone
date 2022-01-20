@@ -3,7 +3,7 @@ module github.com/dronestock/drone
 go 1.17
 
 require (
-	github.com/storezhang/gox v1.8.1
+	github.com/storezhang/gox v1.8.4
 	github.com/storezhang/mengpo v0.1.0
 	github.com/storezhang/simaqian v0.1.1
 	github.com/storezhang/validatorx v1.0.9
@@ -24,3 +24,5 @@ require (
 	golang.org/x/sys v0.0.0-20211031064116-611d5d643895 // indirect
 	golang.org/x/text v0.3.3 // indirect
 )
+
+// replace github.com/storezhang/gox => ../../storezhang/gox
