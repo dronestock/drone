@@ -75,7 +75,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	// 执行插件
 	wg := new(sync.WaitGroup)
 	for _, step := range _plugin.Steps() {
-		if err = execStep(step, wg, config, logger); nil != err && step.options.interrupt {
+		if err = execStep(step, wg, config, logger); nil != err && step.options._break {
 			return
 		}
 	}

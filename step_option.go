@@ -6,15 +6,15 @@ type (
 	}
 
 	stepOptions struct {
-		name      string
-		async     bool
-		interrupt bool
+		name   string
+		async  bool
+		_break bool
 	}
 )
 
 func defaultStepOption() *stepOptions {
 	return &stepOptions{
-		async:     false,
-		interrupt: true,
+		async:  false,
+		_break: true,
 	}
 }
