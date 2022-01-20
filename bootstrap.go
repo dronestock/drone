@@ -55,9 +55,10 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	}
 
 	// 设置配置信息
-	if err = _configuration.Setup(); nil != err {
+	if unset, setErr := _configuration.Setup(); nil != setErr {
 		logger.Error(`设置配置信息出错`, _configuration.Fields().Connect(field.Error(err))...)
-	} else {
+		err = setErr
+	} else if !unset {
 		logger.Info(`设置配置信息完成，继续执行`)
 	}
 	if nil != err {

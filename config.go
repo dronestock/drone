@@ -39,7 +39,10 @@ func (c *Config) Parses(to map[string][]string, configs ...string) {
 	}
 }
 
-func (c *Config) Setup() (err error) {
+func (c *Config) Setup() (unset bool, err error) {
+	unset = true
+	err = nil
+
 	return
 }
 
