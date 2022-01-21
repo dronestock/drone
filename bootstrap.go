@@ -125,7 +125,7 @@ func execStepAsync(step *Step, wg *sync.WaitGroup, config *Config, logger simaqi
 func execDo(do do, options *stepOptions, config *Config, logger simaqian.Logger) (err error) {
 	undo := false
 	for count := 0; count < config.Counts; count++ {
-		if undo, err = do(logger); (nil == err) || (0 == count && !config.Retry) || undo {
+		if undo, err = do(logger); (nil == err) || (0 == count && !config.Retry && !options.retry) || undo {
 			break
 		} else {
 			time.Sleep(config.Backoff)

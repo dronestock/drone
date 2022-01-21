@@ -8,6 +8,7 @@ type (
 	stepOptions struct {
 		name   string
 		async  bool
+		retry  bool
 		_break bool
 	}
 )
@@ -15,6 +16,7 @@ type (
 func defaultStepOption() *stepOptions {
 	return &stepOptions{
 		async:  false,
+		retry:  true,
 		_break: true,
 	}
 }
