@@ -4,6 +4,7 @@ var (
 	_            = Name
 	_ option     = (*optionName)(nil)
 	_ stepOption = (*optionName)(nil)
+	_ execOption = (*optionName)(nil)
 )
 
 type optionName struct {
@@ -22,5 +23,9 @@ func (n *optionName) apply(options *options) {
 }
 
 func (n *optionName) applyStep(options *stepOptions) {
+	options.name = n.name
+}
+
+func (n *optionName) applyExec(options *execOptions) {
 	options.name = n.name
 }

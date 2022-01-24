@@ -34,8 +34,8 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	}
 
 	// 加载配置
-	configuration := _plugin.Configuration()
-	fields := configuration.Fields().Connects(configuration.Basic().Fields())
+	configuration := _plugin.Config()
+	fields := configuration.Fields().Connects(configuration.Base().Fields())
 	if err = mengpo.Set(configuration); nil != err {
 		logger.Error(`加载配置出错`, fields.Connect(field.Error(err))...)
 	} else {
@@ -66,16 +66,17 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 		return
 	}
 
-	config := configuration.Basic()
+	base := configuration.Base()
 	// 设置日志级别
-	if config.Debug {
+	if base.Debug {
 		logger.Sets(simaqian.Level(simaqian.LevelDebug))
 	}
+	base.Logger = logger
 
 	// 执行插件
 	wg := new(sync.WaitGroup)
 	for _, step := range _plugin.Steps() {
-		if err = execStep(step, wg, config, logger); nil != err && step.options._break {
+		if err = execStep(step, wg, base); nil != err && step.options._break {
 			return
 		}
 	}
@@ -96,25 +97,25 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	return
 }
 
-func execStep(step *Step, wg *sync.WaitGroup, config *Config, logger simaqian.Logger) (err error) {
+func execStep(step *Step, wg *sync.WaitGroup, base *Base) (err error) {
 	if step.options.async {
-		err = execStepAsync(step, wg, config, logger)
+		err = execStepAsync(step, wg, base)
 	} else {
-		err = execStepSync(step, config, logger)
+		err = execStepSync(step, base)
 	}
 
 	return
 }
 
-func execStepSync(step *Step, config *Config, logger simaqian.Logger) error {
-	return execDo(step.do, step.options, config, logger)
+func execStepSync(step *Step, base *Base) error {
+	return execDo(step.do, step.options, base)
 }
 
-func execStepAsync(step *Step, wg *sync.WaitGroup, config *Config, logger simaqian.Logger) (err error) {
+func execStepAsync(step *Step, wg *sync.WaitGroup, base *Base) (err error) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		if err = execDo(step.do, step.options, config, logger); nil != err {
+		if err = execDo(step.do, step.options, base); nil != err {
 			panic(err)
 		}
 	}()
@@ -122,14 +123,14 @@ func execStepAsync(step *Step, wg *sync.WaitGroup, config *Config, logger simaqi
 	return
 }
 
-func execDo(do do, options *stepOptions, config *Config, logger simaqian.Logger) (err error) {
+func execDo(do do, options *stepOptions, base *Base) (err error) {
 	undo := false
-	for count := 0; count < config.Counts; count++ {
-		if undo, err = do(logger); (nil == err) || (0 == count && !config.Retry && !options.retry) || undo {
+	for count := 0; count < base.Counts; count++ {
+		if undo, err = do(); (nil == err) || (0 == count && !base.Retry && !options.retry) || undo {
 			break
 		} else {
-			time.Sleep(config.Backoff)
-			logger.Info(`步骤执行遇到错误`, field.String(`name`, options.name), field.Int(`count`, count), field.Error(err))
+			time.Sleep(base.Backoff)
+			base.Info(`步骤执行遇到错误`, field.String(`name`, options.name), field.Int(`count`, count), field.Error(err))
 		}
 	}
 
@@ -138,16 +139,16 @@ func execDo(do do, options *stepOptions, config *Config, logger simaqian.Logger)
 			field.String(`name`, options.name),
 			field.Error(err),
 		}
-		if config.Retry {
-			logger.Error(`步骤执行尝试所有重试后出错`, fields...)
+		if base.Retry {
+			base.Error(`步骤执行尝试所有重试后出错`, fields...)
 		} else {
-			logger.Error(`步骤执行出错`, fields...)
+			base.Error(`步骤执行出错`, fields...)
 		}
 	} else {
 		if undo {
-			logger.Info(`步骤未执行`, field.String(`name`, options.name))
+			base.Info(`步骤未执行`, field.String(`name`, options.name))
 		} else {
-			logger.Info(`步骤执行成功`, field.String(`name`, options.name))
+			base.Info(`步骤执行成功`, field.String(`name`, options.name))
 		}
 	}
 
