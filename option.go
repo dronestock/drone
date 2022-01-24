@@ -10,6 +10,7 @@ type (
 	options struct {
 		name    string
 		configs []string
+		aliases []*alias
 	}
 )
 

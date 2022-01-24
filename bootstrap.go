@@ -32,6 +32,10 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	if err = parseConfigs(_options.configs...); nil != err {
 		return
 	}
+	// 处理别名
+	if err = parseAliases(_options.aliases...); nil != err {
+		return
+	}
 
 	// 加载配置
 	configuration := _plugin.Config()
@@ -97,7 +101,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	return
 }
 
-func execStep(step *Step, wg *sync.WaitGroup, base *Base) (err error) {
+func execStep(step *Step, wg *sync.WaitGroup, base *PluginBase) (err error) {
 	if step.options.async {
 		err = execStepAsync(step, wg, base)
 	} else {
@@ -107,11 +111,11 @@ func execStep(step *Step, wg *sync.WaitGroup, base *Base) (err error) {
 	return
 }
 
-func execStepSync(step *Step, base *Base) error {
+func execStepSync(step *Step, base *PluginBase) error {
 	return execDo(step.do, step.options, base)
 }
 
-func execStepAsync(step *Step, wg *sync.WaitGroup, base *Base) (err error) {
+func execStepAsync(step *Step, wg *sync.WaitGroup, base *PluginBase) (err error) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -123,7 +127,7 @@ func execStepAsync(step *Step, wg *sync.WaitGroup, base *Base) (err error) {
 	return
 }
 
-func execDo(do do, options *stepOptions, base *Base) (err error) {
+func execDo(do do, options *stepOptions, base *PluginBase) (err error) {
 	undo := false
 	for count := 0; count < base.Counts; count++ {
 		if undo, err = do(); (nil == err) || (0 == count && !base.Retry && !options.retry) || undo {

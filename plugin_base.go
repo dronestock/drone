@@ -9,10 +9,10 @@ import (
 	`github.com/storezhang/simaqian`
 )
 
-var _ Config = (*Base)(nil)
+var _ Config = (*PluginBase)(nil)
 
-// Base 插件基础配置
-type Base struct {
+// PluginBase 插件基础配置
+type PluginBase struct {
 	simaqian.Logger
 
 	// 是否启用默认配置
@@ -30,42 +30,42 @@ type Base struct {
 	Backoff time.Duration `default:"${PLUGIN_BACKOFF=${BACKOFF=5s}}"`
 }
 
-func (b *Base) Parse(to map[string]string, configs ...string) {
+func (pb *PluginBase) Parse(to map[string]string, configs ...string) {
 	for _, config := range configs {
-		b.parse(config, b.put(to))
+		pb.parse(config, pb.put(to))
 	}
 }
 
-func (b *Base) Parses(to map[string][]string, configs ...string) {
+func (pb *PluginBase) Parses(to map[string][]string, configs ...string) {
 	for _, config := range configs {
-		b.parse(config, b.puts(to))
+		pb.parse(config, pb.puts(to))
 	}
 }
 
-func (b *Base) Setup() (unset bool, err error) {
+func (pb *PluginBase) Setup() (unset bool, err error) {
 	unset = true
 	err = nil
 
 	return
 }
 
-func (b *Base) Fields() gox.Fields {
+func (pb *PluginBase) Fields() gox.Fields {
 	return gox.Fields{
-		field.Bool(`defaults`, b.Defaults),
-		field.Bool(`verbose`, b.Verbose),
-		field.Bool(`debug`, b.Debug),
+		field.Bool(`defaults`, pb.Defaults),
+		field.Bool(`verbose`, pb.Verbose),
+		field.Bool(`debug`, pb.Debug),
 
-		field.Bool(`retry`, b.Retry),
-		field.Int(`counts`, b.Counts),
-		field.Duration(`backoff`, b.Backoff),
+		field.Bool(`retry`, pb.Retry),
+		field.Int(`counts`, pb.Counts),
+		field.Duration(`backoff`, pb.Backoff),
 	}
 }
 
-func (b *Base) Base() *Base {
-	return b
+func (pb *PluginBase) Base() *PluginBase {
+	return pb
 }
 
-func (b *Base) parse(original string, put func(configs []string)) {
+func (pb *PluginBase) parse(original string, put func(configs []string)) {
 	var _configs []string
 	defer func() {
 		put(_configs)
@@ -87,7 +87,7 @@ func (b *Base) parse(original string, put func(configs []string)) {
 	return
 }
 
-func (b *Base) puts(cache map[string][]string) func(configs []string) {
+func (pb *PluginBase) puts(cache map[string][]string) func(configs []string) {
 	return func(configs []string) {
 		if nil != configs && 2 <= len(configs) {
 			value := strings.TrimSpace(configs[1])
@@ -95,12 +95,12 @@ func (b *Base) puts(cache map[string][]string) func(configs []string) {
 				return
 			}
 
-			cache[strings.TrimSpace(configs[0])] = b.splits(value, `,`, `|`, `||`)
+			cache[strings.TrimSpace(configs[0])] = pb.splits(value, `,`, `|`, `||`)
 		}
 	}
 }
 
-func (b *Base) put(cache map[string]string) func(configs []string) {
+func (pb *PluginBase) put(cache map[string]string) func(configs []string) {
 	return func(configs []string) {
 		if nil != configs && 2 <= len(configs) {
 			value := strings.TrimSpace(configs[1])
@@ -115,7 +115,7 @@ func (b *Base) put(cache map[string]string) func(configs []string) {
 	}
 }
 
-func (b *Base) splits(config string, seps ...string) (configs []string) {
+func (pb *PluginBase) splits(config string, seps ...string) (configs []string) {
 	configs = []string{config}
 	for _, sep := range seps {
 		if strings.Contains(config, sep) {

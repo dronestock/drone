@@ -6,6 +6,23 @@ import (
 	`strings`
 )
 
+func parseAliases(aliases ...*alias) (err error) {
+	for _, _alias := range aliases {
+		config := os.Getenv(_alias.name)
+		if `` == config {
+			config = os.Getenv(droneConfigName(_alias.name))
+		}
+		if err = os.Setenv(_alias.value, config); nil != err {
+			return
+		}
+		if err = os.Setenv(droneConfigName(_alias.value), config); nil != err {
+			return
+		}
+	}
+
+	return
+}
+
 func parseConfigs(envs ...string) (err error) {
 	for _, env := range envs {
 		if err = parseStrings(env); nil != err {
@@ -20,7 +37,7 @@ func parseStrings(env string) (err error) {
 	if err = parseValues(env); nil != err {
 		return
 	}
-	err = parseValues(fmt.Sprintf(`PLUGIN_%s`, env))
+	err = parseValues(droneConfigName(env))
 
 	return
 }
@@ -43,4 +60,8 @@ func parseValues(env string) (err error) {
 	}
 
 	return
+}
+
+func droneConfigName(env string) string {
+	return fmt.Sprintf(`PLUGIN_%s`, env)
 }

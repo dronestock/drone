@@ -13,5 +13,5 @@ type Config interface {
 	Fields() gox.Fields
 
 	// Base 基础配置
-	Base() *Base
+	Base() *PluginBase
 }
