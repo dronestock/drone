@@ -1,5 +1,9 @@
 package drone
 
+import (
+	`strings`
+)
+
 var (
 	_        = Configs
 	_ option = (*optionConfigs)(nil)
@@ -17,5 +21,7 @@ func Configs(configs ...string) *optionConfigs {
 }
 
 func (c *optionConfigs) apply(options *options) {
-	options.configs = c.configs
+	for _, config := range c.configs {
+		options.configs = append(c.configs, strings.ToUpper(config))
+	}
 }
