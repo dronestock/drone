@@ -13,7 +13,11 @@ type (
 		name   string
 		args   []string
 		dir    string
+		async  bool
 		fields gox.Fields
+
+		checkerMode checkerMode
+		checkerArgs interface{}
 	}
 )
 

@@ -4,6 +4,7 @@ var (
 	_            = Async
 	_            = Sync
 	_ stepOption = (*optionAsync)(nil)
+	_ execOption = (*optionAsync)(nil)
 )
 
 type optionAsync struct {
@@ -25,5 +26,9 @@ func Sync() *optionAsync {
 }
 
 func (a *optionAsync) applyStep(options *stepOptions) {
+	options.async = a.async
+}
+
+func (a *optionAsync) applyExec(options *execOptions) {
 	options.async = a.async
 }

@@ -27,9 +27,25 @@ func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
 	if `` != _options.dir {
 		gexOptions = append(gexOptions, gex.Dir(_options.dir))
 	}
+
+	if _options.async {
+		gexOptions = append(gexOptions, gex.Async())
+	} else {
+		gexOptions = append(gexOptions, gex.Sync())
+	}
+
+	switch _options.checkerMode {
+	case checkerModeContains:
+		gexOptions = append(gexOptions, gex.ContainsChecker(_options.checkerArgs.(string)))
+	case checkerModeEqual:
+		gexOptions = append(gexOptions, gex.EqualChecker(_options.checkerArgs.(string)))
+	}
+
 	if !pb.Debug {
 		gexOptions = append(gexOptions, gex.Quiet())
 	}
+
+	// 执行命令
 	if _, err = gex.Run(command, gexOptions...); nil != err {
 		pb.Error(fmt.Sprintf(`执行%s命令出错`, _options.name), fields.Connect(field.Error(err))...)
 	} else {
