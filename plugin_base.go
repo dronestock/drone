@@ -95,9 +95,6 @@ func (pb *PluginBase) puts(cache map[string][]string) func(configs []string) {
 				return
 			}
 
-			if nil == cache {
-				cache = make(map[string][]string)
-			}
 			cache[strings.TrimSpace(configs[0])] = pb.splits(value, `,`, `|`, `||`)
 		}
 	}
@@ -111,9 +108,6 @@ func (pb *PluginBase) put(cache map[string]string) func(configs []string) {
 				return
 			}
 
-			if nil == cache {
-				cache = make(map[string]string)
-			}
 			cache[strings.TrimSpace(configs[0])] = value
 		}
 
