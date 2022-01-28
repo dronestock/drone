@@ -34,16 +34,18 @@ func parseConfigs(envs ...string) (err error) {
 }
 
 func parseStrings(env string) (err error) {
-	if err = parseValues(env); nil != err {
-		return
+	if values := parseValues(env); `` != values {
+		err = setEnv(env, values)
 	}
-	err = parseValues(droneConfigName(env))
+	if values := parseValues(droneConfigName(env)); `` != values {
+		err = setEnv(env, values)
+	}
 
 	return
 }
 
-func parseValues(env string) (err error) {
-	values := strings.Split(os.Getenv(env), `,`)
+func parseValues(from string) (to string) {
+	values := strings.Split(os.Getenv(from), `,`)
 	converts := make([]string, 0, len(values))
 	for _, value := range values {
 		if `` == value {
@@ -55,9 +57,16 @@ func parseValues(env string) (err error) {
 	if 0 == len(converts) {
 		return
 	}
-	if err = os.Setenv(env, fmt.Sprintf(`[%s]`, strings.Join(converts, `,`))); nil != err {
+	to = fmt.Sprintf(`[%s]`, strings.Join(converts, `,`))
+
+	return
+}
+
+func setEnv(env string, value string) (err error) {
+	if err = os.Setenv(env, value); nil != err {
 		return
 	}
+	err = os.Setenv(droneConfigName(env), value)
 
 	return
 }

@@ -22,6 +22,6 @@ func Configs(configs ...string) *optionConfigs {
 
 func (c *optionConfigs) apply(options *options) {
 	for _, config := range c.configs {
-		options.configs = append(c.configs, strings.ToUpper(config))
+		options.configs = append(options.configs, strings.ToUpper(config))
 	}
 }
