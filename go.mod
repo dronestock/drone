@@ -3,7 +3,7 @@ module github.com/dronestock/drone
 go 1.17
 
 require (
-	github.com/storezhang/gex v0.1.6
+	github.com/storezhang/gex v0.1.7
 	github.com/storezhang/gox v1.8.4
 	github.com/storezhang/mengpo v0.1.0
 	github.com/storezhang/simaqian v0.1.1

@@ -43,6 +43,8 @@ func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
 
 	if !pb.Debug {
 		gexOptions = append(gexOptions, gex.Quiet())
+	} else {
+		gexOptions = append(gexOptions, gex.Terminal())
 	}
 
 	// 执行命令
