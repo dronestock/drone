@@ -12,6 +12,7 @@ type (
 	execOptions struct {
 		name   string
 		args   []string
+		envs   []string
 		dir    string
 		async  bool
 		fields gox.Fields

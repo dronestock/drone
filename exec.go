@@ -16,7 +16,7 @@ func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
 
 	fields := gox.Fields{
 		field.String(`command`, command),
-		field.Strings(`args`, _options.args...),
+		field.Strings(`envs`, _options.args...),
 		field.Bool(`verbose`, pb.Verbose),
 		field.Bool(`debug`, pb.Debug),
 	}
@@ -26,6 +26,10 @@ func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
 	gexOptions := gex.NewOptions(gex.Args(_options.args...))
 	if `` != _options.dir {
 		gexOptions = append(gexOptions, gex.Dir(_options.dir))
+	}
+
+	if 0 != len(_options.envs) {
+		gexOptions = append(gexOptions, gex.Envs(gex.ParseEnvs(_options.envs...)...))
 	}
 
 	if _options.async {
