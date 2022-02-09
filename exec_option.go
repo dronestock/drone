@@ -11,7 +11,7 @@ type (
 
 	execOptions struct {
 		name   string
-		args   []string
+		args   []interface{}
 		envs   []string
 		dir    string
 		async  bool

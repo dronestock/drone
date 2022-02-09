@@ -6,11 +6,11 @@ var (
 )
 
 type optionArgs struct {
-	args []string
+	args []interface{}
 }
 
 // Args 参数
-func Args(args ...string) *optionArgs {
+func Args(args ...interface{}) *optionArgs {
 	return &optionArgs{
 		args: args,
 	}

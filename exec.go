@@ -16,7 +16,7 @@ func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
 
 	fields := gox.Fields{
 		field.String(`command`, command),
-		field.Strings(`envs`, _options.args...),
+		field.Any(`envs`, _options.args),
 		field.Bool(`verbose`, pb.Verbose),
 		field.Bool(`debug`, pb.Debug),
 	}
@@ -52,7 +52,7 @@ func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
 	}
 
 	// 执行命令
-	if _, err = gex.Run(command, gexOptions...); nil != err {
+	if _, err = gex.Exec(command, gexOptions...); nil != err {
 		pb.Error(fmt.Sprintf(`执行%s命令出错`, _options.name), fields.Connect(field.Error(err))...)
 	} else {
 		pb.Info(fmt.Sprintf(`执行%s命令成功`, _options.name), fields...)
