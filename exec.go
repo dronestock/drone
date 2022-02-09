@@ -16,7 +16,7 @@ func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
 
 	fields := gox.Fields{
 		field.String(`command`, command),
-		field.Any(`envs`, _options.args),
+		field.Any(`args`, _options.args),
 		field.Bool(`verbose`, pb.Verbose),
 		field.Bool(`debug`, pb.Debug),
 	}

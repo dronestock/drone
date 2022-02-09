@@ -128,6 +128,14 @@ func execStepAsync(step *Step, wg *sync.WaitGroup, base *PluginBase) (err error)
 }
 
 func execDo(do do, options *stepOptions, base *PluginBase) (err error) {
+	fields := gox.Fields{
+		field.String(`name`, options.name),
+		field.Bool(`async`, options.async),
+		field.Bool(`retry`, options.retry),
+		field.Bool(`break`, options._break),
+	}
+	base.Info(`执行步骤开始`, fields...)
+
 	undo := false
 	for count := 0; count < base.Counts; count++ {
 		if undo, err = do(); (nil == err) || (0 == count && !base.Retry && !options.retry) || undo {
@@ -139,12 +147,8 @@ func execDo(do do, options *stepOptions, base *PluginBase) (err error) {
 	}
 
 	if nil != err {
-		fields := gox.Fields{
-			field.String(`name`, options.name),
-			field.Error(err),
-		}
 		if base.Retry {
-			base.Error(`步骤执行尝试所有重试后出错`, fields...)
+			base.Error(`步骤执行尝试所有重试后出错`, fields.Connect(field.Error(err))...)
 		} else {
 			base.Error(`步骤执行出错`, fields...)
 		}
