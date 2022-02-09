@@ -25,31 +25,51 @@ package main
 
 import (
     `github.com/dronestock/drone`
-    `github.com/storezhang/simaqian`
 )
 
 type plugin struct {
-    config *config
+    drone.PluginBase
 
-    envs                  []string
-    fastGithubExe         string
-    fastGithubSuccessMark string
-    gitExe                string
+    // 远程仓库地址
+    Remote string `default:"${PLUGIN_REMOTE=${REMOTE=${DRONE_GIT_HTTP_URL}}}" validate:"required"`
+    // 模式
+    Mode string `default:"${PLUGIN_MODE=${MODE=push}}"`
+    // SSH密钥
+    SSHKey string `default:"${PLUGIN_SSH_KEY=${SSH_KEY}}"`
+    // 目录
+    Folder string `default:"${PLUGIN_FOLDER=${FOLDER=.}}" validate:"required"`
+    // 目录列表
+    Folders []string `default:"${PLUGIN_FOLDERS=${FOLDERS}}"`
+    // 分支
+    Branch string `default:"${PLUGIN_BRANCH=${BRANCH=master}}" validate:"required_without=Commit"`
+    // 标签
+    Tag string `default:"${PLUGIN_TAG=${TAG}}"`
+    // 作者
+    Author string `default:"${PLUGIN_AUTHOR=${AUTHOR=${DRONE_COMMIT_AUTHOR}}}"`
+    // 邮箱
+    Email string `default:"${PLUGIN_EMAIL=${EMAIL=${DRONE_COMMIT_AUTHOR_EMAIL}}}"`
+    // 提交消息
+    Message string `default:"${PLUGIN_MESSAGE=${MESSAGE=${PLUGIN_COMMIT_MESSAGE=drone}}}"`
+    // 是否强制提交
+    Force bool `default:"${PLUGIN_FORCE=${FORCE=true}}"`
+
+    // 子模块
+    Submodules bool `default:"${PLUGIN_SUBMODULES=${SUBMODULES=true}}"`
+    // 深度
+    Depth int `default:"${PLUGIN_DEPTH=${DEPTH=50}}"`
+    // 提交
+    Commit string `default:"${PLUGIN_COMMIT=${COMMIT=${DRONE_COMMIT}}}" validate:"required_without=Branch"`
+
+    // 是否清理
+    Clear bool `default:"${PLUGIN_CLEAR=${CLEAR=true}}"`
 }
 
 func newPlugin() drone.Plugin {
-    return &plugin{
-        config: new(config),
-
-        envs:                  make([]string, 0),
-        fastGithubExe:         `/opt/fastgithub/fastgithub`,
-        fastGithubSuccessMark: `FastGithub启动完成`,
-        gitExe:                `git`,
-    }
+    return new(plugin)
 }
 
-func (p *plugin) Configuration() drone.Configuration {
-    return p.config
+func (p *plugin) Config() drone.Config {
+    return p
 }
 
 func (p *plugin) Steps() []*drone.Step {
@@ -63,27 +83,27 @@ func (p *plugin) Steps() []*drone.Step {
 }
 
 // 业务逻辑代码
-func (p *plugin) github(logger simaqiang.Logger) (undo bool, err error) {
+func (p *plugin) github() (undo bool, err error) {
     return
 }
 
 // 业务逻辑代码
-func (p *plugin) clear(logger simaqiang.Logger) (undo bool, err error) {
+func (p *plugin) clear() (undo bool, err error) {
     return
 }
 
 // 业务逻辑代码
-func (p *plugin) ssh(logger simaqiang.Logger) (undo bool, err error) {
+func (p *plugin) ssh() (undo bool, err error) {
     return
 }
 
 // 业务逻辑代码
-func (p *plugin) pull(logger simaqiang.Logger) (undo bool, err error) {
+func (p *plugin) pull() (undo bool, err error) {
     return
 }
 
 // 业务逻辑代码
-func (p *plugin) push(logger simaqiang.Logger) (undo bool, err error) {
+func (p *plugin) push() (undo bool, err error) {
     return
 }
 
@@ -96,55 +116,6 @@ func (p *plugin) push(logger simaqiang.Logger) (undo bool, err error) {
 - `ssh`
 - `pull`
 - `push`
-
-### 配置文件`config.go`
-
-配置文件用于插件运行过程中的配置，并实现`drone.Configuration`接口，大致代码如下
-
-```go
-package main
-
-import (
-	`github.com/dronestock/drone`
-)
-
-type config struct {
-	drone.Config
-
-	// 远程仓库地址
-	Remote string `default:"${PLUGIN_REMOTE=${REMOTE=${DRONE_GIT_HTTP_URL}}}" validate:"required"`
-	// 模式
-	Mode string `default:"${PLUGIN_MODE=${MODE=push}}"`
-	// SSH密钥
-	SSHKey string `default:"${PLUGIN_SSH_KEY=${SSH_KEY}}"`
-	// 目录
-	Folder string `default:"${PLUGIN_FOLDER=${FOLDER=.}}" validate:"required"`
-	// 目录列表
-	Folders []string `default:"${PLUGIN_FOLDERS=${FOLDERS}}"`
-	// 分支
-	Branch string `default:"${PLUGIN_BRANCH=${BRANCH=master}}" validate:"required_without=Commit"`
-	// 标签
-	Tag string `default:"${PLUGIN_TAG=${TAG}}"`
-	// 作者
-	Author string `default:"${PLUGIN_AUTHOR=${AUTHOR=${DRONE_COMMIT_AUTHOR}}}"`
-	// 邮箱
-	Email string `default:"${PLUGIN_EMAIL=${EMAIL=${DRONE_COMMIT_AUTHOR_EMAIL}}}"`
-	// 提交消息
-	Message string `default:"${PLUGIN_MESSAGE=${MESSAGE=${PLUGIN_COMMIT_MESSAGE=drone}}}"`
-	// 是否强制提交
-	Force bool `default:"${PLUGIN_FORCE=${FORCE=true}}"`
-
-	// 子模块
-	Submodules bool `default:"${PLUGIN_SUBMODULES=${SUBMODULES=true}}"`
-	// 深度
-	Depth int `default:"${PLUGIN_DEPTH=${DEPTH=50}}"`
-	// 提交
-	Commit string `default:"${PLUGIN_COMMIT=${COMMIT=${DRONE_COMMIT}}}" validate:"required_without=Branch"`
-
-	// 是否清理
-	Clear bool `default:"${PLUGIN_CLEAR=${CLEAR=true}}"`
-}
-```
 
 ### 启动文件`main.go`
 
