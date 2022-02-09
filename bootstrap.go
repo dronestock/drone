@@ -135,7 +135,7 @@ func execDo(do do, options *stepOptions, base *PluginBase) (err error) {
 		field.Bool(`retry`, options.retry),
 		field.Bool(`break`, options._break),
 	}
-	base.Info(`执行步骤开始`, fields...)
+	base.Info(`步骤执行开始`, fields...)
 
 	undo := false
 	for count := 0; count < base.Counts; count++ {
@@ -155,9 +155,9 @@ func execDo(do do, options *stepOptions, base *PluginBase) (err error) {
 		}
 	} else {
 		if undo {
-			base.Info(`步骤未执行`, field.String(`name`, options.name))
+			base.Info(`步骤未执行`, fields...)
 		} else {
-			base.Info(`步骤执行成功`, field.String(`name`, options.name))
+			base.Info(`步骤执行成功`, fields...)
 		}
 	}
 
