@@ -2,10 +2,13 @@ package drone
 
 import (
 	`fmt`
+	`time`
 )
 
 var (
 	_     = NewStep
+	_     = NewDelayStep
+	_     = NewDefaultDelayStep
 	steps = 1
 )
 
@@ -30,4 +33,21 @@ func NewStep(do do, opts ...stepOption) *Step {
 		do:      do,
 		options: _options,
 	}
+}
+
+// NewDelayStep 创建延迟步骤，调试使用
+func NewDelayStep(delay time.Duration) *Step {
+	return &Step{
+		do: func() (undo bool, err error) {
+			time.Sleep(delay)
+
+			return
+		},
+		options: defaultStepOption(),
+	}
+}
+
+// NewDefaultDelayStep 创建延迟步骤，调试使用
+func NewDefaultDelayStep() *Step {
+	return NewDelayStep(time.Hour)
 }
