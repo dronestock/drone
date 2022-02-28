@@ -3,7 +3,7 @@ package drone
 import (
 	`fmt`
 
-	`github.com/storezhang/gex`
+	`github.com/golangex/exec`
 	`github.com/storezhang/gox`
 	`github.com/storezhang/gox/field`
 )
@@ -23,36 +23,36 @@ func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
 	// 记录日志
 	pb.Info(fmt.Sprintf(`开始执行%s命令`, _options.name), fields...)
 
-	gexOptions := gex.NewOptions(gex.Args(_options.args...))
+	gexOptions := exec.NewOptions(exec.Args(_options.args...))
 	if `` != _options.dir {
-		gexOptions = append(gexOptions, gex.Dir(_options.dir))
+		gexOptions = append(gexOptions, exec.Dir(_options.dir))
 	}
 
 	if 0 != len(_options.envs) {
-		gexOptions = append(gexOptions, gex.Envs(gex.ParseEnvs(_options.envs...)...))
+		gexOptions = append(gexOptions, exec.Envs(exec.ParseEnvs(_options.envs...)...))
 	}
 
 	if _options.async {
-		gexOptions = append(gexOptions, gex.Async())
+		gexOptions = append(gexOptions, exec.Async())
 	} else {
-		gexOptions = append(gexOptions, gex.Sync())
+		gexOptions = append(gexOptions, exec.Sync())
 	}
 
 	switch _options.checkerMode {
 	case checkerModeContains:
-		gexOptions = append(gexOptions, gex.ContainsChecker(_options.checkerArgs.(string)))
+		gexOptions = append(gexOptions, exec.ContainsChecker(_options.checkerArgs.(string)))
 	case checkerModeEqual:
-		gexOptions = append(gexOptions, gex.EqualChecker(_options.checkerArgs.(string)))
+		gexOptions = append(gexOptions, exec.EqualChecker(_options.checkerArgs.(string)))
 	}
 
 	if !pb.Debug {
-		gexOptions = append(gexOptions, gex.Quiet())
+		gexOptions = append(gexOptions, exec.Quiet())
 	} else {
-		gexOptions = append(gexOptions, gex.Terminal())
+		gexOptions = append(gexOptions, exec.Terminal())
 	}
 
 	// 执行命令
-	if _, err = gex.Exec(command, gexOptions...); nil != err {
+	if _, err = exec.Start(command, gexOptions...); nil != err {
 		pb.Error(fmt.Sprintf(`执行%s命令出错`, _options.name), fields.Connect(field.Error(err))...)
 	} else {
 		pb.Info(fmt.Sprintf(`执行%s命令成功`, _options.name), fields...)
