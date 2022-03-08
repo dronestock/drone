@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/goexl/gex v0.2.1
-	github.com/goexl/mengpo v0.1.3
+	github.com/goexl/mengpo v0.1.4
 	github.com/storezhang/gox v1.8.4
 	github.com/storezhang/simaqian v0.1.1
 	github.com/storezhang/validatorx v1.0.9
