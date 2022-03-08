@@ -6,9 +6,9 @@ import (
 	`sync`
 	`time`
 
+	`github.com/goexl/mengpo`
 	`github.com/storezhang/gox`
 	`github.com/storezhang/gox/field`
-	`github.com/storezhang/mengpo`
 	`github.com/storezhang/simaqian`
 	`github.com/storezhang/validatorx`
 )
@@ -28,10 +28,6 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 		return
 	}
 
-	// 解析数组环境变量
-	if err = parseConfigs(_options.configs...); nil != err {
-		return
-	}
 	// 处理别名
 	if err = parseAliases(_options.aliases...); nil != err {
 		return
@@ -39,7 +35,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 
 	// 加载配置
 	configuration := _plugin.Config()
-	err = mengpo.Set(configuration)
+	err = mengpo.Set(configuration, mengpo.Before(toSlice))
 	fields := configuration.Fields().Connects(configuration.Base().Fields())
 	if nil != err {
 		logger.Error(`加载配置出错`, fields.Connect(field.Error(err))...)
