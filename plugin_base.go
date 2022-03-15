@@ -4,9 +4,9 @@ import (
 	`strings`
 	`time`
 
+	`github.com/goexl/simaqian`
 	`github.com/storezhang/gox`
 	`github.com/storezhang/gox/field`
-	`github.com/storezhang/simaqian`
 )
 
 var _ Config = (*PluginBase)(nil)

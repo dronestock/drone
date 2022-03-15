@@ -7,10 +7,10 @@ import (
 	`time`
 
 	`github.com/goexl/mengpo`
+	`github.com/goexl/simaqian`
+	`github.com/goexl/xiren`
 	`github.com/storezhang/gox`
 	`github.com/storezhang/gox/field`
-	`github.com/storezhang/simaqian`
-	`github.com/storezhang/validatorx`
 )
 
 var _ = Bootstrap
@@ -47,7 +47,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	}
 
 	// 数据验证
-	if err = validatorx.Struct(configuration); nil != err {
+	if err = xiren.Struct(configuration); nil != err {
 		logger.Error(`配置验证未通过`, configuration.Fields().Connect(field.Error(err))...)
 	} else {
 		logger.Info(`配置验证通过，继续执行`)

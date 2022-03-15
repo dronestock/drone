@@ -29,7 +29,7 @@ func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
 	}
 
 	if 0 != len(_options.envs) {
-		gexOptions = append(gexOptions, gex.Envs(gex.ParseEnvs(_options.envs...)...))
+		gexOptions = append(gexOptions, gex.StringEnvs(_options.envs...))
 	}
 
 	if _options.async {
