@@ -11,8 +11,6 @@ import (
 	`github.com/goexl/mengpo`
 	`github.com/goexl/simaqian`
 	`github.com/goexl/xiren`
-	`github.com/storezhang/gox`
-	`github.com/storezhang/gox/field`
 )
 
 var _ = Bootstrap
