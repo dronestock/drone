@@ -1,7 +1,7 @@
 package drone
 
 import (
-	`github.com/storezhang/gox`
+	`github.com/goexl/gox`
 )
 
 type (
@@ -10,12 +10,12 @@ type (
 	}
 
 	execOptions struct {
-		name   string
-		args   []interface{}
-		envs   []string
-		dir    string
-		async  bool
-		fields gox.Fields
+		name         string
+		args         []interface{}
+		environments []string
+		dir          string
+		async        bool
+		fields       gox.Fields
 
 		checkerMode checkerMode
 		checkerArgs interface{}

@@ -1,7 +1,7 @@
 package drone
 
 import (
-	`github.com/storezhang/gox`
+	`github.com/goexl/gox`
 )
 
 var (

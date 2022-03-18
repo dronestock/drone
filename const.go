@@ -1,6 +1,7 @@
 package drone
 
 const (
-	jsonArrayStart = `[`
-	jsonArrayEnd   = `]`
+	jsonArrayStart       = `[`
+	jsonArrayEnd         = `]`
+	environmentFormatter = `%s=%s`
 )

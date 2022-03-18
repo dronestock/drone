@@ -6,6 +6,8 @@ import (
 	`sync`
 	`time`
 
+	`github.com/goexl/gox`
+	`github.com/goexl/gox/field`
 	`github.com/goexl/mengpo`
 	`github.com/goexl/simaqian`
 	`github.com/goexl/xiren`

@@ -4,8 +4,8 @@ import (
 	`fmt`
 
 	`github.com/goexl/gex`
-	`github.com/storezhang/gox`
-	`github.com/storezhang/gox/field`
+	`github.com/goexl/gox`
+	`github.com/goexl/gox/field`
 )
 
 func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
@@ -28,8 +28,8 @@ func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
 		gexOptions = append(gexOptions, gex.Dir(_options.dir))
 	}
 
-	if 0 != len(_options.envs) {
-		gexOptions = append(gexOptions, gex.StringEnvs(_options.envs...))
+	if 0 != len(_options.environments) {
+		gexOptions = append(gexOptions, gex.StringEnvs(_options.environments...))
 	}
 
 	if _options.async {
