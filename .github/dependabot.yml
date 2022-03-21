@@ -1,13 +1,13 @@
 version: 2
 updates:
-    -   package-ecosystem: "gomod"
-        directory: "/"
-        schedule:
-            interval: "weekly"
-        pull-request-branch-name:
-            separator: "-"
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    pull-request-branch-name:
+      separator: "-"
 
-    -   package-ecosystem: "npm"
-        directory: "/doc"
-        schedule:
-            interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/doc"
+    schedule:
+      interval: "weekly"
