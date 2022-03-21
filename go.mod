@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/goexl/gex v0.2.4
 	github.com/goexl/gox v0.0.4
-	github.com/goexl/mengpo v0.1.5
+	github.com/goexl/mengpo v0.1.6
 	github.com/goexl/simaqian v0.1.3
 	github.com/goexl/xiren v0.0.2
 )
@@ -26,7 +26,7 @@ require (
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.21.0 // indirect
 	golang.org/x/crypto v0.0.0-20220315160706-3147a52a75dd // indirect
-	golang.org/x/sys v0.0.0-20220318055525-2edf467146b5 // indirect
+	golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8 // indirect
 	golang.org/x/text v0.3.7 // indirect
 )
 
