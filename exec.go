@@ -21,7 +21,9 @@ func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
 		field.Bool(`debug`, pb.Debug),
 	}
 	// 记录日志
-	pb.Info(fmt.Sprintf(`开始执行%s命令`, _options.name), fields...)
+	if pb.Debug {
+		pb.Info(fmt.Sprintf(`开始执行%s命令`, _options.name), fields...)
+	}
 
 	gexOptions := gex.NewOptions(gex.Args(_options.args...))
 	if `` != _options.dir {
@@ -54,7 +56,7 @@ func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
 	// 执行命令
 	if _, err = gex.Exec(command, gexOptions...); nil != err {
 		pb.Error(fmt.Sprintf(`执行%s命令出错`, _options.name), fields.Connect(field.Error(err))...)
-	} else {
+	} else if pb.Debug {
 		pb.Info(fmt.Sprintf(`执行%s命令成功`, _options.name), fields...)
 	}
 

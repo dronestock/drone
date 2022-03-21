@@ -150,7 +150,7 @@ func execDo(do do, options *stepOptions, base *PluginBase) (err error) {
 			base.Error(`步骤执行出错`, fields...)
 		}
 	} else {
-		if undo {
+		if undo && base.Debug {
 			base.Info(`步骤未执行`, fields...)
 		} else {
 			base.Info(`步骤执行成功`, fields...)
