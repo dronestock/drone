@@ -6,7 +6,7 @@ require (
 	github.com/goexl/exc v0.0.4
 	github.com/goexl/gex v0.2.4
 	github.com/goexl/gox v0.0.5
-	github.com/goexl/mengpo v0.1.6
+	github.com/goexl/mengpo v0.1.7
 	github.com/goexl/simaqian v0.1.3
 	github.com/goexl/xiren v0.0.3
 )
@@ -17,7 +17,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.1 // indirect
 	github.com/goexl/baozheng v0.0.1 // indirect
-	github.com/goexl/env v0.0.1 // indirect
+	github.com/goexl/env v0.0.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
