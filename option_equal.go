@@ -17,6 +17,5 @@ func Equal(equal string) *optionEqual {
 }
 
 func (c *optionEqual) applyExec(options *execOptions) {
-	options.checkerMode = checkerModeEqual
-	options.checkerArgs = c.equal
+	options.checkers = append(options.checkers, newChecker(checkerModeEqual, c.equal))
 }

@@ -17,6 +17,5 @@ func Contains(contains string) *optionContains {
 }
 
 func (c *optionContains) applyExec(options *execOptions) {
-	options.checkerMode = checkerModeContains
-	options.checkerArgs = c.contains
+	options.checkers = append(options.checkers, newChecker(checkerModeContains, c.contains))
 }

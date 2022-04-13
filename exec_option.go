@@ -1,7 +1,7 @@
 package drone
 
 import (
-	`github.com/goexl/gox`
+	"github.com/goexl/gox"
 )
 
 type (
@@ -17,8 +17,8 @@ type (
 		async        bool
 		fields       gox.Fields
 
-		checkerMode checkerMode
-		checkerArgs interface{}
+		collectors []*collector
+		checkers   []*checker
 	}
 )
 

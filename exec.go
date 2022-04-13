@@ -1,11 +1,11 @@
 package drone
 
 import (
-	`fmt`
+	"fmt"
 
-	`github.com/goexl/gex`
-	`github.com/goexl/gox`
-	`github.com/goexl/gox/field`
+	"github.com/goexl/gex"
+	"github.com/goexl/gox"
+	"github.com/goexl/gox/field"
 )
 
 func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
@@ -40,11 +40,22 @@ func (pb *PluginBase) Exec(command string, opts ...execOption) (err error) {
 		gexOptions = append(gexOptions, gex.Sync())
 	}
 
-	switch _options.checkerMode {
-	case checkerModeContains:
-		gexOptions = append(gexOptions, gex.ContainsChecker(_options.checkerArgs.(string)))
-	case checkerModeEqual:
-		gexOptions = append(gexOptions, gex.EqualChecker(_options.checkerArgs.(string)))
+	// 增加检查
+	for _, _checker := range _options.checkers {
+		switch _checker.mode {
+		case checkerModeContains:
+			gexOptions = append(gexOptions, gex.ContainsChecker(_checker.args.(string)))
+		case checkerModeEqual:
+			gexOptions = append(gexOptions, gex.EqualChecker(_checker.args.(string)))
+		}
+	}
+
+	// 增加输出
+	for _, _collector := range _options.collectors {
+		switch _collector.mode {
+		case collectorModeString:
+			gexOptions = append(gexOptions, gex.StringCollector(_collector.args.(*string)))
+		}
 	}
 
 	if !pb.Debug {
