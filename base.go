@@ -61,7 +61,7 @@ func (b *Base) Fields() gox.Fields {
 	}
 }
 
-func (b *Base) Base() *Base {
+func (b *Base) BaseConfig() *Base {
 	return b
 }
 

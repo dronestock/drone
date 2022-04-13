@@ -45,7 +45,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	// 加载配置
 	configuration := _plugin.Config()
 	err = mengpo.Set(configuration, mengpo.Before(toSlice))
-	fields := configuration.Fields().Connects(configuration.Base().Fields())
+	fields := configuration.Fields().Connects(configuration.BaseConfig().Fields())
 	if nil != err {
 		logger.Error(`加载配置出错`, fields.Connect(field.Error(err))...)
 	} else {
@@ -76,7 +76,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 		return
 	}
 
-	base := configuration.Base()
+	base := configuration.BaseConfig()
 	// 设置日志级别
 	if base.Debug {
 		logger.Sets(simaqian.Level(simaqian.LevelDebug))
