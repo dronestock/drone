@@ -8,7 +8,7 @@ import (
 	"github.com/goexl/gox/field"
 )
 
-func (p *Plugin) Exec(command string, opts ...execOption) (err error) {
+func (b *Base) Exec(command string, opts ...execOption) (err error) {
 	_options := defaultExecOptions()
 	for _, opt := range opts {
 		opt.applyExec(_options)
@@ -17,12 +17,12 @@ func (p *Plugin) Exec(command string, opts ...execOption) (err error) {
 	fields := gox.Fields{
 		field.String(`command`, command),
 		field.Any(`args`, _options.args),
-		field.Bool(`verbose`, p.Verbose),
-		field.Bool(`debug`, p.Debug),
+		field.Bool(`verbose`, b.Verbose),
+		field.Bool(`debug`, b.Debug),
 	}
 	// 记录日志
-	if p.Debug {
-		p.Info(fmt.Sprintf(`开始执行%s命令`, _options.name), fields...)
+	if b.Debug {
+		b.Info(fmt.Sprintf(`开始执行%s命令`, _options.name), fields...)
 	}
 
 	gexOptions := gex.NewOptions(gex.Args(_options.args...))
@@ -58,7 +58,7 @@ func (p *Plugin) Exec(command string, opts ...execOption) (err error) {
 		}
 	}
 
-	if !p.Debug {
+	if !b.Debug {
 		gexOptions = append(gexOptions, gex.Quiet())
 	} else {
 		gexOptions = append(gexOptions, gex.Terminal())
@@ -66,9 +66,9 @@ func (p *Plugin) Exec(command string, opts ...execOption) (err error) {
 
 	// 执行命令
 	if _, err = gex.Exec(command, gexOptions...); nil != err {
-		p.Error(fmt.Sprintf(`执行%s命令出错`, _options.name), fields.Connect(field.Error(err))...)
-	} else if p.Debug {
-		p.Info(fmt.Sprintf(`执行%s命令成功`, _options.name), fields...)
+		b.Error(fmt.Sprintf(`执行%s命令出错`, _options.name), fields.Connect(field.Error(err))...)
+	} else if b.Debug {
+		b.Info(fmt.Sprintf(`执行%s命令成功`, _options.name), fields...)
 	}
 
 	return

@@ -12,6 +12,6 @@ type Config interface {
 	// Fields 导出所有字段
 	Fields() gox.Fields
 
-	// Plugin 插件基础
-	Plugin() *Plugin
+	// Base 插件基础
+	Base() *Base
 }

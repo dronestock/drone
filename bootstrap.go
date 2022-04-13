@@ -19,7 +19,7 @@ var _ = Bootstrap
 
 // Bootstrap 启动插件
 func Bootstrap(constructor constructor, opts ...option) (err error) {
-	_plugin, ok := constructor().(plugin)
+	_plugin, ok := constructor().(Plugin)
 	if !ok {
 		err = exc.NewField(exceptionMustImplementPlugin, field.String(`type`, reflect.TypeOf(_plugin).Name()))
 	}
@@ -45,7 +45,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	// 加载配置
 	configuration := _plugin.Config()
 	err = mengpo.Set(configuration, mengpo.Before(toSlice))
-	fields := configuration.Fields().Connects(configuration.Plugin().Fields())
+	fields := configuration.Fields().Connects(configuration.Base().Fields())
 	if nil != err {
 		logger.Error(`加载配置出错`, fields.Connect(field.Error(err))...)
 	} else {
@@ -76,7 +76,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 		return
 	}
 
-	base := configuration.Plugin()
+	base := configuration.Base()
 	// 设置日志级别
 	if base.Debug {
 		logger.Sets(simaqian.Level(simaqian.LevelDebug))
@@ -107,7 +107,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	return
 }
 
-func execStep(step *Step, wg *sync.WaitGroup, base *Plugin) (err error) {
+func execStep(step *Step, wg *sync.WaitGroup, base *Base) (err error) {
 	if step.options.async {
 		err = execStepAsync(step, wg, base)
 	} else {
@@ -117,11 +117,11 @@ func execStep(step *Step, wg *sync.WaitGroup, base *Plugin) (err error) {
 	return
 }
 
-func execStepSync(step *Step, base *Plugin) error {
+func execStepSync(step *Step, base *Base) error {
 	return execDo(step.do, step.options, base)
 }
 
-func execStepAsync(step *Step, wg *sync.WaitGroup, base *Plugin) (err error) {
+func execStepAsync(step *Step, wg *sync.WaitGroup, base *Base) (err error) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -133,7 +133,7 @@ func execStepAsync(step *Step, wg *sync.WaitGroup, base *Plugin) (err error) {
 	return
 }
 
-func execDo(do do, options *stepOptions, base *Plugin) (err error) {
+func execDo(do do, options *stepOptions, base *Base) (err error) {
 	fields := gox.Fields{
 		field.String(`name`, options.name),
 		field.Bool(`async`, options.async),

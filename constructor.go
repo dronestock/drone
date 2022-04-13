@@ -1,3 +1,3 @@
 package drone
 
-type constructor func() interface{}
+type constructor func() Plugin
