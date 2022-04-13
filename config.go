@@ -1,7 +1,7 @@
 package drone
 
 import (
-	`github.com/goexl/gox`
+	"github.com/goexl/gox"
 )
 
 // Config 配置
@@ -12,6 +12,6 @@ type Config interface {
 	// Fields 导出所有字段
 	Fields() gox.Fields
 
-	// Base 基础配置
-	Base() *PluginBase
+	// Plugin 插件基础
+	Plugin() *Plugin
 }

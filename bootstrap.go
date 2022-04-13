@@ -1,23 +1,32 @@
 package drone
 
 import (
-	`fmt`
-	`os`
-	`sync`
-	`time`
+	"fmt"
+	"os"
+	"reflect"
+	"sync"
+	"time"
 
-	`github.com/goexl/gox`
-	`github.com/goexl/gox/field`
-	`github.com/goexl/mengpo`
-	`github.com/goexl/simaqian`
-	`github.com/goexl/xiren`
+	"github.com/goexl/exc"
+	"github.com/goexl/gox"
+	"github.com/goexl/gox/field"
+	"github.com/goexl/mengpo"
+	"github.com/goexl/simaqian"
+	"github.com/goexl/xiren"
 )
 
 var _ = Bootstrap
 
 // Bootstrap 启动插件
 func Bootstrap(constructor constructor, opts ...option) (err error) {
-	_plugin := constructor()
+	_plugin, ok := constructor().(plugin)
+	if !ok {
+		err = exc.NewField(exceptionMustImplementPlugin, field.String(`type`, reflect.TypeOf(_plugin).Name()))
+	}
+	if nil != err {
+		return
+	}
+
 	_options := defaultOptions()
 	for _, opt := range opts {
 		opt.apply(_options)
@@ -36,7 +45,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	// 加载配置
 	configuration := _plugin.Config()
 	err = mengpo.Set(configuration, mengpo.Before(toSlice))
-	fields := configuration.Fields().Connects(configuration.Base().Fields())
+	fields := configuration.Fields().Connects(configuration.Plugin().Fields())
 	if nil != err {
 		logger.Error(`加载配置出错`, fields.Connect(field.Error(err))...)
 	} else {
@@ -67,7 +76,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 		return
 	}
 
-	base := configuration.Base()
+	base := configuration.Plugin()
 	// 设置日志级别
 	if base.Debug {
 		logger.Sets(simaqian.Level(simaqian.LevelDebug))
@@ -98,7 +107,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	return
 }
 
-func execStep(step *Step, wg *sync.WaitGroup, base *PluginBase) (err error) {
+func execStep(step *Step, wg *sync.WaitGroup, base *Plugin) (err error) {
 	if step.options.async {
 		err = execStepAsync(step, wg, base)
 	} else {
@@ -108,11 +117,11 @@ func execStep(step *Step, wg *sync.WaitGroup, base *PluginBase) (err error) {
 	return
 }
 
-func execStepSync(step *Step, base *PluginBase) error {
+func execStepSync(step *Step, base *Plugin) error {
 	return execDo(step.do, step.options, base)
 }
 
-func execStepAsync(step *Step, wg *sync.WaitGroup, base *PluginBase) (err error) {
+func execStepAsync(step *Step, wg *sync.WaitGroup, base *Plugin) (err error) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -124,7 +133,7 @@ func execStepAsync(step *Step, wg *sync.WaitGroup, base *PluginBase) (err error)
 	return
 }
 
-func execDo(do do, options *stepOptions, base *PluginBase) (err error) {
+func execDo(do do, options *stepOptions, base *Plugin) (err error) {
 	fields := gox.Fields{
 		field.String(`name`, options.name),
 		field.Bool(`async`, options.async),
