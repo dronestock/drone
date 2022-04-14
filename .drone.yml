@@ -23,6 +23,8 @@ steps:
 
   - name: 日志
     image: dronestock/changelog
+    commands:
+      - echo $DRONE_NETRC_USERNAME
     when:
       branch:
         - master
