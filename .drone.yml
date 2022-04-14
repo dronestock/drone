@@ -18,6 +18,8 @@ steps:
         path: /var/lib/go
     settings:
       output: changelog
+      compress:
+        enabled: false
 
   - name: 日志
     image: dronestock/changelog
