@@ -1,12 +1,13 @@
 package drone
 
 import (
-	`github.com/goexl/gox`
+	"github.com/goexl/gox"
 )
 
 var (
-	_            = Fields
-	_ execOption = (*optionFields)(nil)
+	_               = Fields
+	_ commandOption = (*optionFields)(nil)
+	_ execOption    = (*optionFields)(nil)
 )
 
 type optionFields struct {
@@ -18,6 +19,10 @@ func Fields(fields ...gox.Field) *optionFields {
 	return &optionFields{
 		fields: fields,
 	}
+}
+
+func (f *optionFields) applyCommand(options *commandOptions) {
+	options.fields = f.fields
 }
 
 func (f *optionFields) applyExec(options *execOptions) {

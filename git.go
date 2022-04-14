@@ -1,5 +1,5 @@
 package drone
 
-func (b *Base) GitLatestTag(opts ...execOption) (tag string, err error) {
+func (b *Base) GitLatestTag(opts ...commandOption) (tag string, err error) {
 	return
 }

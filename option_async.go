@@ -1,10 +1,11 @@
 package drone
 
 var (
-	_            = Async
-	_            = Sync
-	_ stepOption = (*optionAsync)(nil)
-	_ execOption = (*optionAsync)(nil)
+	_               = Async
+	_               = Sync
+	_ stepOption    = (*optionAsync)(nil)
+	_ commandOption = (*optionAsync)(nil)
+	_ execOption    = (*optionAsync)(nil)
 )
 
 type optionAsync struct {
@@ -26,6 +27,10 @@ func Sync() *optionAsync {
 }
 
 func (a *optionAsync) applyStep(options *stepOptions) {
+	options.async = a.async
+}
+
+func (a *optionAsync) applyCommand(options *commandOptions) {
 	options.async = a.async
 }
 

@@ -1,11 +1,12 @@
 package drone
 
 var (
-	_            = StringEnv
-	_            = StringEnvironment
-	_            = StringEnvs
-	_            = StringEnvironments
-	_ execOption = (*optionStringEnvironments)(nil)
+	_               = StringEnv
+	_               = StringEnvironment
+	_               = StringEnvs
+	_               = StringEnvironments
+	_ commandOption = (*optionStringEnvironments)(nil)
+	_ execOption    = (*optionStringEnvironments)(nil)
 )
 
 type optionStringEnvironments struct {
@@ -34,6 +35,10 @@ func StringEnvironments(environments ...string) *optionStringEnvironments {
 	return &optionStringEnvironments{
 		environments: environments,
 	}
+}
+
+func (se *optionStringEnvironments) applyCommand(options *commandOptions) {
+	options.environments = append(options.environments, se.environments...)
 }
 
 func (se *optionStringEnvironments) applyExec(options *execOptions) {
