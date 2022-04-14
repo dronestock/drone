@@ -1,0 +1,32 @@
+kind: pipeline
+type: docker
+name: Drone
+
+
+clone:
+  disable: true
+
+
+steps:
+  - name: 代码
+    image: dronestock/git
+
+  - name: 编译
+    image: pangum/drone
+    volumes:
+      - name: go
+        path: /var/lib/go
+    settings:
+      output: changelog
+
+  - name: 日志
+    image: dronestock/changelog
+    when:
+      branch:
+        - master
+
+
+volumes:
+  - name: go
+    host:
+      path: /var/lib/cache/go
