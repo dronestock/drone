@@ -3,7 +3,6 @@ module github.com/dronestock/drone
 go 1.17
 
 require (
-	github.com/goexl/exc v0.0.4
 	github.com/goexl/gex v0.2.5
 	github.com/goexl/gox v0.0.6
 	github.com/goexl/mengpo v0.1.7
@@ -18,6 +17,7 @@ require (
 	github.com/go-playground/validator/v10 v10.10.1 // indirect
 	github.com/goexl/baozheng v0.0.1 // indirect
 	github.com/goexl/env v0.0.2 // indirect
+	github.com/goexl/exc v0.0.4 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect

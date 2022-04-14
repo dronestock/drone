@@ -3,11 +3,9 @@ package drone
 import (
 	"fmt"
 	"os"
-	"reflect"
 	"sync"
 	"time"
 
-	"github.com/goexl/exc"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
 	"github.com/goexl/mengpo"
@@ -19,13 +17,7 @@ var _ = Bootstrap
 
 // Bootstrap 启动插件
 func Bootstrap(constructor constructor, opts ...option) (err error) {
-	_plugin, ok := constructor().(Plugin)
-	if !ok {
-		err = exc.NewField(exceptionMustImplementPlugin, field.String(`type`, reflect.TypeOf(_plugin).Name()))
-	}
-	if nil != err {
-		return
-	}
+	_plugin := constructor()
 
 	_options := defaultOptions()
 	for _, opt := range opts {

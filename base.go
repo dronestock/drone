@@ -83,8 +83,6 @@ func (b *Base) parse(original string, put func(configs []string)) {
 	if _configs = strings.Split(original, " "); 2 <= len(_configs) {
 		return
 	}
-
-	return
 }
 
 func (b *Base) puts(cache map[string][]string) func(configs []string) {
@@ -110,8 +108,6 @@ func (b *Base) put(cache map[string]string) func(configs []string) {
 
 			cache[strings.TrimSpace(configs[0])] = value
 		}
-
-		return
 	}
 }
 
