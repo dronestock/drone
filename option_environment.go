@@ -5,10 +5,9 @@ import (
 )
 
 var (
-	_               = Env
-	_               = Environment
-	_ commandOption = (*optionEnvironment)(nil)
-	_ execOption    = (*optionEnvironment)(nil)
+	_            = Env
+	_            = Environment
+	_ execOption = (*optionEnvironment)(nil)
 )
 
 type optionEnvironment struct {
@@ -27,10 +26,6 @@ func Environment(key string, value string) *optionEnvironment {
 		key:   key,
 		value: value,
 	}
-}
-
-func (e *optionEnvironment) applyCommand(options *commandOptions) {
-	options.environments = append(options.environments, fmt.Sprintf(environmentFormatter, e.key, e.value))
 }
 
 func (e *optionEnvironment) applyExec(options *execOptions) {

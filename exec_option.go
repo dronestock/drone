@@ -1,25 +1,28 @@
 package drone
 
+import (
+	"github.com/goexl/gox"
+)
+
 type (
 	execOption interface {
 		applyExec(options *execOptions)
 	}
 
 	execOptions struct {
-		*commandOptions
+		name         string
+		args         []interface{}
+		environments []string
+		dir          string
+		pwe          bool
+		async        bool
+		fields       gox.Fields
 
-		args []interface{}
+		collectors []*collector
+		checkers   []*checker
 	}
 )
 
 func defaultExecOptions() *execOptions {
-	return &execOptions{
-		commandOptions: defaultCommandOptions(),
-	}
-}
-
-func newExecOptions(options *commandOptions) *execOptions {
-	return &execOptions{
-		commandOptions: options,
-	}
+	return &execOptions{}
 }

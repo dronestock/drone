@@ -1,9 +1,8 @@
 package drone
 
 var (
-	_               = Dir
-	_ commandOption = (*optionDir)(nil)
-	_ execOption    = (*optionDir)(nil)
+	_            = Dir
+	_ execOption = (*optionDir)(nil)
 )
 
 type optionDir struct {
@@ -15,10 +14,6 @@ func Dir(dir string) *optionDir {
 	return &optionDir{
 		dir: dir,
 	}
-}
-
-func (d *optionDir) applyCommand(options *commandOptions) {
-	options.dir = d.dir
 }
 
 func (d *optionDir) applyExec(options *execOptions) {

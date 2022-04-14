@@ -62,6 +62,11 @@ func (b *Base) exec(command string, options *execOptions) (err error) {
 		}
 	}
 
+	// PWE处理
+	if !options.pwe {
+		gexOptions = append(gexOptions, gex.DisablePwe())
+	}
+
 	if !b.Debug {
 		gexOptions = append(gexOptions, gex.Quiet())
 	} else {
