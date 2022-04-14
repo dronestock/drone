@@ -116,6 +116,7 @@ func (b *Base) splits(config string, seps ...string) (configs []string) {
 	for _, sep := range seps {
 		if strings.Contains(config, sep) {
 			configs = strings.Split(config, sep)
+
 			break
 		}
 	}
