@@ -21,6 +21,8 @@ type Base struct {
 	Verbose bool `default:"${PLUGIN_VERBOSE=${VERBOSE=false}}"`
 	// 是否显示调试信息
 	Debug bool `default:"${PLUGIN_DEBUG=${DEBUG=false}}"`
+	// 是否在出错时打印输出
+	Pwe bool `default:"${PLUGIN_PWE=${PWE=true}}"`
 
 	// 是否重试
 	Retry bool `default:"${PLUGIN_RETRY=${RETRY=true}}"`

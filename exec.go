@@ -9,7 +9,7 @@ import (
 )
 
 func (b *Base) Exec(command string, opts ...execOption) error {
-	_options := defaultExecOptions()
+	_options := defaultExecOptions(b.Pwe)
 	for _, opt := range opts {
 		opt.applyExec(_options)
 	}

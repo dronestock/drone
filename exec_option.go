@@ -13,7 +13,7 @@ type (
 
 	execOptions struct {
 		name         string
-		args         []interface{}
+		args         []any
 		environments []string
 		dir          string
 		pwe          bool
@@ -30,6 +30,8 @@ func NewExecOptions(options ...execOption) []execOption {
 	return options
 }
 
-func defaultExecOptions() *execOptions {
-	return &execOptions{}
+func defaultExecOptions(pwe bool) *execOptions {
+	return &execOptions{
+		pwe: pwe,
+	}
 }
