@@ -4,8 +4,8 @@ go 1.17
 
 require (
 	github.com/goexl/gex v0.2.6
-	github.com/goexl/gox v0.0.8
-	github.com/goexl/mengpo v0.1.7
+	github.com/goexl/gox v0.0.9
+	github.com/goexl/mengpo v0.1.9
 	github.com/goexl/simaqian v0.1.3
 	github.com/goexl/xiren v0.0.3
 )
