@@ -1,8 +1,8 @@
 package drone
 
 import (
-	`fmt`
-	`os`
+	"fmt"
+	"os"
 )
 
 func parseAliases(aliases ...*alias) (err error) {

@@ -20,7 +20,7 @@ type Base struct {
 	// 是否显示详细信息
 	Verbose bool `default:"${PLUGIN_VERBOSE=${VERBOSE=false}}"`
 	// 是否显示调试信息
-	Debug bool `default:"${PLUGIN_DEBUG=${DEBUG=false}}"`
+	Level string `default:"${PLUGIN_LEVEL${LEVEL=debug}}"`
 	// 是否在出错时打印输出
 	Pwe bool `default:"${PLUGIN_PWE=${PWE=true}}"`
 
@@ -55,7 +55,7 @@ func (b *Base) Fields() gox.Fields {
 	return gox.Fields{
 		field.Bool(`defaults`, b.Defaults),
 		field.Bool(`verbose`, b.Verbose),
-		field.Bool(`debug`, b.Debug),
+		field.String(`level`, b.Level),
 
 		field.Bool(`retry`, b.Retry),
 		field.Int(`counts`, b.Counts),

@@ -69,11 +69,9 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	}
 
 	base := configuration.BaseConfig()
-	// 设置日志级别
-	if base.Debug {
-		logger.Sets(simaqian.Level(simaqian.LevelDebug))
-	}
 	base.Logger = logger
+	// 设置日志级别
+	base.Logger.Sets(simaqian.Levels(base.Level))
 
 	// 执行插件
 	wg := new(sync.WaitGroup)

@@ -1,8 +1,8 @@
 package drone
 
 import (
-	`fmt`
-	`time`
+	"fmt"
+	"time"
 )
 
 var (

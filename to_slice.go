@@ -1,10 +1,10 @@
 package drone
 
 import (
-	`fmt`
-	`reflect`
-	`strconv`
-	`strings`
+	"fmt"
+	"reflect"
+	"strconv"
+	"strings"
 )
 
 func toSlice(from string, field reflect.StructField) (to string, err error) {
