@@ -25,7 +25,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	}
 
 	var logger simaqian.Logger
-	if logger, err = simaqian.New(); nil != err {
+	if logger, err = simaqian.New(simaqian.Output(simaqian.Stdout())); nil != err {
 		return
 	}
 
@@ -148,8 +148,8 @@ func execDo(do do, options *stepOptions, base *Base) (err error) {
 		} else {
 			base.Error(`步骤执行出错`, fields...)
 		}
-	} else {
-		if undo && base.Debug {
+	} else if base.Verbose {
+		if undo {
 			base.Info(`步骤未执行`, fields...)
 		} else {
 			base.Info(`步骤执行成功`, fields...)

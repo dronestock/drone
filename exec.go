@@ -22,10 +22,10 @@ func (b *Base) exec(command string, options *execOptions) (err error) {
 		field.String(`command`, command),
 		field.Any(`args`, options.args),
 		field.Bool(`verbose`, b.Verbose),
-		field.Bool(`debug`, b.Debug),
+		field.String(`level`, b.Level),
 	}
 	// 记录日志
-	if b.Debug {
+	if b.Verbose {
 		b.Info(fmt.Sprintf(`开始执行%s命令`, options.name), fields...)
 	}
 
@@ -67,7 +67,7 @@ func (b *Base) exec(command string, options *execOptions) (err error) {
 		gexOptions = append(gexOptions, gex.DisablePwe())
 	}
 
-	if !b.Debug {
+	if !b.Verbose {
 		gexOptions = append(gexOptions, gex.Quiet())
 	} else {
 		gexOptions = append(gexOptions, gex.Terminal())
@@ -76,7 +76,7 @@ func (b *Base) exec(command string, options *execOptions) (err error) {
 	// 执行命令
 	if _, err = gex.Exec(command, gexOptions...); nil != err {
 		b.Error(fmt.Sprintf(`执行%s命令出错`, options.name), fields.Connect(field.Error(err))...)
-	} else if b.Debug {
+	} else if b.Verbose {
 		b.Info(fmt.Sprintf(`执行%s命令成功`, options.name), fields...)
 	}
 
