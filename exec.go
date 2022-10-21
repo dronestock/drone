@@ -71,6 +71,8 @@ func (b *Base) exec(command string, options *execOptions) (err error) {
 		gexOptions = append(gexOptions, gex.Quiet())
 	} else {
 		gexOptions = append(gexOptions, gex.Terminal())
+		// 当开启了打印输出时，关闭遇到错误打印时
+		gexOptions = append(gexOptions, gex.DisablePwe())
 	}
 
 	// 执行命令

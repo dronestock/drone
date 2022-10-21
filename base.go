@@ -20,7 +20,7 @@ type Base struct {
 	// 是否显示详细信息
 	Verbose bool `default:"${PLUGIN_VERBOSE=${VERBOSE=false}}"`
 	// 是否显示调试信息
-	Level string `default:"${PLUGIN_LEVEL${LEVEL=debug}}"`
+	Level string `default:"${PLUGIN_LEVEL=${LEVEL=debug}}"`
 	// 是否在出错时打印输出
 	Pwe bool `default:"${PLUGIN_PWE=${PWE=true}}"`
 
