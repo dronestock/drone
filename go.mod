@@ -4,9 +4,9 @@ go 1.18
 
 require (
 	github.com/goexl/gex v0.2.6
-	github.com/goexl/gox v0.1.1
+	github.com/goexl/gox v0.1.2
 	github.com/goexl/mengpo v0.2.0
-	github.com/goexl/simaqian v0.1.7
+	github.com/goexl/simaqian v0.1.8
 	github.com/goexl/xiren v0.0.3
 )
 
