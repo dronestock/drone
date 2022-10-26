@@ -86,6 +86,9 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	}
 	wg.Wait()
 
+	// 写入最终数据到卡片中
+	_ = writeCard(_plugin, base)
+
 	// 记录日志
 	if nil != err {
 		logger.Error(fmt.Sprintf(`%s插件执行出错，请检查`, _options.name))
