@@ -37,7 +37,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 
 	// 加载配置
 	configuration := _plugin.Config()
-	err = mengpo.Set(configuration, mengpo.Before(toSlice))
+	err = mengpo.Set(configuration, mengpo.Before(environment), mengpo.Before(toSlice))
 	fields := configuration.Fields().Connects(configuration.BaseConfig().Fields())
 	if nil != err {
 		logger.Error(`加载配置出错`, fields.Connect(field.Error(err))...)

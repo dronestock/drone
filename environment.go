@@ -3,7 +3,12 @@ package drone
 import (
 	"fmt"
 	"os"
+	"reflect"
 )
+
+func environment(_ string, _ reflect.StructField) (to string, err error) {
+	return
+}
 
 func parseAliases(aliases ...*alias) (err error) {
 	for _, _alias := range aliases {
@@ -23,5 +28,5 @@ func parseAliases(aliases ...*alias) (err error) {
 }
 
 func droneConfigName(env string) string {
-	return fmt.Sprintf(`PLUGIN_%s`, env)
+	return fmt.Sprintf(`%s_%s`, environmentPrefix, env)
 }
