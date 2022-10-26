@@ -3,6 +3,7 @@ package drone
 import (
 	"fmt"
 	"os"
+	"strings"
 	"sync"
 	"time"
 
@@ -73,6 +74,9 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	// 设置日志级别
 	base.Logger.Sets(simaqian.Levels(base.Level))
 
+	// 开始卡片信息写入
+	go startCard(_plugin, base)
+
 	// 执行插件
 	wg := new(sync.WaitGroup)
 	for _, step := range _plugin.Steps() {
@@ -129,6 +133,7 @@ func execDo(do do, options *stepOptions, base *Base) (err error) {
 		field.Bool(`async`, options.async),
 		field.Bool(`retry`, options.retry),
 		field.Bool(`break`, options._break),
+		field.Int(`counts`, base.Counts),
 	}
 	base.Info(`步骤执行开始`, fields...)
 
@@ -136,24 +141,55 @@ func execDo(do do, options *stepOptions, base *Base) (err error) {
 	for count := 0; count < base.Counts; count++ {
 		if undo, err = do(); (nil == err) || (0 == count && !base.Retry && !options.retry) || undo {
 			break
-		} else {
-			time.Sleep(base.Backoff)
-			base.Info(`步骤执行遇到错误`, field.String(`name`, options.name), field.Int(`count`, count), field.Error(err))
 		}
+
+		base.Info(fmt.Sprintf(`步骤第%d次执行遇到错误`, count), fields.Connect(field.Error(err))...)
+		base.Info(fmt.Sprintf(`休眠%s，继续执行步骤`, base.Backoff), fields...)
+		time.Sleep(base.Backoff)
+		base.Info(fmt.Sprintf(`步骤重试第%d次执行`, count), fields...)
 	}
 
-	if nil != err {
-		if base.Retry {
-			base.Error(`步骤执行尝试所有重试后出错`, fields.Connect(field.Error(err))...)
-		} else {
-			base.Error(`步骤执行出错`, fields...)
+	switch {
+	case nil != err && base.Retry:
+		base.Error(`步骤执行尝试所有重试后出错`, fields.Connect(field.Error(err))...)
+	case nil != err && !base.Retry:
+		base.Error(`步骤执行出错`, fields...)
+	case nil == err && undo:
+		base.Info(`步骤未执行`, fields...)
+	case nil == err && !undo:
+		base.Info(`步骤执行成功`, fields...)
+	}
+
+	return
+}
+
+func startCard(plugin Plugin, base *Base) {
+	timer := time.NewTimer(100 * time.Millisecond)
+	defer func() {
+		_ = timer.Stop()
+	}()
+
+	for {
+		select {
+		case <-timer.C:
+			if err := writeCard(plugin, base); nil != err {
+				base.Warn(`写入卡片数据出错`, field.Error(err))
+			}
+			timer.Reset(plugin.Interval())
 		}
-	} else if base.Verbose {
-		if undo {
-			base.Info(`步骤未执行`, fields...)
-		} else {
-			base.Info(`步骤执行成功`, fields...)
-		}
+	}
+}
+
+func writeCard(plugin Plugin, base *Base) (err error) {
+	scheme := plugin.Scheme()
+	if strings.HasPrefix(scheme, github) {
+		scheme = fmt.Sprintf(`%s%s`, ghproxy, scheme)
+	}
+
+	if _card, ce := plugin.Card(); nil != ce {
+		err = ce
+	} else {
+		err = base.writeCard(scheme, _card)
 	}
 
 	return

@@ -1,7 +1,6 @@
 package drone
 
 import (
-	"strings"
 	"time"
 
 	"github.com/goexl/gox"
@@ -30,18 +29,21 @@ type Base struct {
 	Counts int `default:"${PLUGIN_COUNTS=${COUNTS=5}}"`
 	// 重试间隔
 	Backoff time.Duration `default:"${PLUGIN_BACKOFF=${BACKOFF=5s}}"`
+
+	// 卡片路径
+	CardPath string `default:"${DRONE_CARD_PATH=/dev/stdout}"`
 }
 
-func (b *Base) Parse(to map[string]string, configs ...string) {
-	for _, config := range configs {
-		b.parse(config, b.put(to))
-	}
+func (b *Base) Scheme() (scheme string) {
+	return
 }
 
-func (b *Base) Parses(to map[string][]string, configs ...string) {
-	for _, config := range configs {
-		b.parse(config, b.puts(to))
-	}
+func (b *Base) Card() (card any, err error) {
+	return
+}
+
+func (b *Base) Interval() time.Duration {
+	return time.Second
 }
 
 func (b *Base) Setup() (unset bool, err error) {
@@ -65,63 +67,4 @@ func (b *Base) Fields() gox.Fields {
 
 func (b *Base) BaseConfig() *Base {
 	return b
-}
-
-func (b *Base) parse(original string, put func(configs []string)) {
-	var _configs []string
-	defer func() {
-		put(_configs)
-	}()
-
-	if _configs = strings.Split(original, "@"); 2 <= len(_configs) {
-		return
-	}
-	if _configs = strings.Split(original, "=>"); 2 <= len(_configs) {
-		return
-	}
-	if _configs = strings.Split(original, "->"); 2 <= len(_configs) {
-		return
-	}
-	if _configs = strings.Split(original, " "); 2 <= len(_configs) {
-		return
-	}
-}
-
-func (b *Base) puts(cache map[string][]string) func(configs []string) {
-	return func(configs []string) {
-		if nil != configs && 2 <= len(configs) {
-			value := strings.TrimSpace(configs[1])
-			if `` == value {
-				return
-			}
-
-			cache[strings.TrimSpace(configs[0])] = b.splits(value, `,`, `|`, `||`)
-		}
-	}
-}
-
-func (b *Base) put(cache map[string]string) func(configs []string) {
-	return func(configs []string) {
-		if nil != configs && 2 <= len(configs) {
-			value := strings.TrimSpace(configs[1])
-			if `` == value {
-				return
-			}
-
-			cache[strings.TrimSpace(configs[0])] = value
-		}
-	}
-}
-
-func (b *Base) splits(config string, seps ...string) (configs []string) {
-	configs = []string{config}
-	for _, sep := range seps {
-		if strings.Contains(config, sep) {
-			configs = strings.Split(config, sep)
-
-			break
-		}
-	}
-
-	return
 }
