@@ -1,7 +1,8 @@
 package drone
 
 const (
-	environmentPrefix    = `PLUGIN`
+	envPrefix            = `DRONE_`
+	pluginEnvPrefix      = `PLUGIN_`
 	jsonArrayStart       = `[`
 	jsonArrayEnd         = `]`
 	environmentFormatter = `%s=%s`
