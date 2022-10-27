@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"os"
 
 	"github.com/goexl/exc"
@@ -30,7 +29,7 @@ func (b *Base) writeCard(url string, _card any) (err error) {
 		case ``:
 			err = exc.NewMessage(`卡片写入路径为空`)
 		default:
-			err = ioutil.WriteFile(b.CardPath, data, 0644)
+			err = os.WriteFile(b.CardPath, data, 0600)
 		}
 	} else {
 		err = je
@@ -41,9 +40,15 @@ func (b *Base) writeCard(url string, _card any) (err error) {
 
 func (b *Base) writeCardTo(out io.Writer, data []byte) (err error) {
 	encoded := base64.StdEncoding.EncodeToString(data)
-	_, err = io.WriteString(out, "\u001B]1338;")
-	_, err = io.WriteString(out, encoded)
-	_, err = io.WriteString(out, "\u001B]0m")
+	if _, err = io.WriteString(out, "\u001B]1338;"); nil != err {
+		return
+	}
+	if _, err = io.WriteString(out, encoded); nil != err {
+		return
+	}
+	if _, err = io.WriteString(out, "\u001B]0m"); nil != err {
+		return
+	}
 	_, err = io.WriteString(out, "\n")
 
 	return

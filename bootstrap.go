@@ -167,19 +167,16 @@ func execDo(do do, options *stepOptions, base *Base) (err error) {
 }
 
 func startCard(plugin Plugin, base *Base) {
-	timer := time.NewTimer(100 * time.Millisecond)
+	ticker := time.NewTimer(100 * time.Millisecond)
 	defer func() {
-		_ = timer.Stop()
+		_ = ticker.Stop()
 	}()
 
-	for {
-		select {
-		case <-timer.C:
-			if err := writeCard(plugin, base); nil != err {
-				base.Warn(`写入卡片数据出错`, field.Error(err))
-			}
-			timer.Reset(plugin.Interval())
+	for range ticker.C {
+		if err := writeCard(plugin, base); nil != err {
+			base.Warn(`写入卡片数据出错`, field.Error(err))
 		}
+		ticker.Reset(plugin.Interval())
 	}
 }
 
