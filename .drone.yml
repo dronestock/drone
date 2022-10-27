@@ -9,10 +9,10 @@ clone:
 
 steps:
   - name: 代码
-    image: dronestock/git
+    image: ccr.ccs.tencentyun.com/dronestock/git
 
   - name: 编译
-    image: pangum/drone
+    image: ccr.ccs.tencentyun.com/pangum/drone
     volumes:
       - name: go
         path: /var/lib/go
@@ -20,14 +20,6 @@ steps:
       output: changelog
       compress:
         enabled: false
-
-  - name: 日志
-    image: dronestock/changelog
-    commands:
-      - echo $DRONE_NETRC_USERNAME
-    when:
-      branch:
-        - master
 
 
 volumes:
