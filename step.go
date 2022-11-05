@@ -8,7 +8,7 @@ import (
 var (
 	_     = NewStep
 	_     = NewDelayStep
-	_     = NewDefaultDelayStep
+	_     = NewDebugStep
 	steps = 1
 )
 
@@ -37,17 +37,20 @@ func NewStep(do do, opts ...stepOption) *Step {
 
 // NewDelayStep 创建延迟步骤，调试使用
 func NewDelayStep(delay time.Duration) *Step {
+	_options := defaultStepOption()
+	_options.name = `延迟步骤`
+
 	return &Step{
 		do: func() (undo bool, err error) {
 			time.Sleep(delay)
 
 			return
 		},
-		options: defaultStepOption(),
+		options: _options,
 	}
 }
 
-// NewDefaultDelayStep 创建延迟步骤，调试使用
-func NewDefaultDelayStep() *Step {
+// NewDebugStep 创建延迟步骤，调试使用
+func NewDebugStep() *Step {
 	return NewDelayStep(time.Hour)
 }

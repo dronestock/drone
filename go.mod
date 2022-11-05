@@ -3,11 +3,12 @@ module github.com/dronestock/drone
 go 1.18
 
 require (
+	github.com/goexl/env v0.0.2
 	github.com/goexl/exc v0.0.4
 	github.com/goexl/gex v0.2.6
 	github.com/goexl/gox v0.1.2
 	github.com/goexl/mengpo v0.2.1
-	github.com/goexl/simaqian v0.1.8
+	github.com/goexl/simaqian v0.1.9
 	github.com/goexl/xiren v0.0.3
 )
 
@@ -17,7 +18,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.1 // indirect
 	github.com/goexl/baozheng v0.0.1 // indirect
-	github.com/goexl/env v0.0.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
@@ -30,6 +30,3 @@ require (
 	golang.org/x/sys v0.1.0 // indirect
 	golang.org/x/text v0.4.0 // indirect
 )
-
-// replace github.com/goexl/mengpo => ../../storezhang/mengpo
-// replace github.com/goexl/gox => ../../storezhang/gox

@@ -15,6 +15,7 @@ type (
 
 func defaultStepOption() *stepOptions {
 	return &stepOptions{
+		name:   `默认步骤`,
 		async:  false,
 		retry:  true,
 		_break: true,
