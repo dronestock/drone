@@ -149,7 +149,7 @@ func execDo(do do, options *stepOptions, base *Base) (err error) {
 		base.Info(fmt.Sprintf(`步骤第%d次执行遇到错误`, count), fields.Connect(field.Error(err))...)
 		base.Info(fmt.Sprintf(`休眠%s，继续执行步骤`, base.Backoff), fields...)
 		time.Sleep(base.Backoff)
-		base.Info(fmt.Sprintf(`步骤重试第%d次执行`, count), fields...)
+		base.Info(fmt.Sprintf(`步骤重试第%d次执行`, count+1), fields...)
 	}
 
 	switch {
