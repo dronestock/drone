@@ -132,10 +132,11 @@ func execStepAsync(step *Step, wg *sync.WaitGroup, base *Base) (err error) {
 }
 
 func execDo(do do, options *stepOptions, base *Base) (err error) {
+	retry := options.retryable(base)
 	fields := gox.Fields{
 		field.String(`name`, options.name),
 		field.Bool(`async`, options.async),
-		field.Bool(`retry`, options.retry),
+		field.Bool(`retry`, retry),
 		field.Bool(`break`, options._break),
 		field.Int(`counts`, base.Counts),
 	}
@@ -144,7 +145,7 @@ func execDo(do do, options *stepOptions, base *Base) (err error) {
 	undo := false
 	rand.Seed(time.Now().UnixNano())
 	for count := 0; count < base.Counts; count++ {
-		if undo, err = do(); (nil == err) || (0 == count && !base.Retry && !options.retry) || undo {
+		if undo, err = do(); (nil == err) || (0 == count && !retry) || undo {
 			break
 		}
 
@@ -160,10 +161,10 @@ func execDo(do do, options *stepOptions, base *Base) (err error) {
 	}
 
 	switch {
-	case nil != err && base.Retry:
+	case nil != err && retry:
 		base.Error(`步骤执行尝试所有重试后出错`, fields.Connect(field.Error(err))...)
-	case nil != err && !base.Retry:
-		base.Error(`步骤执行出错`, fields...)
+	case nil != err && !retry:
+		base.Error(`步骤执行出错`, fields.Connect(field.Error(err))...)
 	case nil == err && undo:
 		base.Info(`步骤未执行`, fields...)
 	case nil == err && !undo:
