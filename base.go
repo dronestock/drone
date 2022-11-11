@@ -1,6 +1,7 @@
 package drone
 
 import (
+	"math/rand"
 	"time"
 
 	"github.com/goexl/gox"
@@ -67,4 +68,11 @@ func (b *Base) Fields() gox.Fields {
 
 func (b *Base) BaseConfig() *Base {
 	return b
+}
+
+func (b *Base) backoff() time.Duration {
+	from := time.Duration(int64(float64(b.Backoff) * 0.3))
+	offset := time.Duration(rand.Int63n(int64(b.Backoff / 2))).Truncate(time.Second)
+
+	return from + offset
 }

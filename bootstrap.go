@@ -2,6 +2,7 @@ package drone
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
 	"sync"
@@ -141,15 +142,21 @@ func execDo(do do, options *stepOptions, base *Base) (err error) {
 	base.Info(`步骤执行开始`, fields...)
 
 	undo := false
+	rand.Seed(time.Now().UnixNano())
 	for count := 0; count < base.Counts; count++ {
 		if undo, err = do(); (nil == err) || (0 == count && !base.Retry && !options.retry) || undo {
 			break
 		}
 
-		base.Info(fmt.Sprintf(`步骤第%d次执行遇到错误`, count), fields.Connect(field.Error(err))...)
-		base.Info(fmt.Sprintf(`休眠%s，继续执行步骤`, base.Backoff), fields...)
-		time.Sleep(base.Backoff)
+		backoff := base.backoff()
+		base.Info(fmt.Sprintf(`步骤第%d次执行遇到错误`, count+1), fields.Connect(field.Error(err))...)
+		base.Info(fmt.Sprintf(`休眠%s，继续执行步骤`, backoff), fields...)
+		time.Sleep(backoff)
 		base.Info(fmt.Sprintf(`步骤重试第%d次执行`, count+1), fields...)
+
+		if count != base.Counts-1 {
+			err = nil
+		}
 	}
 
 	switch {
