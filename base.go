@@ -72,7 +72,7 @@ func (b *Base) BaseConfig() *Base {
 
 func (b *Base) backoff() time.Duration {
 	from := time.Duration(int64(float64(b.Backoff) * 0.3))
-	offset := time.Duration(rand.Int63n(int64(b.Backoff / 2))).Truncate(time.Second)
+	offset := time.Duration(rand.Int63n(int64(b.Backoff - from))).Truncate(time.Second)
 
 	return from + offset
 }
