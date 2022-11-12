@@ -3,6 +3,8 @@ package drone
 import (
 	"fmt"
 	"time"
+
+	"github.com/goexl/gox"
 )
 
 var (
@@ -14,6 +16,8 @@ var (
 
 // Step 步骤
 type Step struct {
+	gox.CannotCopy
+
 	do      do
 	options *stepOptions
 }
