@@ -19,5 +19,5 @@ type Plugin interface {
 	Config() (config Config)
 
 	// Steps 插件运行步骤
-	Steps() []*Step
+	Steps() Steps
 }
