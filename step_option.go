@@ -1,5 +1,7 @@
 package drone
 
+var _ = NewStepOptions
+
 type (
 	stepOption interface {
 		applyStep(options *stepOptions)
@@ -20,6 +22,11 @@ func defaultStepOption() *stepOptions {
 		retry:  true,
 		_break: true,
 	}
+}
+
+// NewStepOptions 创建步骤选项
+func NewStepOptions(opts ...stepOption) []stepOption {
+	return opts
 }
 
 func (o *stepOptions) retryable(base *Base) (retry bool) {
