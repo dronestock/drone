@@ -4,10 +4,10 @@ go 1.18
 
 require (
 	github.com/goexl/env v0.0.2
-	github.com/goexl/exc v0.0.4
+	github.com/goexl/exc v0.0.5
 	github.com/goexl/gex v0.2.6
-	github.com/goexl/gox v0.1.2
-	github.com/goexl/mengpo v0.2.1
+	github.com/goexl/gox v0.1.5
+	github.com/goexl/mengpo v0.2.3
 	github.com/goexl/simaqian v0.1.9
 	github.com/goexl/xiren v0.0.3
 )
@@ -20,7 +20,6 @@ require (
 	github.com/goexl/baozheng v0.0.1 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
-	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/rs/xid v1.4.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
