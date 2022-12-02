@@ -39,7 +39,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	// 加载配置
 	configuration := _plugin.Config()
 	err = mengpo.Set(configuration, mengpo.EnvGetter(envGetter), mengpo.Processor(new(sliceProcessor)))
-	fields := configuration.Fields().Connects(configuration.BaseConfig().Fields())
+	fields := configuration.Fields().Connects(configuration.BaseConfig().Fields()...)
 	if nil != err {
 		logger.Error(`加载配置出错`, fields.Connect(field.Error(err))...)
 	} else {
@@ -133,12 +133,12 @@ func execStepAsync(step *Step, wg *sync.WaitGroup, base *Base) (err error) {
 
 func execDo(do do, options *stepOptions, base *Base) (err error) {
 	retry := options.retryable(base)
-	fields := gox.Fields{
-		field.String(`name`, options.name),
-		field.Bool(`async`, options.async),
-		field.Bool(`retry`, retry),
-		field.Bool(`break`, options._break),
-		field.Int(`counts`, base.Counts),
+	fields := gox.Fields[any]{
+		field.New("name", options.name),
+		field.New("async", options.async),
+		field.New("retry", retry),
+		field.New("break", options._break),
+		field.New("counts", base.Counts),
 	}
 	base.Info(`步骤执行开始`, fields...)
 

@@ -10,11 +10,11 @@ var (
 )
 
 type optionFields struct {
-	fields []gox.Field
+	fields gox.Fields[any]
 }
 
 // Fields 字段
-func Fields(fields ...gox.Field) *optionFields {
+func Fields(fields ...gox.Field[any]) *optionFields {
 	return &optionFields{
 		fields: fields,
 	}

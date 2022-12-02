@@ -18,11 +18,11 @@ func (b *Base) Exec(command string, opts ...execOption) error {
 }
 
 func (b *Base) exec(command string, options *execOptions) (err error) {
-	fields := gox.Fields{
-		field.String(`command`, command),
-		field.Any(`args`, options.args),
-		field.Bool(`verbose`, b.Verbose),
-		field.String(`level`, b.Level),
+	fields := gox.Fields[any]{
+		field.New(`command`, command),
+		field.New(`args`, options.args),
+		field.New(`verbose`, b.Verbose),
+		field.New(`level`, b.Level),
 	}
 	// 记录日志
 	if b.Verbose {

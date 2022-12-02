@@ -10,7 +10,7 @@ type Config interface {
 	Setup() (unset bool, err error)
 
 	// Fields 导出所有字段
-	Fields() gox.Fields
+	Fields() gox.Fields[any]
 
 	// BaseConfig 基础配置
 	BaseConfig() *Base

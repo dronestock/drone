@@ -18,7 +18,7 @@ type (
 		dir          string
 		pwe          bool
 		async        bool
-		fields       gox.Fields
+		fields       gox.Fields[any]
 
 		collectors []*collector
 		checkers   []*checker

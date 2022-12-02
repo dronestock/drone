@@ -54,15 +54,15 @@ func (b *Base) Setup() (unset bool, err error) {
 	return
 }
 
-func (b *Base) Fields() gox.Fields {
-	return gox.Fields{
-		field.Bool(`defaults`, b.Defaults),
-		field.Bool(`verbose`, b.Verbose),
-		field.String(`level`, b.Level),
+func (b *Base) Fields() gox.Fields[any] {
+	return gox.Fields[any]{
+		field.New("defaults", b.Defaults),
+		field.New("verbose", b.Verbose),
+		field.New("level", b.Level),
 
-		field.Bool(`retry`, b.Retry),
-		field.Int(`counts`, b.Counts),
-		field.Duration(`backoff`, b.Backoff),
+		field.New("retry", b.Retry),
+		field.New("counts", b.Counts),
+		field.New("backoff", b.Backoff),
 	}
 }
 
