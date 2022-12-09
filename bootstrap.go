@@ -26,11 +26,6 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 		opt.apply(_options)
 	}
 
-	var logger simaqian.Logger
-	if logger, err = simaqian.New(simaqian.Output(simaqian.Stdout())); nil != err {
-		return
-	}
-
 	// 处理别名
 	if err = parseAliases(_options.aliases...); nil != err {
 		return
@@ -38,12 +33,21 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 
 	// 加载配置
 	configuration := _plugin.Config()
+	base := configuration.BaseConfig()
+	builder := simaqian.New()
+	// 设置日志级别
+	builder.Level(simaqian.ParseLevel(base.Level))
+	// 向标准输出流和标准错误流输出日志
+	zap := builder.Zap().Output(simaqian.Stdout()).Output(simaqian.Stderr())
+	if base.Logger, err = zap.Build(); nil != err {
+		return
+	}
 	err = mengpo.Set(configuration, mengpo.EnvGetter(envGetter), mengpo.Processor(new(sliceProcessor)))
 	fields := configuration.Fields().Connects(configuration.BaseConfig().Fields()...)
 	if nil != err {
-		logger.Error(`加载配置出错`, fields.Connect(field.Error(err))...)
+		base.Logger.Error(`加载配置出错`, fields.Connect(field.Error(err))...)
 	} else {
-		logger.Info(`加载配置成功`, fields...)
+		base.Logger.Info(`加载配置成功`, fields...)
 	}
 	if nil != err {
 		return
@@ -51,29 +55,24 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 
 	// 数据验证
 	if err = xiren.Struct(configuration); nil != err {
-		logger.Error(`配置验证未通过`, configuration.Fields().Connect(field.Error(err))...)
+		base.Logger.Error(`配置验证未通过`, configuration.Fields().Connect(field.Error(err))...)
 	} else {
-		logger.Info(`配置验证通过，继续执行`)
+		base.Logger.Info(`配置验证通过，继续执行`)
 	}
 	if nil != err {
 		return
 	}
 
 	// 设置配置信息
-	if unset, setErr := configuration.Setup(); nil != setErr {
-		logger.Error(`设置配置信息出错`, configuration.Fields().Connect(field.Error(err))...)
-		err = setErr
+	if unset, se := configuration.Setup(); nil != se {
+		base.Logger.Error(`设置配置信息出错`, configuration.Fields().Connect(field.Error(err))...)
+		err = se
 	} else if !unset {
-		logger.Info(`设置配置信息完成，继续执行`)
+		base.Logger.Info(`设置配置信息完成，继续执行`)
 	}
 	if nil != err {
 		return
 	}
-
-	base := configuration.BaseConfig()
-	base.Logger = logger
-	// 设置日志级别
-	base.Logger.Sets(simaqian.Levels(base.Level))
 
 	// 开始卡片信息写入
 	go startCard(_plugin, base)
@@ -92,9 +91,9 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 
 	// 记录日志
 	if nil != err {
-		logger.Error(fmt.Sprintf(`%s插件执行出错，请检查`, _options.name))
+		base.Logger.Error(fmt.Sprintf(`%s插件执行出错，请检查`, _options.name))
 	} else {
-		logger.Info(fmt.Sprintf(`%s插件执行成功，恭喜`, _options.name))
+		base.Logger.Info(fmt.Sprintf(`%s插件执行成功，恭喜`, _options.name))
 
 		// 退出程序，解决最外层panic报错的问题
 		// 原理：如果到这个地方还没有发生错误，程序正常退出，外层panic得不到执行
