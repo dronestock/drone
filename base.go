@@ -19,8 +19,8 @@ type Base struct {
 	Defaults bool `default:"${PLUGIN_DEFAULTS=${DEFAULTS=true}}"`
 	// 是否显示详细信息
 	Verbose bool `default:"${PLUGIN_VERBOSE=${VERBOSE=false}}"`
-	// 是否显示调试信息
-	Level string `default:"${PLUGIN_LEVEL=${LEVEL=debug}}"`
+	// 日志级别
+	Level string `default:"${PLUGIN_LEVEL=${LEVEL=info}}"`
 	// 是否在出错时打印输出
 	Pwe bool `default:"${PLUGIN_PWE=${PWE=true}}"`
 
