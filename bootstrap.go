@@ -59,8 +59,8 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	builder := simaqian.New()
 	// 设置日志级别
 	builder.Level(simaqian.ParseLevel(base.Level))
-	// 向标准输出流和标准错误流输出日志
-	zap := builder.Zap().Output(simaqian.Stdout()).Output(simaqian.Stderr())
+	// 向标准输出流输出日志
+	zap := builder.Zap().Output(simaqian.Stdout())
 	if base.Logger, err = zap.Build(); nil == err {
 		logger = base.Logger
 	}
