@@ -16,20 +16,20 @@ type Base struct {
 	simaqian.Logger
 
 	// 是否启用默认配置
-	Defaults bool `default:"${PLUGIN_DEFAULTS=${DEFAULTS=true}}"`
+	Defaults bool `default:"${DEFAULTS=true}"`
 	// 是否显示详细信息
-	Verbose bool `default:"${PLUGIN_VERBOSE=${VERBOSE=false}}"`
+	Verbose bool `default:"${VERBOSE=false}"`
 	// 日志级别
-	Level string `default:"${PLUGIN_LEVEL=${LEVEL=info}}"`
+	Level string `default:"${LEVEL=info}"`
 	// 是否在出错时打印输出
-	Pwe bool `default:"${PLUGIN_PWE=${PWE=true}}"`
+	Pwe bool `default:"${PWE=true}"`
 
 	// 是否重试
-	Retry bool `default:"${PLUGIN_RETRY=${RETRY=true}}"`
+	Retry bool `default:"${RETRY=true}"`
 	// 重试次数
-	Counts int `default:"${PLUGIN_COUNTS=${COUNTS=5}}"`
+	Counts int `default:"${COUNTS=5}"`
 	// 重试间隔
-	Backoff time.Duration `default:"${PLUGIN_BACKOFF=${BACKOFF=5s}}"`
+	Backoff time.Duration `default:"${BACKOFF=5s}"`
 
 	// 卡片路径
 	CardPath string `default:"${DRONE_CARD_PATH=/dev/stdout}"`
