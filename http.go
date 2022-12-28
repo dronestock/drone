@@ -6,9 +6,16 @@ import (
 
 func (b *Base) Http() *resty.Request {
 	if nil == b.http {
-		b.http = resty.New()
-		b.http.SetProxy(b.Proxy.addr())
+		b.setupHttp()
 	}
 
 	return b.http.R()
+}
+
+func (b *Base) setupHttp() {
+	b.http = resty.New()
+
+	if nil != b.Proxy {
+		b.http.SetProxy(b.Proxy.addr())
+	}
 }
