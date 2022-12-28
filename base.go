@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/go-resty/resty/v2"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
 	"github.com/goexl/simaqian"
@@ -31,8 +32,13 @@ type Base struct {
 	// 重试间隔
 	Backoff time.Duration `default:"${BACKOFF=5s}"`
 
+	// 代理
+	Proxy *proxy `default:"${PROXY}"`
+
 	// 卡片路径
 	CardPath string `default:"${DRONE_CARD_PATH=/dev/stdout}"`
+
+	http *resty.Client
 }
 
 func (b *Base) Scheme() (scheme string) {
@@ -63,6 +69,8 @@ func (b *Base) Fields() gox.Fields[any] {
 		field.New("retry", b.Retry),
 		field.New("counts", b.Counts),
 		field.New("backoff", b.Backoff),
+
+		field.New("proxy", b.Proxy),
 	}
 }
 
