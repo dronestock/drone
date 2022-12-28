@@ -1,7 +1,8 @@
 package drone
 
 import (
-	"math/rand"
+	"crypto/rand"
+	"math/big"
 	"time"
 
 	"github.com/go-resty/resty/v2"
@@ -78,9 +79,13 @@ func (b *Base) BaseConfig() *Base {
 	return b
 }
 
-func (b *Base) backoff() time.Duration {
+func (b *Base) backoff() (backoff time.Duration) {
 	from := time.Duration(int64(float64(b.Backoff) * 0.3))
-	offset := time.Duration(rand.Int63n(int64(b.Backoff - from))).Truncate(time.Second)
+	if duration, re := rand.Int(rand.Reader, big.NewInt(int64(b.Backoff-from))); nil != re {
+		backoff = b.Backoff
+	} else {
+		backoff = from + time.Duration(duration.Int64()).Truncate(time.Second)
+	}
 
-	return from + offset
+	return backoff
 }
