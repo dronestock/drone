@@ -60,7 +60,7 @@ func (b *Base) Fields() gox.Fields[any] {
 	return gox.Fields[any]{
 		field.New("defaults", b.Defaults),
 		field.New("verbose", b.Verbose),
-		field.New("level", b.Level),
+		field.New("log", b.Log),
 
 		field.New("retry", b.Retry),
 		field.New("counts", b.Counts),

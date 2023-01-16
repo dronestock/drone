@@ -8,30 +8,30 @@ import (
 	"github.com/goexl/gox/field"
 )
 
-func (bb *bootstrapBuilder) startCard(plugin Plugin, base *Base) {
+func (b *bootstrap) startCard() {
 	ticker := time.NewTimer(100 * time.Millisecond)
 	defer func() {
 		_ = ticker.Stop()
 	}()
 
 	for range ticker.C {
-		if err := bb.writeCard(plugin, base); nil != err {
-			base.Warn("写入卡片数据出错", field.Error(err))
+		if err := b.writeCard(); nil != err {
+			b.Warn("写入卡片数据出错", field.Error(err))
 		}
 		ticker.Reset(time.Second)
 	}
 }
 
-func (bb *bootstrapBuilder) writeCard(plugin Plugin, base *Base) (err error) {
-	scheme := plugin.Scheme()
+func (b *bootstrap) writeCard() (err error) {
+	scheme := b.plugin.Scheme()
 	if strings.HasPrefix(scheme, github) {
 		scheme = fmt.Sprintf("%s%s", ghproxy, scheme)
 	}
 
-	if _card, ce := plugin.Carding(); nil != ce {
+	if _card, ce := b.plugin.Carding(); nil != ce {
 		err = ce
 	} else {
-		err = base.writeCard(scheme, _card)
+		err = b.Base.writeCard(scheme, _card)
 	}
 
 	return
