@@ -8,44 +8,35 @@ import (
 	"github.com/goexl/gox/field"
 )
 
-func (b *Base) Exec(command string, opts ...execOption) error {
-	_options := defaultExecOptions(b.Pwe)
-	for _, opt := range opts {
-		opt.applyExec(_options)
-	}
-
-	return b.exec(command, _options)
-}
-
-func (b *Base) exec(command string, options *execOptions) (err error) {
+func (cb *commandBuilder) Exec(command string) (err error) {
 	fields := gox.Fields[any]{
 		field.New("command", command),
-		field.New("args", options.args),
-		field.New("verbose", b.Verbose),
-		field.New("level", b.Level),
+		field.New("args", cb.options.args),
+		field.New("verbose", cb.Verbose),
+		field.New("level", cb.Level),
 	}
 	// 记录日志
-	if b.Verbose {
-		b.Info(fmt.Sprintf("开始执行%s命令", options.name), fields...)
+	if cb.Verbose {
+		cb.Info(fmt.Sprintf("开始执行%s命令", cb.options.name), fields...)
 	}
 
-	gexOptions := gex.NewOptions(gex.Args(options.args...))
-	if "" != options.dir {
-		gexOptions = append(gexOptions, gex.Dir(options.dir))
+	gexOptions := gex.NewOptions(gex.Args(cb.options.args...))
+	if "" != cb.options.dir {
+		gexOptions = append(gexOptions, gex.Dir(cb.options.dir))
 	}
 
-	if 0 != len(options.environments) {
-		gexOptions = append(gexOptions, gex.StringEnvs(options.environments...))
+	if 0 != len(cb.options.environments) {
+		gexOptions = append(gexOptions, gex.StringEnvs(cb.options.environments...))
 	}
 
-	if options.async {
+	if cb.options.async {
 		gexOptions = append(gexOptions, gex.Async())
 	} else {
 		gexOptions = append(gexOptions, gex.Sync())
 	}
 
 	// 增加检查
-	for _, _checker := range options.checkers {
+	for _, _checker := range cb.options.checkers {
 		switch _checker.mode {
 		case checkerModeContains:
 			gexOptions = append(gexOptions, gex.ContainsChecker(_checker.args.(string)))
@@ -55,7 +46,7 @@ func (b *Base) exec(command string, options *execOptions) (err error) {
 	}
 
 	// 增加输出
-	for _, _collector := range options.collectors {
+	for _, _collector := range cb.options.collectors {
 		switch _collector.mode {
 		case collectorModeString:
 			gexOptions = append(gexOptions, gex.StringCollector(_collector.args.(*string)))
@@ -63,11 +54,11 @@ func (b *Base) exec(command string, options *execOptions) (err error) {
 	}
 
 	// PWE处理
-	if !options.pwe {
+	if !cb.options.pwe {
 		gexOptions = append(gexOptions, gex.DisablePwe())
 	}
 
-	if !b.Verbose {
+	if !cb.Verbose {
 		gexOptions = append(gexOptions, gex.Quiet())
 	} else {
 		gexOptions = append(gexOptions, gex.Terminal())
@@ -77,9 +68,9 @@ func (b *Base) exec(command string, options *execOptions) (err error) {
 
 	// 执行命令
 	if _, err = gex.Exec(command, gexOptions...); nil != err {
-		b.Error(fmt.Sprintf("执行%s命令出错", options.name), fields.Connect(field.Error(err))...)
-	} else if b.Verbose {
-		b.Info(fmt.Sprintf("执行%s命令成功", options.name), fields...)
+		cb.Error(fmt.Sprintf("执行%s命令出错", cb.options.name), fields.Connect(field.Error(err))...)
+	} else if cb.Verbose {
+		cb.Info(fmt.Sprintf("执行%s命令成功", cb.options.name), fields...)
 	}
 
 	return

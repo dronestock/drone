@@ -5,7 +5,21 @@ import (
 )
 
 type commandBuilder struct {
+	*Base
+
+	command string
 	options *commandOptions
+}
+
+func newCommand(base *Base, command string) *commandBuilder {
+	return &commandBuilder{
+		Base: base,
+
+		command: command,
+		options: &commandOptions{
+			pwe: base.Pwe,
+		},
+	}
 }
 
 func (cb *commandBuilder) Name(name string) *commandBuilder {
