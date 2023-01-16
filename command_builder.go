@@ -5,8 +5,7 @@ import (
 )
 
 type commandBuilder struct {
-	*Base
-
+	base *Base
 	command string
 	options *commandOptions
 }
