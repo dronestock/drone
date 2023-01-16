@@ -5,15 +5,14 @@ import (
 )
 
 type commandBuilder struct {
-	base *Base
+	base    *Base
 	command string
 	options *commandOptions
 }
 
 func newCommand(base *Base, command string) *commandBuilder {
 	return &commandBuilder{
-		Base: base,
-
+		base:    base,
 		command: command,
 		options: &commandOptions{
 			pwe: base.Pwe,
@@ -65,4 +64,24 @@ func (cb *commandBuilder) Fields(fields ...gox.Field[any]) *commandBuilder {
 
 func (cb *commandBuilder) Field(field gox.Field[any]) *commandBuilder {
 	return cb.Fields(field)
+}
+
+func (cb *commandBuilder) Collectors(collectors ...*collector) *commandBuilder {
+	cb.options.collectors = append(cb.options.collectors, collectors...)
+
+	return cb
+}
+
+func (cb *commandBuilder) Collector(collector *collector) *commandBuilder {
+	return cb.Collectors(collector)
+}
+
+func (cb *commandBuilder) Checkers(checkers ...*checker) *commandBuilder {
+	cb.options.checkers = append(cb.options.checkers, checkers...)
+
+	return cb
+}
+
+func (cb *commandBuilder) Checker(checker *checker) *commandBuilder {
+	return cb.Checkers(checker)
 }

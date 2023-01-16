@@ -12,12 +12,12 @@ func (cb *commandBuilder) Exec(command string) (err error) {
 	fields := gox.Fields[any]{
 		field.New("command", command),
 		field.New("args", cb.options.args),
-		field.New("verbose", cb.Verbose),
-		field.New("level", cb.Level),
+		field.New("verbose", cb.base.Verbose),
+		field.New("level", cb.base.Level),
 	}
 	// 记录日志
-	if cb.Verbose {
-		cb.Info(fmt.Sprintf("开始执行%s命令", cb.options.name), fields...)
+	if cb.base.Verbose {
+		cb.base.Info(fmt.Sprintf("开始执行%s命令", cb.options.name), fields...)
 	}
 
 	gexOptions := gex.NewOptions(gex.Args(cb.options.args...))
@@ -58,7 +58,7 @@ func (cb *commandBuilder) Exec(command string) (err error) {
 		gexOptions = append(gexOptions, gex.DisablePwe())
 	}
 
-	if !cb.Verbose {
+	if !cb.base.Verbose {
 		gexOptions = append(gexOptions, gex.Quiet())
 	} else {
 		gexOptions = append(gexOptions, gex.Terminal())
@@ -68,9 +68,9 @@ func (cb *commandBuilder) Exec(command string) (err error) {
 
 	// 执行命令
 	if _, err = gex.Exec(command, gexOptions...); nil != err {
-		cb.Error(fmt.Sprintf("执行%s命令出错", cb.options.name), fields.Connect(field.Error(err))...)
-	} else if cb.Verbose {
-		cb.Info(fmt.Sprintf("执行%s命令成功", cb.options.name), fields...)
+		cb.base.Error(fmt.Sprintf("执行%s命令出错", cb.options.name), fields.Connect(field.Error(err))...)
+	} else if cb.base.Verbose {
+		cb.base.Info(fmt.Sprintf("执行%s命令成功", cb.options.name), fields...)
 	}
 
 	return
