@@ -66,22 +66,26 @@ func (cb *commandBuilder) Field(field gox.Field[any]) *commandBuilder {
 	return cb.Fields(field)
 }
 
-func (cb *commandBuilder) Collectors(collectors ...*collector) *commandBuilder {
-	cb.options.collectors = append(cb.options.collectors, collectors...)
+func (cb *commandBuilder) Collectors(collectors ...collectorBuilder) *commandBuilder {
+	for _, builder := range collectors {
+		cb.options.collectors = append(cb.options.collectors, builder.collector())
+	}
 
 	return cb
 }
 
-func (cb *commandBuilder) Collector(collector *collector) *commandBuilder {
+func (cb *commandBuilder) Collector(collector collectorBuilder) *commandBuilder {
 	return cb.Collectors(collector)
 }
 
-func (cb *commandBuilder) Checkers(checkers ...*checker) *commandBuilder {
-	cb.options.checkers = append(cb.options.checkers, checkers...)
+func (cb *commandBuilder) Checkers(checkers ...checkerBuilder) *commandBuilder {
+	for _, builder := range checkers {
+		cb.options.checkers = append(cb.options.checkers, builder.checker())
+	}
 
 	return cb
 }
 
-func (cb *commandBuilder) Checker(checker *checker) *commandBuilder {
+func (cb *commandBuilder) Checker(checker checkerBuilder) *commandBuilder {
 	return cb.Checkers(checker)
 }

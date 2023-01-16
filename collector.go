@@ -2,10 +2,10 @@ package drone
 
 type collector struct {
 	mode collectorMode
-	args interface{}
+	args any
 }
 
-func newCollector(mode collectorMode, args interface{}) *collector {
+func newCollector(mode collectorMode, args any) *collector {
 	return &collector{
 		mode: mode,
 		args: args,
