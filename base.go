@@ -21,8 +21,8 @@ type Base struct {
 	Defaults bool `default:"${DEFAULTS=true}"`
 	// 是否显示详细信息
 	Verbose bool `default:"${VERBOSE=false}"`
-	// 日志级别
-	Level string `default:"${LEVEL=info}"`
+	// 日志配置
+	Log log `default:"${LOG}"`
 	// 是否在出错时打印输出
 	Pwe bool `default:"${PWE=true}"`
 
@@ -35,9 +35,8 @@ type Base struct {
 
 	// 代理
 	Proxy *proxy `default:"${PROXY}"`
-
-	// 卡片路径
-	CardPath string `default:"${DRONE_CARD_PATH=/dev/stdout}"`
+	// 卡片
+	Card card `default:"${CARD}"`
 
 	http *resty.Client
 }
@@ -46,12 +45,8 @@ func (b *Base) Scheme() (scheme string) {
 	return
 }
 
-func (b *Base) Card() (card any, err error) {
+func (b *Base) Carding() (card any, err error) {
 	return
-}
-
-func (b *Base) Interval() time.Duration {
-	return time.Second
 }
 
 func (b *Base) Setup() (unset bool, err error) {

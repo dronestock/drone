@@ -18,40 +18,25 @@ var (
 type Step struct {
 	gox.CannotCopy
 
-	do      do
+	stepper stepper
 	options *stepOptions
 }
 
-// NewStep 创建一个步骤
-func NewStep(do do, opts ...stepOption) *Step {
-	_options := defaultStepOption()
-	for _, opt := range opts {
-		opt.applyStep(_options)
-	}
-	if `` == _options.name {
-		_options.name = fmt.Sprintf(`第%d步`, steps)
+func newStep(stepper stepper, options *stepOptions) *Step {
+	if "" == options.name {
+		options.name = fmt.Sprintf("第%d步", steps)
 		steps++
 	}
 
 	return &Step{
-		do:      do,
-		options: _options,
+		stepper: stepper,
+		options: options,
 	}
 }
 
 // NewDelayStep 创建延迟步骤，调试使用
 func NewDelayStep(delay time.Duration) *Step {
-	_options := defaultStepOption()
-	_options.name = `延迟步骤`
-
-	return &Step{
-		do: func() (undo bool, err error) {
-			time.Sleep(delay)
-
-			return
-		},
-		options: _options,
-	}
+	return NewStep(newDelayStepper(delay)).Name("延迟步骤").Build()
 }
 
 // NewDebugStep 创建延迟步骤，调试使用

@@ -1,12 +1,6 @@
 package drone
 
-import (
-	"encoding/json"
-)
-
 type card struct {
-	// 地址
-	Schema string `json:"schema"`
-	// 数据
-	Data json.RawMessage `json:"data"`
+	// 路径
+	Path string `default:"${DRONE_CARD_PATH=/dev/stdout}" json:"path"`
 }

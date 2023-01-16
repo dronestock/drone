@@ -1,32 +1,10 @@
 package drone
 
-var _ = NewStepOptions
-
-type (
-	stepOption interface {
-		applyStep(options *stepOptions)
-	}
-
-	stepOptions struct {
-		name   string
-		async  bool
-		retry  bool
-		_break bool
-	}
-)
-
-func defaultStepOption() *stepOptions {
-	return &stepOptions{
-		name:   `默认步骤`,
-		async:  false,
-		retry:  true,
-		_break: true,
-	}
-}
-
-// NewStepOptions 创建步骤选项
-func NewStepOptions(opts ...stepOption) []stepOption {
-	return opts
+type stepOptions struct {
+	name   string
+	async  bool
+	retry  bool
+	_break bool
 }
 
 func (o *stepOptions) retryable(base *Base) (retry bool) {

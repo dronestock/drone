@@ -37,9 +37,9 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	err = mengpo.Set(configuration, mengpo.EnvGetter(envGetter), mengpo.Processor(new(sliceProcessor)))
 	fields := configuration.Fields().Connects(configuration.BaseConfig().Fields()...)
 	if nil != err {
-		logger.Error(`加载配置出错`, fields.Connect(field.Error(err))...)
+		logger.Error("加载配置出错", fields.Connect(field.Error(err))...)
 	} else {
-		logger.Info(`加载配置成功`, fields...)
+		logger.Info("加载配置成功", fields...)
 	}
 	if nil != err {
 		return
@@ -47,9 +47,9 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 
 	// 数据验证
 	if err = xiren.Struct(configuration); nil != err {
-		logger.Error(`配置验证未通过`, configuration.Fields().Connect(field.Error(err))...)
+		logger.Error("配置验证未通过", configuration.Fields().Connect(field.Error(err))...)
 	} else {
-		logger.Info(`配置验证通过，继续执行`)
+		logger.Info("配置验证通过，继续执行")
 	}
 	if nil != err {
 		return
@@ -58,7 +58,7 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 	base := configuration.BaseConfig()
 	builder := simaqian.New()
 	// 设置日志级别
-	builder.Level(simaqian.ParseLevel(base.Level))
+	builder.Level(simaqian.ParseLevel(base.Log.Level))
 	// 向标准输出流输出日志
 	zap := builder.Zap().Output(simaqian.Stdout())
 	if base.Logger, err = zap.Build(); nil == err {
@@ -70,10 +70,10 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 
 	// 设置配置信息
 	if unset, se := configuration.Setup(); nil != se {
-		logger.Error(`设置配置信息出错`, configuration.Fields().Connect(field.Error(err))...)
+		logger.Error("设置配置信息出错", configuration.Fields().Connect(field.Error(err))...)
 		err = se
 	} else if !unset {
-		logger.Info(`设置配置信息完成，继续执行`)
+		logger.Info("设置配置信息完成，继续执行")
 	}
 	if nil != err {
 		return
@@ -96,9 +96,9 @@ func Bootstrap(constructor constructor, opts ...option) (err error) {
 
 	// 记录日志
 	if nil != err {
-		logger.Error(fmt.Sprintf(`%s插件执行出错，请检查`, _options.name))
+		logger.Error(fmt.Sprintf("%s插件执行出错，请检查", _options.name))
 	} else {
-		logger.Info(fmt.Sprintf(`%s插件执行成功，恭喜`, _options.name))
+		logger.Info(fmt.Sprintf("%s插件执行成功，恭喜", _options.name))
 
 		// 退出程序，解决最外层panic报错的问题
 		// 原理：如果到这个地方还没有发生错误，程序正常退出，外层panic得不到执行
@@ -120,14 +120,14 @@ func execStep(step *Step, wg *sync.WaitGroup, base *Base) (err error) {
 }
 
 func execStepSync(step *Step, base *Base) error {
-	return execDo(step.do, step.options, base)
+	return execStepper(step.stepper, step.options, base)
 }
 
 func execStepAsync(step *Step, wg *sync.WaitGroup, base *Base) (err error) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		if err = execDo(step.do, step.options, base); nil != err {
+		if err = execStepper(step.stepper, step.options, base); nil != err {
 			panic(err)
 		}
 	}()
@@ -135,7 +135,11 @@ func execStepAsync(step *Step, wg *sync.WaitGroup, base *Base) (err error) {
 	return
 }
 
-func execDo(do do, options *stepOptions, base *Base) (err error) {
+func execStepper(stepper stepper, options *stepOptions, base *Base) (err error) {
+	if !stepper.Runnable() {
+		return
+	}
+
 	retry := options.retryable(base)
 	fields := gox.Fields[any]{
 		field.New("name", options.name),
@@ -144,20 +148,19 @@ func execDo(do do, options *stepOptions, base *Base) (err error) {
 		field.New("break", options._break),
 		field.New("counts", base.Counts),
 	}
-	base.Info(`步骤执行开始`, fields...)
 
-	undo := false
+	base.Info("步骤执行开始", fields...)
 	rand.Seed(time.Now().UnixNano())
 	for count := 0; count < base.Counts; count++ {
-		if undo, err = do(); (nil == err) || (0 == count && !retry) || undo {
+		if err = stepper.Run(); (nil == err) && (0 == count && !retry) {
 			break
 		}
 
 		backoff := base.backoff()
-		base.Info(fmt.Sprintf(`步骤第%d次执行遇到错误`, count+1), fields.Connect(field.Error(err))...)
-		base.Info(fmt.Sprintf(`休眠%s，继续执行步骤`, backoff), fields...)
+		base.Info(fmt.Sprintf("步骤第%d次执行遇到错误", count+1), fields.Connect(field.Error(err))...)
+		base.Info(fmt.Sprintf("休眠%s，继续执行步骤", backoff), fields...)
 		time.Sleep(backoff)
-		base.Info(fmt.Sprintf(`步骤重试第%d次执行`, count+2), fields...)
+		base.Info(fmt.Sprintf("步骤重试第%d次执行", count+2), fields...)
 
 		if count != base.Counts-1 {
 			err = nil
@@ -166,13 +169,11 @@ func execDo(do do, options *stepOptions, base *Base) (err error) {
 
 	switch {
 	case nil != err && retry:
-		base.Error(`步骤执行尝试所有重试后出错`, fields.Connect(field.Error(err))...)
+		base.Error("步骤执行尝试所有重试后出错", fields.Connect(field.Error(err))...)
 	case nil != err && !retry:
-		base.Error(`步骤执行出错`, fields.Connect(field.Error(err))...)
-	case nil == err && undo:
-		base.Info(`步骤未执行`, fields...)
-	case nil == err && !undo:
-		base.Info(`步骤执行成功`, fields...)
+		base.Error("步骤执行出错", fields.Connect(field.Error(err))...)
+	case nil == err:
+		base.Info("步骤执行成功", fields...)
 	}
 
 	return
@@ -186,19 +187,19 @@ func startCard(plugin Plugin, base *Base) {
 
 	for range ticker.C {
 		if err := writeCard(plugin, base); nil != err {
-			base.Warn(`写入卡片数据出错`, field.Error(err))
+			base.Warn("写入卡片数据出错", field.Error(err))
 		}
-		ticker.Reset(plugin.Interval())
+		ticker.Reset(time.Second)
 	}
 }
 
 func writeCard(plugin Plugin, base *Base) (err error) {
 	scheme := plugin.Scheme()
 	if strings.HasPrefix(scheme, github) {
-		scheme = fmt.Sprintf(`%s%s`, ghproxy, scheme)
+		scheme = fmt.Sprintf("%s%s", ghproxy, scheme)
 	}
 
-	if _card, ce := plugin.Card(); nil != ce {
+	if _card, ce := plugin.Carding(); nil != ce {
 		err = ce
 	} else {
 		err = base.writeCard(scheme, _card)
