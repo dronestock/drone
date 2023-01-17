@@ -38,15 +38,16 @@ func (b *bootstrap) Alias(name string, value string) *bootstrap {
 }
 
 func (b *bootstrap) Boot() (err error) {
+	defer func() {
+		_ = b.commands()
+	}()
+
 	if se := b.setup(); nil != se {
 		err = se
 		b.Error("配置插件出错", field.Error(se))
 	} else if ee := b.exec(); nil != ee {
 		err = ee
 		b.Error("执行插件出错", field.Error(ee))
-	} else if ce := b.commands(); nil != ce {
-		err = ce
-		b.Error("命令执行出错", field.Error(ce))
 	}
 
 	return
