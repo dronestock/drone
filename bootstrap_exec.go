@@ -1,6 +1,7 @@
 package drone
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"sync"
@@ -12,8 +13,9 @@ func (b *bootstrap) exec() (err error) {
 
 	// 执行插件
 	wg := new(sync.WaitGroup)
+	ctx := context.Background()
 	for _, step := range b.plugin.Steps() {
-		if err = b.execStep(step, wg); nil != err && step.options._break {
+		if err = b.execStep(ctx, step, wg); nil != err && step.options._break {
 			return
 		}
 	}

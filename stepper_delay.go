@@ -1,6 +1,7 @@
 package drone
 
 import (
+	"context"
 	"time"
 )
 
@@ -18,6 +19,6 @@ func (ds *delayStepper) Runnable() bool {
 	return true
 }
 
-func (ds *delayStepper) Run() (err error) {
+func (ds *delayStepper) Run(_ context.Context) (err error) {
 	return
 }

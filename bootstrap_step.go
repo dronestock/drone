@@ -1,6 +1,7 @@
 package drone
 
 import (
+	"context"
 	"fmt"
 	"math/rand"
 	"sync"
@@ -10,25 +11,25 @@ import (
 	"github.com/goexl/gox/field"
 )
 
-func (b *bootstrap) execStep(step *Step, wg *sync.WaitGroup) (err error) {
+func (b *bootstrap) execStep(ctx context.Context, step *Step, wg *sync.WaitGroup) (err error) {
 	if step.options.async {
-		err = b.execStepAsync(step, wg)
+		err = b.execStepAsync(ctx, step, wg)
 	} else {
-		err = b.execStepSync(step)
+		err = b.execStepSync(ctx, step)
 	}
 
 	return
 }
 
-func (b *bootstrap) execStepSync(step *Step) error {
-	return b.execStepper(step.stepper, step.options)
+func (b *bootstrap) execStepSync(ctx context.Context, step *Step) error {
+	return b.execStepper(ctx, step.stepper, step.options)
 }
 
-func (b *bootstrap) execStepAsync(step *Step, wg *sync.WaitGroup) (err error) {
+func (b *bootstrap) execStepAsync(ctx context.Context, step *Step, wg *sync.WaitGroup) (err error) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		if err = b.execStepper(step.stepper, step.options); nil != err {
+		if err = b.execStepper(ctx, step.stepper, step.options); nil != err {
 			panic(err)
 		}
 	}()
@@ -36,7 +37,7 @@ func (b *bootstrap) execStepAsync(step *Step, wg *sync.WaitGroup) (err error) {
 	return
 }
 
-func (b *bootstrap) execStepper(stepper stepper, options *stepOptions) (err error) {
+func (b *bootstrap) execStepper(ctx context.Context, stepper stepper, options *stepOptions) (err error) {
 	if !stepper.Runnable() {
 		return
 	}
@@ -53,7 +54,7 @@ func (b *bootstrap) execStepper(stepper stepper, options *stepOptions) (err erro
 	b.Info("步骤执行开始", fields...)
 	rand.Seed(time.Now().UnixNano())
 	for count := 0; count < b.Counts; count++ {
-		if err = stepper.Run(); (nil == err) && (0 == count && !retry) {
+		if err = stepper.Run(ctx); (nil == err) && (0 == count && !retry) {
 			break
 		}
 
