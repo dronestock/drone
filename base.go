@@ -37,6 +37,8 @@ type Base struct {
 	Proxy *proxy `default:"${PROXY}"`
 	// 卡片
 	Card card `default:"${CARD}"`
+	// 命令列表
+	Commands []string `default:"${COMMANDS}"`
 
 	http *resty.Client
 }
