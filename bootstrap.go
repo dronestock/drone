@@ -42,7 +42,10 @@ func (b *bootstrap) Boot() (err error) {
 		_ = b.commands()
 	}()
 
-	if se := b.setup(); nil != se {
+	if pe := b.prepare(); nil != pe {
+		err = pe
+		b.Error("准备插件出错", field.Error(pe))
+	} else if se := b.setup(); nil != se {
 		err = se
 		b.Error("配置插件出错", field.Error(se))
 	} else if ee := b.exec(); nil != ee {
