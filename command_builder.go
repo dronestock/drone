@@ -15,7 +15,7 @@ func newCommand(base *Base, command string) *commandBuilder {
 		base:    base,
 		command: command,
 		options: &commandOptions{
-			pwe: base.Pwe,
+			pwe: gox.If(nil == base.Pwe, true, *base.Pwe),
 		},
 	}
 }

@@ -18,16 +18,16 @@ type Base struct {
 	simaqian.Logger
 
 	// 是否启用默认配置
-	Defaults bool `default:"${DEFAULTS=true}"`
+	Defaults *bool `default:"${DEFAULTS=true}"`
 	// 是否显示详细信息
 	Verbose bool `default:"${VERBOSE=false}"`
 	// 日志配置
 	Level string `default:"${LEVEL=info}"`
 	// 是否在出错时打印输出
-	Pwe bool `default:"${PWE=true}"`
+	Pwe *bool `default:"${PWE=true}"`
 
 	// 是否重试
-	Retry bool `default:"${RETRY=true}"`
+	Retry *bool `default:"${RETRY=true}"`
 	// 重试次数
 	Counts int `default:"${COUNTS=5}"`
 	// 重试间隔
