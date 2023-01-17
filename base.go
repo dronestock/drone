@@ -22,7 +22,7 @@ type Base struct {
 	// 是否显示详细信息
 	Verbose bool `default:"${VERBOSE=false}"`
 	// 日志配置
-	Log log `default:"${LOG}"`
+	Level string `default:"${LEVEL=info}"`
 	// 是否在出错时打印输出
 	Pwe bool `default:"${PWE=true}"`
 
@@ -62,7 +62,7 @@ func (b *Base) Fields() gox.Fields[any] {
 	return gox.Fields[any]{
 		field.New("defaults", b.Defaults),
 		field.New("verbose", b.Verbose),
-		field.New("log", b.Log),
+		field.New("level", b.Level),
 
 		field.New("retry", b.Retry),
 		field.New("counts", b.Counts),

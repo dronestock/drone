@@ -39,7 +39,7 @@ func (b *bootstrap) setup() (err error) {
 	b.Base = config.BaseConfig()
 	builder := simaqian.New()
 	// 设置日志级别
-	builder.Level(simaqian.ParseLevel(b.Log.Level))
+	builder.Level(simaqian.ParseLevel(b.Level))
 	// 向标准输出流输出日志
 	zap := builder.Zap().Output(simaqian.Stdout())
 	if logger, be := zap.Build(); nil != be {
