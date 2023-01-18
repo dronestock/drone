@@ -10,19 +10,24 @@ var _ = New
 type bootstrap struct {
 	*Base
 
-	plugin  Plugin
-	name    string
-	aliases []*alias
+	getter    *getter
+	processor *processor
+	plugin    Plugin
+	name      string
+	aliases   []*alias
 }
 
-func New(constructor constructor) *bootstrap {
-	return &bootstrap{
-		Base: &Base{
-			Logger: simaqian.Default(),
-		},
+func New(constructor constructor) (boot *bootstrap) {
+	boot = new(bootstrap)
+	boot.plugin = constructor()
+	boot.getter = newGetter(boot)
+	boot.processor = newProcessor()
 
-		plugin: constructor(),
-	}
+	base := new(Base)
+	base.Logger = simaqian.Default()
+	boot.Base = base
+
+	return
 }
 
 func (b *bootstrap) Name(name string) *bootstrap {

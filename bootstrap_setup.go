@@ -15,7 +15,7 @@ func (b *bootstrap) setup() (err error) {
 
 	// 加载配置
 	config := b.plugin.Config()
-	err = mengpo.New().EnvGetter(b.env).Processor(b).Build().Set(config)
+	err = mengpo.New().Getter(b.getter).Processor(b.processor).Build().Set(config)
 	fields := config.Fields().Connects(config.BaseConfig().Fields()...)
 	if nil != err {
 		b.Error("加载配置出错", fields.Connect(field.Error(err))...)

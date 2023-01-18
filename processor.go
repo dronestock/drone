@@ -7,7 +7,13 @@ import (
 	"strings"
 )
 
-func (b *bootstrap) Process(tag string, field reflect.StructField) (to string, err error) {
+type processor struct{}
+
+func newProcessor() *processor {
+	return new(processor)
+}
+
+func (b *processor) Process(tag string, field reflect.StructField) (to string, err error) {
 	to = tag
 	if !b.canConvert(tag, field) {
 		return
@@ -28,7 +34,7 @@ func (b *bootstrap) Process(tag string, field reflect.StructField) (to string, e
 	return
 }
 
-func (b *bootstrap) canConvert(from string, field reflect.StructField) bool {
+func (b *processor) canConvert(from string, field reflect.StructField) bool {
 	return "" != strings.TrimSpace(from) && // 不能是空字符串
 		reflect.Slice == field.Type.Kind() && // 只能是列表
 		!(strings.HasPrefix(from, jsonArrayStart) && strings.HasSuffix(from, jsonArrayEnd)) // 不能是数组
