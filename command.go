@@ -18,7 +18,7 @@ func (b *Base) commands() (err error) {
 		return
 	}
 
-	b.Info("执行命令开发", field.New("commands", b.Commands))
+	b.Info("执行命令开始", field.New("commands", b.Commands))
 	code := 0
 	switch runtime.GOOS {
 	case "windows":

@@ -43,9 +43,7 @@ func (b *bootstrap) Alias(name string, value string) *bootstrap {
 }
 
 func (b *bootstrap) Boot() (err error) {
-	defer func() {
-		_ = b.commands()
-	}()
+	defer b.finally()
 
 	if pe := b.prepare(); nil != pe {
 		err = pe
