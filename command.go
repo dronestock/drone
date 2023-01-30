@@ -18,6 +18,7 @@ func (b *Base) commands() (err error) {
 		return
 	}
 
+	b.Info("执行命令开发", field.New("commands", b.Commands))
 	code := 0
 	switch runtime.GOOS {
 	case "windows":
@@ -33,7 +34,7 @@ func (b *Base) commands() (err error) {
 	if nil != err {
 		b.Warn("执行命令出错", fields.Connect(field.Error(err))...)
 	} else {
-		b.Warn("执行命令出错", fields...)
+		b.Info("执行命令成功", fields...)
 	}
 
 	return
