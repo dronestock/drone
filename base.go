@@ -18,7 +18,7 @@ type Base struct {
 	simaqian.Logger
 
 	// 是否启用默认配置
-	Defaults *bool `default:"${DEFAULTS=true}"`
+	Defaults *bool `default:"${DEFAULT=true}"`
 	// 是否显示详细信息
 	Verbose bool `default:"${VERBOSE=false}"`
 	// 日志配置
@@ -75,6 +75,10 @@ func (b *Base) Fields() gox.Fields[any] {
 
 func (b *Base) BaseConfig() *Base {
 	return b
+}
+
+func (b *Base) Default() bool {
+	return nil != b.Defaults && *b.Defaults
 }
 
 func (b *Base) backoff() (backoff time.Duration) {
