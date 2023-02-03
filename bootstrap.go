@@ -43,7 +43,7 @@ func (b *bootstrap) Alias(name string, value string) *bootstrap {
 }
 
 func (b *bootstrap) Boot() (err error) {
-	defer b.finally()
+	defer b.finally(&err)
 
 	if pe := b.prepare(); nil != pe {
 		err = pe
@@ -55,6 +55,7 @@ func (b *bootstrap) Boot() (err error) {
 		err = ee
 		b.Error("执行插件出错", field.Error(ee))
 	}
+	err = nil
 
 	return
 }
