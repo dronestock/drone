@@ -60,7 +60,7 @@ func (b *Base) Setup() (unset bool, err error) {
 
 func (b *Base) Fields() gox.Fields[any] {
 	return gox.Fields[any]{
-		field.New("defaults", b.Defaults),
+		field.New("default", b.Defaults),
 		field.New("verbose", b.Verbose),
 		field.New("level", b.Level),
 
