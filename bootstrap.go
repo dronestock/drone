@@ -55,7 +55,6 @@ func (b *bootstrap) Boot() (err error) {
 		err = ee
 		b.Error("执行插件出错", field.Error(ee))
 	}
-	err = nil
 
 	return
 }
