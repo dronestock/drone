@@ -1,8 +1,13 @@
 package drone
 
 const (
-	envPrefix            = `DRONE_`
-	pluginEnvPrefix      = `PLUGIN_`
+	pluginEnvPrefix = `PLUGIN_`
+
+	filePrefix          = "file:"
+	urlPrefix           = "url:"
+	httpProtocolPrefix  = "http://"
+	httpsProtocolPrefix = "https://"
+
 	jsonArrayStart       = `[`
 	jsonArrayEnd         = `]`
 	environmentFormatter = `%s=%s`
