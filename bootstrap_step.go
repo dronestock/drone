@@ -3,7 +3,6 @@ package drone
 import (
 	"context"
 	"fmt"
-	"math/rand"
 	"sync"
 	"time"
 
@@ -52,7 +51,6 @@ func (b *bootstrap) execStepper(ctx context.Context, stepper stepper, options *s
 	}
 
 	b.Info("步骤执行开始", fields...)
-	rand.Seed(time.Now().UnixNano())
 	for count := 0; count < b.Counts; count++ {
 		if err = stepper.Run(ctx); (nil == err) || (0 == count && !retry) {
 			break
