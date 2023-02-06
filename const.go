@@ -3,8 +3,6 @@ package drone
 const (
 	pluginEnvPrefix = `PLUGIN_`
 
-	filePrefix          = "file:"
-	urlPrefix           = "url:"
 	httpProtocolPrefix  = "http://"
 	httpsProtocolPrefix = "https://"
 

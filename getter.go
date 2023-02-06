@@ -5,26 +5,43 @@ import (
 	"strings"
 
 	"github.com/goexl/env"
+	"github.com/goexl/exc"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
+	"github.com/maja42/goval"
 )
 
 type getter struct {
 	bootstrap *bootstrap
+	functions map[string]goval.ExpressionFunction
 }
 
-func newGetter(bootstrap *bootstrap) *getter {
-	return &getter{
-		bootstrap: bootstrap,
+func newGetter(bootstrap *bootstrap) (g *getter) {
+	g = new(getter)
+	g.bootstrap = bootstrap
+	g.functions = map[string]goval.ExpressionFunction{
+		"file": g.file,
+		"url":  g.url,
 	}
+
+	return
 }
 
 func (g *getter) Get(key string) (value string) {
 	value = g.env(key)
-	if strings.HasPrefix(value, filePrefix) {
-		value = g.file(strings.TrimPrefix(value, filePrefix))
-	} else if strings.HasPrefix(value, urlPrefix) {
-		value = g.url(strings.TrimPrefix(value, urlPrefix))
+	if "" == strings.TrimSpace(value) {
+		return
+	}
+
+	fields := gox.Fields[any]{
+		field.New("expression", value),
+	}
+	eval := goval.NewEvaluator()
+	if result, ee := eval.Evaluate(value, map[string]any{}, g.functions); nil != ee {
+		g.bootstrap.Error("表达式运算出错", fields.Connect(field.Error(ee))...)
+	} else {
+		value = gox.String(result)
+		g.bootstrap.Debug("表达式运算成功", fields.Connect(field.New("result", value))...)
 	}
 
 	return
@@ -45,8 +62,14 @@ func (g *getter) env(key string) (value string) {
 	return
 }
 
-func (g *getter) file(name string) (value string) {
-	if _, se := os.Stat(name); nil != se && os.IsNotExist(se) {
+func (g *getter) file(args ...any) (result any, err error) {
+	name := ""
+	if 0 == len(args) {
+		err = exc.NewField("必须传入参数", field.New("args", args))
+	} else {
+		name = gox.String(args[0])
+	}
+	if nil != err {
 		return
 	}
 
@@ -56,15 +79,22 @@ func (g *getter) file(name string) (value string) {
 	if bytes, re := os.ReadFile(name); nil != re {
 		g.bootstrap.Error("读取文件出错", fields.Connect(field.Error(re))...)
 	} else {
-		value = string(bytes)
-		g.bootstrap.Debug("读取文件成功", fields.Connect(field.New("content", value))...)
+		result = string(bytes)
+		g.bootstrap.Debug("读取文件成功", fields.Connect(field.New("content", result))...)
 	}
 
 	return
 }
 
-func (g *getter) url(url string) (value string) {
-	if !strings.HasPrefix(url, httpProtocolPrefix) || !strings.HasPrefix(url, httpsProtocolPrefix) {
+func (g *getter) url(args ...any) (result any, err error) {
+	url := ""
+	if 0 == len(args) {
+		err = exc.NewField("必须传入参数", field.New("args", args))
+	} else {
+		url = gox.String(args[0])
+		err = gox.If(g.isHttp(url), exc.NewField("必须是URL地址", field.New("url", url)))
+	}
+	if nil != err {
 		return
 	}
 
@@ -80,9 +110,13 @@ func (g *getter) url(url string) (value string) {
 		}
 		g.bootstrap.Warn("远端服务器返回错误", fields.Connects(httpFields...)...)
 	} else {
-		value = string(rsp.Body())
-		g.bootstrap.Debug("读取端点成功", fields.Connect(field.New("content", value))...)
+		result = string(rsp.Body())
+		g.bootstrap.Debug("读取端点成功", fields.Connect(field.New("content", result))...)
 	}
 
 	return
+}
+
+func (g *getter) isHttp(url string) bool {
+	return strings.HasPrefix(url, httpProtocolPrefix) || strings.HasPrefix(url, httpsProtocolPrefix)
 }
