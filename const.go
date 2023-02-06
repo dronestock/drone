@@ -1,10 +1,11 @@
 package drone
 
 const (
-	pluginEnvPrefix = `PLUGIN_`
-
-	httpProtocolPrefix  = "http://"
-	httpsProtocolPrefix = "https://"
+	prefixPluginEnv     = `PLUGIN_`
+	prefixHttpProtocol  = "http://"
+	prefixHttpsProtocol = "https://"
+	prefixExp           = "exp:"
+	prefixExpression    = "expression"
 
 	jsonArrayStart       = `[`
 	jsonArrayEnd         = `]`

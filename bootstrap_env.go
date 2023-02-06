@@ -5,5 +5,5 @@ import (
 )
 
 func (b *bootstrap) droneEnv(env string) string {
-	return fmt.Sprintf("%s%s", pluginEnvPrefix, env)
+	return fmt.Sprintf("%s%s", prefixPluginEnv, env)
 }
