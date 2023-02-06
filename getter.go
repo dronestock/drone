@@ -35,6 +35,7 @@ func (g *getter) Get(key string) (value string) {
 
 	value = strings.ReplaceAll(value, prefixExpression, "")
 	value = strings.ReplaceAll(value, prefixExp, "")
+	value = strings.TrimSpace(value)
 	fields := gox.Fields[any]{
 		field.New("key", key),
 		field.New("expression", value),
