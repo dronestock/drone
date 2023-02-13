@@ -2,6 +2,9 @@ package drone
 
 // Plugin 插件接口，任何插件都需要实现这个接口
 type Plugin interface {
+	// Prepared 准备
+	Prepared() (err error)
+
 	// Scheme 卡片模板
 	Scheme() (scheme string)
 
@@ -13,4 +16,7 @@ type Plugin interface {
 
 	// Steps 插件运行步骤
 	Steps() Steps
+
+	// Cleanup 清理
+	Cleanup() (err error)
 }

@@ -43,6 +43,10 @@ type Base struct {
 	http *resty.Client
 }
 
+func (b *Base) Prepared() (err error) {
+	return
+}
+
 func (b *Base) Scheme() (scheme string) {
 	return
 }
@@ -55,6 +59,10 @@ func (b *Base) Setup() (unset bool, err error) {
 	unset = true
 	err = nil
 
+	return
+}
+
+func (b *Base) Cleanup() (err error) {
 	return
 }
 
