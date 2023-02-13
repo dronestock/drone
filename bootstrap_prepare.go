@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func (b *bootstrap) prepare() (err error) {
+func (b *bootstrap) prepared() (err error) {
 	if "true" == b.getter.Get("VERBOSE") { // 执行这一步的时候，不能使用结构体里面的配置，因为还没有加载配置
 		fmt.Println(strings.Repeat("-", 120))
 		for _, env := range os.Environ() {
@@ -14,6 +14,7 @@ func (b *bootstrap) prepare() (err error) {
 		}
 		fmt.Println(strings.Repeat("-", 120))
 	}
+	err = b.Prepared()
 
 	return
 }
