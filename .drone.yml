@@ -20,6 +20,30 @@ steps:
       compress:
         enabled: false
 
+  - name: 改变
+    image: ccr.ccs.tencentyun.com/dronestock/changelog
+    when:
+      event:
+        - tag
+    settings:
+      output: $${CHANGELOG_TAG_OUTPUT}
+      tag: $${DRONE_TAG}
+
+  - name: 发布
+    image: ccr.ccs.tencentyun.com/dronestock/github
+    when:
+      event:
+        - tag
+    environment:
+      VERSION: $${DRONE_TAG##v}
+      TOKEN:
+        from_secret: token_github
+    settings:
+      release:
+        tag: $${DRONE_TAG}
+        token: $${TOKEN}
+        body: exe:file("$${CHANGELOG_TAG_OUTPUT}")
+
 
 volumes:
   - name: go
