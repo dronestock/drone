@@ -29,7 +29,7 @@ func newGetter(bootstrap *bootstrap) (g *getter) {
 
 func (g *getter) Get(key string) (value string) {
 	value = g.env(key)
-	if "" == strings.TrimSpace(value) || !g.isExpression(value) {
+	if "" == strings.TrimSpace(value) || !g.isExpr(value) {
 		return
 	}
 
@@ -125,6 +125,7 @@ func (g *getter) isHttp(url string) bool {
 	return strings.HasPrefix(url, prefixHttpProtocol) || strings.HasPrefix(url, prefixHttpsProtocol)
 }
 
-func (g *getter) isExpression(exp string) bool {
-	return strings.HasPrefix(exp, prefixExp) || strings.HasPrefix(exp, prefixExpression)
+func (g *getter) isExpr(expr string) bool {
+	// TODO 改为gox里面的快捷方法调用
+	return strings.HasPrefix(expr, prefixExp) || strings.HasPrefix(expr, prefixExpression) || strings.HasPrefix(expr, prefixExpr)
 }

@@ -4,8 +4,10 @@ const (
 	prefixPluginEnv     = `PLUGIN_`
 	prefixHttpProtocol  = "http://"
 	prefixHttpsProtocol = "https://"
-	prefixExp           = "exp:"
-	prefixExpression    = "expression"
+
+	prefixExp        = "exp:"
+	prefixExpr       = "expr:"
+	prefixExpression = "expression:"
 
 	jsonArrayStart       = `[`
 	jsonArrayEnd         = `]`
