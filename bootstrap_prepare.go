@@ -14,7 +14,6 @@ func (b *bootstrap) prepared() (err error) {
 		}
 		fmt.Println(strings.Repeat("-", 120))
 	}
-	err = b.Prepared()
 
 	return
 }

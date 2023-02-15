@@ -27,7 +27,6 @@ steps:
         - tag
     settings:
       output: $${CHANGELOG_TAG_OUTPUT}
-      tag: $${DRONE_TAG}
 
   - name: 发布
     image: ccr.ccs.tencentyun.com/dronestock/github
@@ -35,7 +34,6 @@ steps:
       event:
         - tag
     environment:
-      VERSION: $${DRONE_TAG##v}
       TOKEN:
         from_secret: token_github
     settings:

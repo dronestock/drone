@@ -40,11 +40,8 @@ type Base struct {
 	// 命令列表
 	Commands []string `default:"${COMMANDS}"`
 
-	http *resty.Client
-}
-
-func (b *Base) Prepared() (err error) {
-	return
+	cleanups []cleanup
+	http     *resty.Client
 }
 
 func (b *Base) Scheme() (scheme string) {
@@ -62,8 +59,8 @@ func (b *Base) Setup() (unset bool, err error) {
 	return
 }
 
-func (b *Base) Cleanup() (err error) {
-	return
+func (b *Base) Cleanup() *cleanupBuilder {
+	return newCleanupBuilder(b)
 }
 
 func (b *Base) Fields() gox.Fields[any] {

@@ -12,7 +12,7 @@ func (b *bootstrap) finally(err *error) {
 	} else {
 		b.Debug("执行命令成功", field.New("code", code), field.New("commands", b.Commands))
 	}
-	if ce := b.Cleanup(); nil != ce {
+	if ce := b.cleanup(); nil != ce {
 		b.Warn("清理插件出错", field.Error(ce))
 	} else {
 		b.Debug("清理插件出错")
