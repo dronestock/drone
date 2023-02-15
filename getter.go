@@ -123,7 +123,7 @@ func (g *getter) url(args ...any) (result any, err error) {
 }
 
 func (g *getter) isHttp(url string) bool {
-	return strings.HasPrefix(url, prefixHttpProtocol) || strings.HasPrefix(url, prefixHttpsProtocol)
+	return check.New().Any().String(url).Items(prefixHttpProtocol, prefixHttpsProtocol).Prefix().Check()
 }
 
 func (g *getter) isExpr(expr string) bool {
