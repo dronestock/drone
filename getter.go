@@ -7,6 +7,7 @@ import (
 	"github.com/goexl/env"
 	"github.com/goexl/exc"
 	"github.com/goexl/gox"
+	"github.com/goexl/gox/check"
 	"github.com/goexl/gox/field"
 	"github.com/maja42/goval"
 )
@@ -126,6 +127,5 @@ func (g *getter) isHttp(url string) bool {
 }
 
 func (g *getter) isExpr(expr string) bool {
-	// TODO 改为gox里面的快捷方法调用
-	return strings.HasPrefix(expr, prefixExp) || strings.HasPrefix(expr, prefixExpression) || strings.HasPrefix(expr, prefixExpr)
+	return check.New().Any().String(expr).Items(prefixExp, prefixExpression, prefixExpr).Prefix().Check()
 }
