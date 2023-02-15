@@ -44,7 +44,7 @@ func (g *getter) Get(key string) (value string) {
 	if result, ee := eval.Evaluate(value, map[string]any{}, g.functions); nil != ee {
 		g.bootstrap.Debug("表达式运算出错", fields.Connect(field.Error(ee))...)
 	} else {
-		value = gox.String(result)
+		value = gox.ToString(result)
 		g.bootstrap.Debug("表达式运算成功", fields.Connect(field.New("result", value))...)
 	}
 
@@ -71,7 +71,7 @@ func (g *getter) file(args ...any) (result any, err error) {
 	if 0 == len(args) {
 		err = exc.NewField("必须传入参数", field.New("args", args))
 	} else {
-		name = gox.String(args[0])
+		name = gox.ToString(args[0])
 	}
 	if nil != err {
 		return
@@ -95,7 +95,7 @@ func (g *getter) url(args ...any) (result any, err error) {
 	if 0 == len(args) {
 		err = exc.NewField("必须传入参数", field.New("args", args))
 	} else {
-		url = gox.String(args[0])
+		url = gox.ToString(args[0])
 		err = gox.If(g.isHttp(url), exc.NewField("必须是URL地址", field.New("url", url)))
 	}
 	if nil != err {
