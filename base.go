@@ -40,7 +40,7 @@ type Base struct {
 	// 命令列表
 	Commands []string `default:"${COMMANDS}"`
 
-	cleanups []cleanup
+	cleanups []*cleanup
 	http     *resty.Client
 }
 

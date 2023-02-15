@@ -1,16 +1,16 @@
 package drone
 
 type cleanupBuilder struct {
-	base     *Base
-	name     string
-	cleanups []cleanup
+	base    *Base
+	name    string
+	workers []worker
 }
 
 func newCleanupBuilder(base *Base) *cleanupBuilder {
 	return &cleanupBuilder{
-		base:     base,
-		name:     "开发者很懒，没设置清理名称",
-		cleanups: make([]cleanup, 0),
+		base:    base,
+		name:    "这个开发者很懒，没设置清理名称",
+		workers: make([]worker, 0),
 	}
 }
 
@@ -21,11 +21,11 @@ func (cb *cleanupBuilder) Name(name string) *cleanupBuilder {
 }
 
 func (cb *cleanupBuilder) File(names ...string) *cleanupBuilder {
-	cb.cleanups = append(cb.cleanups, newFileCleanup(names...))
+	cb.workers = append(cb.workers, newFileWorker(names...))
 
 	return cb
 }
 
 func (cb *cleanupBuilder) Build() {
-	cb.base.cleanups = append(cb.base.cleanups, cb.cleanups...)
+	cb.base.cleanups = append(cb.base.cleanups, newCleanup(cb.name, cb.workers...))
 }

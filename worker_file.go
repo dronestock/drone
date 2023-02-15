@@ -6,19 +6,19 @@ import (
 	"github.com/goexl/gox/field"
 )
 
-var _ cleanup = (*fileCleanup)(nil)
+var _ worker = (*fileWorker)(nil)
 
-type fileCleanup struct {
+type fileWorker struct {
 	names []string
 }
 
-func newFileCleanup(names ...string) *fileCleanup {
-	return &fileCleanup{
+func newFileWorker(names ...string) *fileWorker {
+	return &fileWorker{
 		names: names,
 	}
 }
 
-func (fc *fileCleanup) clean(base *Base) (err error) {
+func (fc *fileWorker) work(base *Base) (err error) {
 	for _, name := range fc.names {
 		if re := os.Remove(name); nil != re {
 			err = re
