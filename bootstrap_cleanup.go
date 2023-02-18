@@ -12,7 +12,7 @@ func (b *Base) cleanup() (err error) {
 		}
 		if ce := cleanup.clean(b); nil != ce {
 			err = ce
-			b.Warn("执行清理出错", fields.Connect(field.Error(ce))...)
+			b.Warn("执行清理出错", fields.Add(field.Error(ce))...)
 		} else {
 			b.Debug("执行清理成功", fields...)
 		}

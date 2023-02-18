@@ -57,7 +57,7 @@ func (b *bootstrap) execStepper(ctx context.Context, stepper stepper, options *s
 		}
 
 		backoff := b.backoff()
-		b.Info(fmt.Sprintf("步骤第%d次执行遇到错误", count+1), fields.Connect(field.Error(err))...)
+		b.Info(fmt.Sprintf("步骤第%d次执行遇到错误", count+1), fields.Add(field.Error(err))...)
 		b.Info(fmt.Sprintf("休眠%s，继续执行步骤", backoff), fields...)
 		time.Sleep(backoff)
 		b.Info(fmt.Sprintf("步骤重试第%d次执行", count+2), fields...)
@@ -69,9 +69,9 @@ func (b *bootstrap) execStepper(ctx context.Context, stepper stepper, options *s
 
 	switch {
 	case nil != err && retry:
-		b.Error("步骤执行尝试所有重试后出错", fields.Connect(field.Error(err))...)
+		b.Error("步骤执行尝试所有重试后出错", fields.Add(field.Error(err))...)
 	case nil != err && !retry:
-		b.Error("步骤执行出错", fields.Connect(field.Error(err))...)
+		b.Error("步骤执行出错", fields.Add(field.Error(err))...)
 	case nil == err:
 		b.Info("步骤执行成功", fields...)
 	}

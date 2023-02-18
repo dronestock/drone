@@ -68,7 +68,7 @@ func (cb *commandBuilder) Exec() (err error) {
 
 	// 执行命令
 	if _, err = gex.Exec(cb.command, gexOptions...); nil != err {
-		cb.base.Error(fmt.Sprintf("执行%s命令出错", cb.options.name), fields.Connect(field.Error(err))...)
+		cb.base.Error(fmt.Sprintf("执行%s命令出错", cb.options.name), fields.Add(field.Error(err))...)
 	} else if cb.base.Verbose {
 		cb.base.Info(fmt.Sprintf("执行%s命令成功", cb.options.name), fields...)
 	}

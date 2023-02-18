@@ -35,8 +35,9 @@ func (g *getter) Get(key string) (value string) {
 		return
 	}
 
-	value = strings.ReplaceAll(value, prefixExpression, "")
-	value = strings.ReplaceAll(value, prefixExp, "")
+	value = strings.TrimPrefix(value, prefixExpression)
+	value = strings.TrimPrefix(value, prefixExpr)
+	value = strings.TrimPrefix(value, prefixExp)
 	value = strings.TrimSpace(value)
 	fields := gox.Fields[any]{
 		field.New("key", key),
@@ -44,10 +45,10 @@ func (g *getter) Get(key string) (value string) {
 	}
 	eval := goval.NewEvaluator()
 	if result, ee := eval.Evaluate(value, map[string]any{}, g.functions); nil != ee {
-		g.bootstrap.Debug("表达式运算出错", fields.Connect(field.Error(ee))...)
+		g.bootstrap.Debug("表达式运算出错", fields.Add(field.Error(ee))...)
 	} else {
 		value = gox.ToString(result)
-		g.bootstrap.Debug("表达式运算成功", fields.Connect(field.New("result", value))...)
+		g.bootstrap.Debug("表达式运算成功", fields.Add(field.New("result", value))...)
 	}
 
 	return
@@ -83,10 +84,10 @@ func (g *getter) file(args ...any) (result any, err error) {
 		field.New("filename", name),
 	}
 	if bytes, re := os.ReadFile(name); nil != re {
-		g.bootstrap.Error("读取文件出错", fields.Connect(field.Error(re))...)
+		g.bootstrap.Error("读取文件出错", fields.Add(field.Error(re))...)
 	} else {
 		result = string(bytes)
-		g.bootstrap.Debug("读取文件成功", fields.Connect(field.New("content", result))...)
+		g.bootstrap.Debug("读取文件成功", fields.Add(field.New("content", result))...)
 	}
 
 	return
@@ -108,16 +109,16 @@ func (g *getter) url(args ...any) (result any, err error) {
 		field.New("url", url),
 	}
 	if rsp, re := g.bootstrap.Http().Get(url); nil != re {
-		g.bootstrap.Error("读取端点出错", fields.Connect(field.Error(re))...)
+		g.bootstrap.Error("读取端点出错", fields.Add(field.Error(re))...)
 	} else if rsp.IsError() {
 		httpFields := gox.Fields[any]{
 			field.New("code", rsp.StatusCode()),
 			field.New("body", rsp.Body()),
 		}
-		g.bootstrap.Warn("远端服务器返回错误", fields.Connects(httpFields...)...)
+		g.bootstrap.Warn("远端服务器返回错误", fields.Add(httpFields...)...)
 	} else {
 		result = string(rsp.Body())
-		g.bootstrap.Debug("读取端点成功", fields.Connect(field.New("content", result))...)
+		g.bootstrap.Debug("读取端点成功", fields.Add(field.New("content", result))...)
 	}
 
 	return
