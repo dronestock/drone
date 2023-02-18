@@ -23,6 +23,7 @@ func newGetter(bootstrap *bootstrap) (g *getter) {
 	g.functions = map[string]goval.ExpressionFunction{
 		"file": g.file,
 		"url":  g.url,
+		"http": g.url,
 	}
 
 	return
@@ -123,9 +124,19 @@ func (g *getter) url(args ...any) (result any, err error) {
 }
 
 func (g *getter) isHttp(url string) bool {
-	return check.New().Any().String(url).Items(prefixHttpProtocol, prefixHttpsProtocol).Prefix().Check()
+	return check.New().
+		Any().
+		String(url).
+		Items(prefixHttpProtocol, prefixHttpsProtocol).
+		Prefix().
+		Check()
 }
 
 func (g *getter) isExpr(expr string) bool {
-	return check.New().Any().String(expr).Items(prefixExp, prefixExpression, prefixExpr).Prefix().Check()
+	return check.New().
+		Any().
+		String(expr).
+		Items(prefixExp, prefixExpression, prefixExpr, prefixVal, prefixValue).
+		Prefix().
+		Check()
 }
