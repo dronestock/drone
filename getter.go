@@ -136,7 +136,7 @@ func (g *getter) isExpr(expr string) bool {
 	return check.New().
 		Any().
 		String(expr).
-		Items(prefixExp, prefixExpression, prefixExpr, prefixVal, prefixValue).
+		Items(prefixExp, prefixExpression, prefixExpr).
 		Prefix().
 		Check()
 }

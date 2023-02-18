@@ -8,8 +8,6 @@ const (
 	prefixExp        = "exp:"
 	prefixExpr       = "expr:"
 	prefixExpression = "expression:"
-	prefixVal="val:"
-	prefixValue="value:"
 
 	jsonArrayStart       = `[`
 	jsonArrayEnd         = `]`
