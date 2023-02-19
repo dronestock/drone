@@ -44,7 +44,7 @@ steps:
       release:
         tag: $${DRONE_TAG}
         token: $${TOKEN}
-        body: exp:file("$${CHANGELOG_TAG_OUTPUT}")
+        body: file("$${CHANGELOG_TAG_OUTPUT}")
 
 
 volumes:
