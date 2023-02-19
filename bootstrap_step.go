@@ -46,7 +46,7 @@ func (b *bootstrap) execStepper(ctx context.Context, stepper stepper, options *s
 		field.New("name", options.name),
 		field.New("async", options.async),
 		field.New("retry", retry),
-		field.New("break", options._break),
+		field.New("break", options.br),
 		field.New("counts", b.Counts),
 	}
 

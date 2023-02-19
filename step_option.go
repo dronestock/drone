@@ -7,8 +7,8 @@ import (
 type stepOptions struct {
 	name   string
 	async  bool
-	retry  bool
-	_break bool
+	retry bool
+	br    bool
 }
 
 func (o *stepOptions) retryable(base *Base) (retry bool) {

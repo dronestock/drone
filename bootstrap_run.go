@@ -14,7 +14,7 @@ func (b *bootstrap) run() (err error) {
 	wg := new(sync.WaitGroup)
 	ctx := context.Background()
 	for _, step := range b.plugin.Steps() {
-		if err = b.execStep(ctx, step, wg); nil != err && step.options._break {
+		if err = b.execStep(ctx, step, wg); nil != err && step.options.br {
 			return
 		}
 	}

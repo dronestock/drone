@@ -10,10 +10,10 @@ func NewStep(stepper stepper) *stepBuilder {
 	return &stepBuilder{
 		stepper: stepper,
 		options: &stepOptions{
-			name:   "默认步骤",
-			async:  false,
-			retry:  true,
-			_break: true,
+			name:  "默认步骤",
+			async: false,
+			retry: true,
+			br:    true,
 		},
 	}
 }
@@ -31,13 +31,13 @@ func (sb *stepBuilder) Async() *stepBuilder {
 }
 
 func (sb *stepBuilder) Continue() *stepBuilder {
-	sb.options._break = false
+	sb.options.br = false
 
 	return sb
 }
 
 func (sb *stepBuilder) Break() *stepBuilder {
-	sb.options._break = true
+	sb.options.br = true
 
 	return sb
 }
