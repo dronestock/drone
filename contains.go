@@ -1,21 +1,21 @@
 package drone
 
 var (
-	_ checkerBuilder = (*_contains)(nil)
+	_ checkerBuilder = (*contains)(nil)
 	_                = Contains
 )
 
-type _contains struct {
+type contains struct {
 	contains string
 }
 
 // Contains 检查是否包含字符串
-func Contains(contains string) *_contains {
-	return &_contains{
-		contains: contains,
+func Contains(cas string) *contains {
+	return &contains{
+		contains: cas,
 	}
 }
 
-func (c *_contains) checker() *checker {
+func (c *contains) checker() *checker {
 	return newChecker(checkerModeContains, c.contains)
 }
