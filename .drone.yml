@@ -7,6 +7,10 @@ clone:
   disable: true
 
 
+environment:
+  CHANGELOG_TAG_OUTPUT: CHANGELOG.tag.md
+
+
 steps:
   - name: 代码
     image: ccr.ccs.tencentyun.com/dronestock/git
