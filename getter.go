@@ -31,13 +31,10 @@ func newGetter(bootstrap *bootstrap) (g *getter) {
 
 func (g *getter) Get(key string) (value string) {
 	value = g.env(key)
-	if "" == strings.TrimSpace(value) || !g.isExpr(value) {
+	if "" == strings.TrimSpace(value) {
 		return
 	}
 
-	value = strings.TrimPrefix(value, prefixExpression)
-	value = strings.TrimPrefix(value, prefixExpr)
-	value = strings.TrimPrefix(value, prefixExp)
 	value = strings.TrimSpace(value)
 	fields := gox.Fields[any]{
 		field.New("key", key),
@@ -129,15 +126,6 @@ func (g *getter) isHttp(url string) bool {
 		Any().
 		String(url).
 		Items(prefixHttpProtocol, prefixHttpsProtocol).
-		Prefix().
-		Check()
-}
-
-func (g *getter) isExpr(expr string) bool {
-	return check.New().
-		Any().
-		String(expr).
-		Items(prefixExp, prefixExpression, prefixExpr).
 		Prefix().
 		Check()
 }
