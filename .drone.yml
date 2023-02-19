@@ -15,7 +15,7 @@ steps:
   - name: 代码
     image: ccr.ccs.tencentyun.com/dronestock/git
     commands:
-      - export DRONE_BUILD_STATUS=failure
+      - env
 
   - name: 编译
     image: ccr.ccs.tencentyun.com/pangum/drone
