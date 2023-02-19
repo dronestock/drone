@@ -15,7 +15,7 @@ steps:
   - name: 代码
     image: ccr.ccs.tencentyun.com/dronestock/git
     commands:
-      - exit 2
+      - exit -1
 
   - name: 编译
     image: ccr.ccs.tencentyun.com/pangum/drone
