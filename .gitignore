@@ -17,7 +17,6 @@ dist/
 # 各种工具中间文件
 *.out
 *.lock
-*.sum
 
 # 依赖文件
 vendor/
