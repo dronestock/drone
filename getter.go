@@ -31,10 +31,13 @@ func newGetter(bootstrap *bootstrap) (g *getter) {
 
 func (g *getter) Get(key string) (value string) {
 	value = g.env(key)
-	if "" == strings.TrimSpace(value) {
+	if "" == strings.TrimSpace(value) || !g.isExpr(value) {
 		return
 	}
 
+	value = strings.TrimPrefix(value, prefixExpression)
+	value = strings.TrimPrefix(value, prefixExpr)
+	value = strings.TrimPrefix(value, prefixExp)
 	value = strings.TrimSpace(value)
 	fields := gox.Fields[any]{
 		field.New("key", key),
@@ -42,7 +45,7 @@ func (g *getter) Get(key string) (value string) {
 	}
 	eval := goval.NewEvaluator()
 	if result, ee := eval.Evaluate(value, map[string]any{}, g.functions); nil != ee {
-		g.bootstrap.Debug("表达式运算出错", fields.Add(field.Error(ee))...)
+		g.bootstrap.Error("表达式运算出错", fields.Add(field.Error(ee))...)
 	} else {
 		value = gox.ToString(result)
 		g.bootstrap.Debug("表达式运算成功", fields.Add(field.New("result", value))...)
@@ -126,6 +129,15 @@ func (g *getter) isHttp(url string) bool {
 		Any().
 		String(url).
 		Items(prefixHttpProtocol, prefixHttpsProtocol).
+		Prefix().
+		Check()
+}
+
+func (g *getter) isExpr(expr string) bool {
+	return check.New().
+		Any().
+		String(expr).
+		Items(prefixExp, prefixExpression, prefixExpr).
 		Prefix().
 		Check()
 }

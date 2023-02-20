@@ -5,6 +5,10 @@ const (
 	prefixHttpProtocol  = "http://"
 	prefixHttpsProtocol = "https://"
 
+	prefixExp        = "exp:"
+	prefixExpr       = "expr:"
+	prefixExpression = "expression:"
+
 	jsonArrayStart       = `[`
 	jsonArrayEnd         = `]`
 	environmentFormatter = `%s=%s`
