@@ -63,6 +63,10 @@ func (b *Base) Cleanup() *cleanupBuilder {
 	return newCleanupBuilder(b)
 }
 
+func (b *Base) Command(command string) *commandBuilder {
+	return newCommandBuilder(b, command)
+}
+
 func (b *Base) Fields() gox.Fields[any] {
 	return gox.Fields[any]{
 		field.New("default", b.Defaults),

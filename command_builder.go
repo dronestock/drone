@@ -10,12 +10,12 @@ type commandBuilder struct {
 	options *commandOptions
 }
 
-func newCommand(base *Base, command string) *commandBuilder {
+func newCommandBuilder(base *Base, command string) *commandBuilder {
 	return &commandBuilder{
 		base:    base,
 		command: command,
 		options: &commandOptions{
-			pwe: gox.Ifx(nil == base.Pwe, true, *base.Pwe),
+			pwe: gox.Ift(nil == base.Pwe, true, *base.Pwe),
 		},
 	}
 }
@@ -88,4 +88,8 @@ func (cb *commandBuilder) Checkers(checkers ...checkerBuilder) *commandBuilder {
 
 func (cb *commandBuilder) Checker(checker checkerBuilder) *commandBuilder {
 	return cb.Checkers(checker)
+}
+
+func (cb *commandBuilder) Build() *command {
+	return newCommand(cb.base, cb.command, cb.options)
 }
