@@ -3,6 +3,7 @@ module github.com/dronestock/drone
 go 1.19
 
 require (
+	github.com/antonmedv/expr v1.12.1
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/goexl/env v0.0.2
 	github.com/goexl/exc v0.0.5
@@ -11,7 +12,6 @@ require (
 	github.com/goexl/mengpo v0.2.4
 	github.com/goexl/simaqian v0.2.3
 	github.com/goexl/xiren v0.0.5
-	github.com/maja42/goval v1.3.1
 )
 
 require (
@@ -24,6 +24,7 @@ require (
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/rs/xid v1.4.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
+	github.com/stretchr/testify v1.8.1 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect

@@ -4,26 +4,30 @@ import (
 	"os"
 	"strings"
 
+	"github.com/antonmedv/expr"
+	"github.com/antonmedv/expr/vm"
 	"github.com/goexl/env"
 	"github.com/goexl/exc"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/check"
 	"github.com/goexl/gox/field"
-	"github.com/maja42/goval"
 )
 
 type getter struct {
 	bootstrap *bootstrap
-	functions map[string]goval.ExpressionFunction
+	vm        *vm.VM
+	options   []expr.Option
 }
 
 func newGetter(bootstrap *bootstrap) (g *getter) {
 	g = new(getter)
 	g.bootstrap = bootstrap
-	g.functions = map[string]goval.ExpressionFunction{
-		"file": g.file,
-		"url":  g.url,
-		"http": g.url,
+	g.vm = new(vm.VM)
+	g.options = []expr.Option{
+		expr.AllowUndefinedVariables(),
+		expr.Function("file", g.file),
+		expr.Function("url", g.url),
+		expr.Function("http", g.url),
 	}
 
 	return
@@ -31,21 +35,18 @@ func newGetter(bootstrap *bootstrap) (g *getter) {
 
 func (g *getter) Get(key string) (value string) {
 	value = g.env(key)
-	if "" == strings.TrimSpace(value) || !g.isExpr(value) {
+	if "" == strings.TrimSpace(value) {
 		return
 	}
 
-	value = strings.TrimPrefix(value, prefixExpression)
-	value = strings.TrimPrefix(value, prefixExpr)
-	value = strings.TrimPrefix(value, prefixExp)
-	value = strings.TrimSpace(value)
 	fields := gox.Fields[any]{
 		field.New("key", key),
 		field.New("expression", value),
 	}
-	eval := goval.NewEvaluator()
-	if result, ee := eval.Evaluate(value, map[string]any{}, g.functions); nil != ee {
-		g.bootstrap.Error("表达式运算出错", fields.Add(field.Error(ee))...)
+	if program, ce := expr.Compile(value, g.options...); nil != ce {
+		g.bootstrap.Error("表达式编译出错", fields.Add(field.Error(ce))...)
+	} else if result, re := g.vm.Run(program, nil); nil != re {
+		g.bootstrap.Error("表达式运算出错", fields.Add(field.Error(re))...)
 	} else {
 		value = gox.ToString(result)
 		g.bootstrap.Debug("表达式运算成功", fields.Add(field.New("result", value))...)
@@ -129,15 +130,6 @@ func (g *getter) isHttp(url string) bool {
 		Any().
 		String(url).
 		Items(prefixHttpProtocol, prefixHttpsProtocol).
-		Prefix().
-		Check()
-}
-
-func (g *getter) isExpr(expr string) bool {
-	return check.New().
-		Any().
-		String(expr).
-		Items(prefixExp, prefixExpression, prefixExpr).
 		Prefix().
 		Check()
 }
