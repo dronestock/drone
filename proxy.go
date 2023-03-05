@@ -3,8 +3,6 @@ package drone
 import (
 	"fmt"
 	"net/url"
-
-	"github.com/goexl/gox"
 )
 
 type proxy struct {
@@ -14,7 +12,7 @@ type proxy struct {
 	Host string `json:"host" yaml:"host" xml:"host" toml:"host" validate:"required"`
 	// 代理类型
 	// nolint:lll
-	Scheme gox.UriScheme `default:"scheme" json:"scheme" yaml:"scheme" xml:"scheme" toml:"scheme" validate:"required,oneof=socks4 socks5 http https"`
+	Scheme string `default:"scheme" json:"scheme" yaml:"scheme" xml:"scheme" toml:"scheme" validate:"required,oneof=socks4 socks5 http https"`
 	// 目标
 	Target string `json:"target" yaml:"target" xml:"target" toml:"target"`
 	// 代理认证用户名
