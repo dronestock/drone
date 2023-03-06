@@ -44,9 +44,9 @@ func (g *getter) Get(key string) (value string) {
 		field.New("expression", value),
 	}
 	if program, ce := expr.Compile(value, g.options...); nil != ce {
-		g.bootstrap.Error("表达式编译出错", fields.Add(field.Error(ce))...)
+		g.bootstrap.Debug("表达式编译出错", fields.Add(field.Error(ce))...)
 	} else if result, re := g.vm.Run(program, nil); nil != re {
-		g.bootstrap.Error("表达式运算出错", fields.Add(field.Error(re))...)
+		g.bootstrap.Debug("表达式运算出错", fields.Add(field.Error(re))...)
 	} else {
 		value = gox.ToString(result)
 		g.bootstrap.Debug("表达式运算成功", fields.Add(field.New("result", value))...)
