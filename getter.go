@@ -25,9 +25,9 @@ func newGetter(bootstrap *bootstrap) (g *getter) {
 	g.vm = new(vm.VM)
 	g.options = []expr.Option{
 		expr.AllowUndefinedVariables(),
-		expr.Function("file", g.file),
-		expr.Function("url", g.url),
-		expr.Function("http", g.url),
+		expr.Function(funcFile, g.file),
+		expr.Function(funcUrl, g.url),
+		expr.Function(funcHttp, g.url),
 	}
 
 	return

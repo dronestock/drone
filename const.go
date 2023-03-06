@@ -10,4 +10,8 @@ const (
 	environmentFormatter = `%s=%s`
 	github               = `https://github.com`
 	ghproxy              = `https://ghproxy.com/`
+
+	funcFile = "file"
+	funcHttp = "http"
+	funcUrl  = "url"
 )
