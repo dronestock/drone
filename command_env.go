@@ -5,7 +5,7 @@ import (
 )
 
 func (cb *commandBuilder) Environment(key string, value string) *commandBuilder {
-	cb.options.environments = append(cb.options.environments, fmt.Sprintf(environmentFormatter, key, value))
+	cb.params.environments = append(cb.params.environments, fmt.Sprintf(environmentFormatter, key, value))
 
 	return cb
 }
@@ -15,7 +15,7 @@ func (cb *commandBuilder) Env(key string, value string) *commandBuilder {
 }
 
 func (cb *commandBuilder) StringEnvironment(env string) *commandBuilder {
-	cb.options.environments = append(cb.options.environments, env)
+	cb.params.environments = append(cb.params.environments, env)
 
 	return cb
 }
@@ -25,7 +25,7 @@ func (cb *commandBuilder) StringEnv(env string) *commandBuilder {
 }
 
 func (cb *commandBuilder) StringEnvironments(envs ...string) *commandBuilder {
-	cb.options.environments = append(cb.options.environments, envs...)
+	cb.params.environments = append(cb.params.environments, envs...)
 
 	return cb
 }

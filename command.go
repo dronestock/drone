@@ -11,10 +11,10 @@ import (
 type command struct {
 	base    *Base
 	name    string
-	options *commandOptions
+	options *commandParams
 }
 
-func newCommand(base *Base, name string, options *commandOptions) *command {
+func newCommand(base *Base, name string, options *commandParams) *command {
 	return &command{
 		base:    base,
 		name:    name,

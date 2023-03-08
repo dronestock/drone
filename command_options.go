@@ -4,7 +4,7 @@ import (
 	"github.com/goexl/gox"
 )
 
-type commandOptions struct {
+type commandParams struct {
 	name         string
 	args         []any
 	environments []string
@@ -15,4 +15,11 @@ type commandOptions struct {
 
 	collectors []*collector
 	checkers   []*checker
+}
+
+func newCommandParams(pwe bool) *commandParams {
+	return &commandParams{
+		args: make([]any, 0, 4),
+		pwe:  pwe,
+	}
 }
