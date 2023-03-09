@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/goexl/gex"
+	"github.com/goexl/gox/args"
 	"github.com/goexl/gox/field"
 )
 
@@ -25,9 +26,13 @@ func (b *Base) exec() (code int, err error) {
 }
 
 func (b *Base) linux() (int, error) {
-	return gex.Exec("/bin/sh", gex.Args("-c", strings.Join(b.Commands, "; ")), gex.Terminal())
+	return gex.New("/bin/sh").Args(args.New().Build().Arg("c", strings.Join(b.Commands, "; ")).Build()).Build().Exec()
 }
 
 func (b *Base) windows() (int, error) {
-	return gex.Exec("cmd", gex.Args("/C", strings.Join(b.Commands, "&& ")), gex.Terminal())
+	ab := args.New()
+	ab.Short("/")
+	ab.Long("/")
+
+	return gex.New("cmd").Args(ab.Build().Arg("C", strings.Join(b.Commands, "&& ")).Build()).Build().Exec()
 }

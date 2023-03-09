@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/goexl/gex"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
 	"github.com/goexl/simaqian"
@@ -63,8 +64,16 @@ func (b *Base) Cleanup() *cleanupBuilder {
 	return newCleanupBuilder(b)
 }
 
-func (b *Base) Command(command string) *commandBuilder {
-	return newCommandBuilder(b, command)
+func (b *Base) Command(command string) (builder *commandBuilder) {
+	builder = gex.New(command)
+	if nil == b.Pwe || *b.Pwe {
+		builder.Pwe()
+	}
+	if b.Verbose {
+		builder.Echo()
+	}
+
+	return
 }
 
 func (b *Base) Fields() gox.Fields[any] {
