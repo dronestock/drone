@@ -6,6 +6,7 @@ import (
 
 	"github.com/antonmedv/expr"
 	"github.com/antonmedv/expr/vm"
+	"github.com/drone/envsubst"
 	"github.com/goexl/env"
 	"github.com/goexl/exc"
 	"github.com/goexl/gox"
@@ -39,8 +40,10 @@ func (g *getter) Get(key string) (value string) {
 		return
 	}
 
+	value = g.eval(value)
 	fields := gox.Fields[any]{
 		field.New("key", key),
+		field.New("value", value),
 		field.New("expression", value),
 	}
 	if program, ce := expr.Compile(value, g.options...); nil != ce {
@@ -65,6 +68,29 @@ func (g *getter) env(key string) (value string) {
 	}
 	if value = env.Get(key); "" != value {
 		return
+	}
+
+	return
+}
+
+func (g *getter) eval(from string) (to string) {
+	to = from
+	if !strings.Contains(to, dollar) {
+		return
+	}
+
+	count := 0
+	for {
+		if value, ee := envsubst.EvalEnv(to); nil == ee {
+			to = value
+		}
+
+		if count >= 2 || !strings.Contains(to, dollar) {
+			break
+		}
+		if strings.Contains(to, dollar) {
+			count++
+		}
 	}
 
 	return
