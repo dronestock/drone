@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/antonmedv/expr v1.12.1
+	github.com/drone/envsubst v1.0.3
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/goexl/env v0.0.2
 	github.com/goexl/exc v0.0.5
@@ -15,7 +16,6 @@ require (
 )
 
 require (
-	github.com/drone/envsubst v1.0.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.11.2 // indirect
