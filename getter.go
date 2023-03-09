@@ -1,7 +1,9 @@
 package drone
 
 import (
+	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/antonmedv/expr"
@@ -59,6 +61,8 @@ func (g *getter) Get(key string) (value string) {
 }
 
 func (g *getter) env(key string) (value string) {
+	defer g.json(&value)
+
 	key = strings.ToUpper(key)
 	if value = os.Getenv(key); "" != value {
 		return
@@ -73,6 +77,21 @@ func (g *getter) env(key string) (value string) {
 	return
 }
 
+func (g *getter) json(from *string) {
+	if "" == strings.TrimSpace(*from) {
+		// 不对空字符串做处理
+	} else if "true" == *from || "false" == *from {
+		// 是布尔值，满足格式要求
+	} else if _, err := strconv.ParseFloat(*from, 64); nil == err {
+		// 是数字，满足格式要求
+	} else if jsonObjectStart == (*from)[0:1] || jsonArrayStart == (*from)[0:1] {
+		// 是对象或者数据，满足格式要求
+	} else {
+		// 是字符串，必须加双引号
+		*from = fmt.Sprintf(`"%s"`, *from)
+	}
+}
+
 func (g *getter) eval(from string) (to string) {
 	to = from
 	if !strings.Contains(to, dollar) {
@@ -81,7 +100,7 @@ func (g *getter) eval(from string) (to string) {
 
 	count := 0
 	for {
-		if value, ee := envsubst.EvalEnv(to); nil == ee {
+		if value, ee := envsubst.Eval(to, g.env); nil == ee {
 			to = value
 		}
 
