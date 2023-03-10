@@ -37,13 +37,9 @@ steps:
     when:
       event:
         - tag
-        - push
     environment:
-      DRONE_TAG: v0.9.1
       TOKEN:
         from_secret: token_github
-    commands:
-      - env
     settings:
       release:
         tag: $${DRONE_TAG}
