@@ -61,7 +61,7 @@ func (g *getter) Get(key string) (value string) {
 }
 
 func (g *getter) env(key string) (value string) {
-	defer g.json(&value)
+	defer g.fixJsonFormat(&value)
 
 	key = strings.ToUpper(key)
 	if value = os.Getenv(key); "" != value {
@@ -77,9 +77,11 @@ func (g *getter) env(key string) (value string) {
 	return
 }
 
-func (g *getter) json(from *string) {
+func (g *getter) fixJsonFormat(from *string) {
 	if "" == strings.TrimSpace(*from) {
 		// 不对空字符串做处理
+	} else if strings.HasPrefix(*from, quota) && strings.HasSuffix(*from, quota) {
+		// 已经是字符串，不用处理
 	} else if "true" == *from || "false" == *from {
 		// 是布尔值，满足格式要求
 	} else if _, err := strconv.ParseFloat(*from, 64); nil == err {

@@ -16,4 +16,5 @@ const (
 	funcUrl  = "url"
 
 	dollar = "$"
+	quota  = `"`
 )
