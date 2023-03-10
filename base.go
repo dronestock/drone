@@ -87,7 +87,7 @@ func (b *Base) Fields() gox.Fields[any] {
 		field.New("backoff", b.Backoff),
 
 		field.New("proxy", b.Proxy),
-		field.New("exec", b.Commands),
+		field.New("commands", b.Commands),
 	}
 }
 

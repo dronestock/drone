@@ -42,11 +42,11 @@ steps:
       DRONE_TAG: v0.9.1
       TOKEN:
         from_secret: token_github
+    commands:
+      - env
     settings:
-      commands:
-        - env
       release:
-        tag: v0.9.1
+        tag: $${DRONE_TAG}
         token: $${TOKEN}
         body: file('$${CHANGELOG_TAG_OUTPUT}')
 
