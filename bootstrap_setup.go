@@ -16,7 +16,7 @@ func (b *bootstrap) setup() (err error) {
 	// 加载配置
 	config := b.plugin.Config()
 	err = mengpo.New().Getter(b.getter).Processor(b.processor).Build().Set(config)
-	fields := config.Fields().Add(config.BaseConfig().Fields()...)
+	fields := config.Fields().Add(config.base().Fields()...)
 	if nil != err {
 		b.Error("加载配置出错", fields.Add(field.Error(err))...)
 	} else {
@@ -26,17 +26,7 @@ func (b *bootstrap) setup() (err error) {
 		return
 	}
 
-	// 数据验证
-	if err = xiren.Struct(config); nil != err {
-		b.Error("配置验证未通过", config.Fields().Add(field.Error(err))...)
-	} else {
-		b.Info("配置验证通过，继续执行")
-	}
-	if nil != err {
-		return
-	}
-
-	b.Base = config.BaseConfig()
+	b.Base = config.base()
 	builder := simaqian.New()
 	// 设置日志级别
 	builder.Level(simaqian.ParseLevel(b.Level))
@@ -53,11 +43,24 @@ func (b *bootstrap) setup() (err error) {
 	}
 
 	// 设置配置信息
-	if unset, se := config.Setup(); nil != se {
+	if se := config.Setup(); nil != se {
 		b.Error("设置配置信息出错", config.Fields().Add(field.Error(err))...)
 		err = se
-	} else if !unset {
+	} else {
 		b.Info("设置配置信息完成，继续执行")
+	}
+	if nil != err {
+		return
+	}
+
+	// 数据验证
+	if err = xiren.Struct(config); nil != err {
+		b.Error("配置验证未通过", config.Fields().Add(field.Error(err))...)
+	} else {
+		b.Info("配置验证通过，继续执行")
+	}
+	if nil != err {
+		return
 	}
 
 	return

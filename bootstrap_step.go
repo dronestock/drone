@@ -8,6 +8,7 @@ import (
 
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
+	"github.com/goexl/gox/rand"
 )
 
 func (b *bootstrap) execStep(ctx context.Context, step *Step, wg *sync.WaitGroup) (err error) {
@@ -56,7 +57,7 @@ func (b *bootstrap) execStepper(ctx context.Context, stepper stepper, options *s
 			break
 		}
 
-		backoff := b.backoff()
+		backoff := rand.New().Duration().Between(time.Second, b.Backoff).Build().Generate().Truncate(time.Second)
 		b.Info(fmt.Sprintf("步骤第%d次执行遇到错误", count+1), fields.Add(field.Error(err))...)
 		b.Info(fmt.Sprintf("休眠%s，继续执行步骤", backoff), fields...)
 		time.Sleep(backoff)
