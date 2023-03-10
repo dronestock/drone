@@ -8,6 +8,7 @@ const (
 	jsonArrayStart  = "["
 	jsonArrayEnd    = "]"
 	jsonObjectStart = "{"
+	jsonObjectEnd   = "}"
 	github          = "https://github.com"
 	ghproxy         = "https://ghproxy.com/"
 
