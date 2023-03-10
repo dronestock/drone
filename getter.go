@@ -42,6 +42,10 @@ func (g *getter) Get(key string) (value string) {
 	}
 
 	value = g.eval(value)
+	if "" == strings.TrimSpace(value) {
+		return
+	}
+
 	size := len(value)
 	if jsonObjectStart == (value)[0:1] || jsonObjectEnd == (value)[size-1:size] {
 		value = g.fixJsonObject(value)
@@ -94,7 +98,7 @@ func (g *getter) fixJsonArray(from string) (to string) {
 	if ue := json.Unmarshal([]byte(from), &array); nil != ue {
 		to = from
 	} else {
-		g.fixArrayExpr(array)
+		g.fixArrayExpr(&array)
 	}
 
 	if from == to {
@@ -108,13 +112,13 @@ func (g *getter) fixJsonArray(from string) (to string) {
 	return
 }
 
-func (g *getter) fixArrayExpr(array []any) {
-	for index, value := range array {
+func (g *getter) fixArrayExpr(array *[]any) {
+	for index, value := range *array {
 		switch vt := value.(type) {
 		case string:
-			array[index] = g.expr(vt)
+			(*array)[index] = g.expr(vt)
 		case []any:
-			g.fixArrayExpr(array)
+			g.fixArrayExpr(&vt)
 		case map[string]any:
 			g.fixObjectExpr(vt)
 		}
@@ -127,7 +131,7 @@ func (g *getter) fixObjectExpr(object map[string]any) {
 		case string:
 			object[key] = g.expr(vt)
 		case []any:
-			g.fixArrayExpr(vt)
+			g.fixArrayExpr(&vt)
 		case map[string]any:
 			g.fixObjectExpr(vt)
 		}
