@@ -46,7 +46,7 @@ steps:
       commands:
         - env
       release:
-        tag: $${DRONE_TAG}
+        tag: v0.9.1
         token: $${TOKEN}
         body: file('$${CHANGELOG_TAG_OUTPUT}')
 
