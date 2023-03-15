@@ -1,6 +1,8 @@
 package drone
 
 import (
+	"time"
+
 	"github.com/goexl/gox/field"
 	"github.com/goexl/simaqian"
 )
@@ -15,6 +17,8 @@ type bootstrap struct {
 	plugin    Plugin
 	name      string
 	aliases   []*alias
+
+	started time.Time
 }
 
 func New(constructor constructor) (boot *bootstrap) {
@@ -42,9 +46,11 @@ func (b *bootstrap) Alias(name string, value string) *bootstrap {
 	return b
 }
 
-func (b *bootstrap) Boot() (err error) {
+func (b *bootstrap) Boot() {
+	var err error
 	defer b.finally(&err)
 
+	b.started = time.Now()
 	if pe := b.prepared(); nil != pe {
 		err = pe
 		b.Error("准备插件出错", field.Error(pe))

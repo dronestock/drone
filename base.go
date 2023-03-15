@@ -71,6 +71,10 @@ func (b *Base) Command(command string) (builder *commandBuilder) {
 	return
 }
 
+func (b *Base) Expressions() (expressions Expressions) {
+	return
+}
+
 func (b *Base) Fields() gox.Fields[any] {
 	return gox.Fields[any]{
 		field.New("default", b.Defaults),

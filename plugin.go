@@ -13,4 +13,7 @@ type Plugin interface {
 
 	// Steps 插件运行步骤
 	Steps() Steps
+
+	// Expressions 表达式
+	Expressions() Expressions
 }
