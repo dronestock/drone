@@ -21,7 +21,7 @@ func (b *bootstrap) finally(err *error) {
 	}
 
 	fields := gox.Fields[any]{
-		field.New("duration", time.Now().Sub(b.started).Truncate(time.Second)),
+		field.New("duration", time.Since(b.started).Truncate(time.Second)),
 	}
 	b.Info("插件执行完成", fields...)
 	if nil == *err {
