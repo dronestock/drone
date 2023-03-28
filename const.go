@@ -12,9 +12,10 @@ const (
 	github          = "https://github.com"
 	ghproxy         = "https://ghproxy.com/"
 
-	funcFile = "file"
-	funcHttp = "http"
-	funcUrl  = "url"
+	funcFile  = "file"
+	funcHttp  = "http"
+	funcUrl   = "url"
+	funcRegex = "regex"
 
 	dollar = "$"
 	quota  = `"`
