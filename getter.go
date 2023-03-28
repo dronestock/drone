@@ -29,7 +29,7 @@ func newGetter(bootstrap *bootstrap) (g *getter) {
 		expr.Function(funcFile, g.file),
 		expr.Function(funcUrl, g.url),
 		expr.Function(funcHttp, g.url),
-		expr.Function(funcRegex, g.regex),
+		expr.Function(funcMatches, g.groups),
 	}
 	for _, _expression := range bootstrap.plugin.Expressions() {
 		g.options = append(g.options, expr.Function(_expression.Name(), _expression.Exec))
