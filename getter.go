@@ -54,6 +54,11 @@ func (g *getter) Get(key string) (value string) {
 		value = g.expr(value)
 	}
 
+	// 如果没有一点变化，证明没有任何配置，返回空值
+	if value == key {
+		value = ""
+	}
+
 	return
 }
 

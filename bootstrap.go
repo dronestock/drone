@@ -22,14 +22,14 @@ type bootstrap struct {
 }
 
 func New(constructor constructor) (boot *bootstrap) {
+	base := new(Base)
+	base.Logger = simaqian.Default()
+
 	boot = new(bootstrap)
+	boot.Base = base
 	boot.plugin = constructor()
 	boot.getter = newGetter(boot)
 	boot.processor = newProcessor()
-
-	base := new(Base)
-	base.Logger = simaqian.Default()
-	boot.Base = base
 
 	return
 }
