@@ -64,7 +64,7 @@ func (g *getter) url(args ...any) (result any, err error) {
 	return
 }
 
-func (g *getter) groups(args ...any) (result any, err error) {
+func (g *getter) match(args ...any) (result any, err error) {
 	if 2 != len(args) {
 		err = exc.NewFields("参数错误", field.New("args", args), field.New("need", 2), field.New("real", 1))
 	}

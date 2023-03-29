@@ -29,7 +29,7 @@ func newGetter(bootstrap *bootstrap) (g *getter) {
 		expr.Function(funcFile, g.file),
 		expr.Function(funcUrl, g.url),
 		expr.Function(funcHttp, g.url),
-		expr.Function(funcMatches, g.groups),
+		expr.Function(funcMatch, g.match),
 	}
 	for _, _expression := range bootstrap.plugin.Expressions() {
 		g.options = append(g.options, expr.Function(_expression.Name(), _expression.Exec))
@@ -39,20 +39,16 @@ func newGetter(bootstrap *bootstrap) (g *getter) {
 }
 
 func (g *getter) Get(key string) (value string) {
-	value = g.env(key)
-	if "" == strings.TrimSpace(value) {
-		return
-	}
-
-	value = g.eval(value)
-	if "" == strings.TrimSpace(value) {
-		return
+	if got := g.env(key); "" != strings.TrimSpace(got) {
+		value = got
+	} else if got := g.eval(key); "" != strings.TrimSpace(got) {
+		value = got
 	}
 
 	size := len(value)
-	if jsonObjectStart == (value)[0:1] || jsonObjectEnd == (value)[size-1:size] {
+	if jsonObjectStart == (value)[0:1] && jsonObjectEnd == (value)[size-1:size] {
 		value = g.fixJsonObject(value)
-	} else if jsonArrayStart == (value)[0:1] || jsonArrayEnd == (value)[size-1:size] {
+	} else if jsonArrayStart == (value)[0:1] && jsonArrayEnd == (value)[size-1:size] {
 		value = g.fixJsonArray(value)
 	} else {
 		value = g.expr(value)

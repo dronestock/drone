@@ -10,13 +10,15 @@ type getterTest struct {
 func TestGetter(t *testing.T) {
 	tests := []getterTest{
 		{in: "2-1", expected: "1"},
+		{in: "file('testdata/file.txt')", expected: "test load file\n"},
+		{in: "match(file('testdata/file.txt'), '.*(load).*')[1]", expected: "load"},
 	}
 
 	_getter := newGetter(New(newPlugin))
-	for _, test := range tests {
+	for index, test := range tests {
 		got := _getter.Get(test.in)
 		if got != test.expected {
-			t.Fatalf("期望：%v，实际：%v", test.expected, got)
+			t.Fatalf("第%d个测试出错，期望：%v，实际：%v", index+1, test.expected, got)
 		}
 	}
 }
