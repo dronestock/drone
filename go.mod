@@ -8,7 +8,7 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/goexl/env v0.0.2
 	github.com/goexl/exc v0.0.5
-	github.com/goexl/gex v0.3.0
+	github.com/goexl/gex v0.3.1
 	github.com/goexl/gox v0.2.8
 	github.com/goexl/mengpo v0.2.4
 	github.com/goexl/simaqian v0.2.5
