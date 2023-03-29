@@ -11,7 +11,7 @@ func TestGetter(t *testing.T) {
 	tests := []getterTest{
 		{in: "2-1", expected: "1"},
 		{in: "file('testdata/file.txt')", expected: "test load file\n"},
-		{in: `match(file('testdata/Dockerfile'), '.*(FROM onlyoffice/documentserver:(.*)\\s*).*')[2]`, expected: "load"},
+		{in: `match(file('testdata/Dockerfile'), '.*(FROM onlyoffice/documentserver:(.*)\\s*).*')[2]`, expected: "7.3.3.49"},
 	}
 
 	_getter := newGetter(New(newPlugin))
