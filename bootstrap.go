@@ -47,6 +47,7 @@ func (b *bootstrap) Alias(name string, value string) *bootstrap {
 }
 
 func (b *bootstrap) Boot() {
+	b.gracefully()
 	var err error
 	defer b.finally(&err)
 
