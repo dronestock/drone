@@ -7,7 +7,7 @@ import (
 )
 
 func (b *bootstrap) gracefully() {
-	signals := make(chan os.Signal)
+	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGTERM, syscall.SIGINT)
 	go b.exit(signals)
 }
