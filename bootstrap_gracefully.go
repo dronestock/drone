@@ -13,8 +13,6 @@ func (b *bootstrap) gracefully() {
 }
 
 func (b *bootstrap) exit(signals chan os.Signal) {
-	select {
-	case <-signals:
-		os.Exit(2)
-	}
+	<-signals
+	os.Exit(2)
 }
