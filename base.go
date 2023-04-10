@@ -1,6 +1,8 @@
 package drone
 
 import (
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/go-resty/resty/v2"
@@ -96,4 +98,15 @@ func (b *Base) base() *Base {
 
 func (b *Base) Default() bool {
 	return nil != b.Defaults && *b.Defaults
+}
+
+func (b *Base) Home(paths ...string) (final string) {
+	if home, uhe := os.UserHomeDir(); nil == uhe {
+		finals := make([]string, 0, len(paths)+1)
+		finals = append(finals, home)
+		finals = append(finals, paths...)
+		final = filepath.Join(finals...)
+	}
+
+	return
 }
