@@ -2,6 +2,7 @@ package drone
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"strings"
 
@@ -39,9 +40,11 @@ func newGetter(bootstrap *bootstrap) (g *getter) {
 }
 
 func (g *getter) Get(key string) (value string) {
+	defer g.recover()
 	if got := g.env(key); "" != strings.TrimSpace(got) {
 		value = got
-	} else if got := g.eval(key); "" != strings.TrimSpace(got) {
+	}
+	if got := g.eval(value); "" != strings.TrimSpace(got) {
 		value = got
 	}
 
@@ -189,4 +192,10 @@ func (g *getter) isHttp(url string) bool {
 		Items(prefixHttpProtocol, prefixHttpsProtocol).
 		Prefix().
 		Check()
+}
+
+func (g *getter) recover() {
+	if err := recover(); nil != err {
+		fmt.Println(err)
+	}
 }
