@@ -2,7 +2,6 @@ package drone
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"strings"
 
@@ -46,6 +45,9 @@ func (g *getter) Get(key string) (value string) {
 	}
 	if got := g.eval(value); "" != strings.TrimSpace(got) {
 		value = got
+	}
+	if ""==value{
+		return
 	}
 
 	size := len(value)
@@ -195,7 +197,10 @@ func (g *getter) isHttp(url string) bool {
 }
 
 func (g *getter) recover() {
-	if err := recover(); nil != err {
-		fmt.Println(err)
+	if ctx := recover(); nil != ctx {
+		switch value := ctx.(type) {
+		case error:
+			g.bootstrap.Warn("获取器执行出错", field.Error(value))
+		}
 	}
 }

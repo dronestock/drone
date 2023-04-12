@@ -27,7 +27,7 @@ func (b *Base) exec() (code int, err error) {
 func (b *Base) linux() (code int, err error) {
 	name := "/bin/sh"
 	ab := args.New().Build()
-	ab.Flag("c").Add(strings.Join(b.Commands, ";"))
+	ab.Option("c", strings.Join(b.Commands, ";"))
 	code, err = b.Command(name).Args(ab.Build()).Build().Exec()
 
 	return
@@ -36,7 +36,7 @@ func (b *Base) linux() (code int, err error) {
 func (b *Base) windows() (code int, err error) {
 	name := "cmd"
 	ab := args.New().Short("/").Long("/").Build()
-	ab.Flag("C").Add(strings.Join(b.Commands, "&&"))
+	ab.Option("C", strings.Join(b.Commands, "&&"))
 	code, err = b.Command(name).Args(ab.Build()).Build().Exec()
 
 	return
