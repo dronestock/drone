@@ -4,7 +4,6 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/goexl/gex"
 	"github.com/goexl/gox/args"
 	"github.com/goexl/gox/field"
 )
@@ -25,14 +24,20 @@ func (b *Base) exec() (code int, err error) {
 	return
 }
 
-func (b *Base) linux() (int, error) {
-	return gex.New("/bin/sh").Args(args.New().Build().Arg("c", strings.Join(b.Commands, "; ")).Build()).Build().Exec()
+func (b *Base) linux() (code int, err error) {
+	name := "/bin/sh"
+	ab := args.New().Build()
+	ab.Flag("c").Add(strings.Join(b.Commands, ";"))
+	code, err = b.Command(name).Args(ab.Build()).Build().Exec()
+
+	return
 }
 
-func (b *Base) windows() (int, error) {
-	ab := args.New()
-	ab.Short("/")
-	ab.Long("/")
+func (b *Base) windows() (code int, err error) {
+	name := "cmd"
+	ab := args.New().Short("/").Long("/").Build()
+	ab.Flag("C").Add(strings.Join(b.Commands, "&&"))
+	code, err = b.Command(name).Args(ab.Build()).Build().Exec()
 
-	return gex.New("cmd").Args(ab.Build().Arg("C", strings.Join(b.Commands, "&& ")).Build()).Build().Exec()
+	return
 }
