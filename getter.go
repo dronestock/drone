@@ -46,8 +46,8 @@ func (g *getter) Get(key string) (value string) {
 	if got := g.eval(value); "" != strings.TrimSpace(got) {
 		value = got
 	}
-	if ""==value{
-		return
+	if "" == value { // 如果环境变量取值没有改变，证明键没有环境变量，需要将键值赋值
+		value = key
 	}
 
 	size := len(value)
