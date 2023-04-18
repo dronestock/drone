@@ -20,7 +20,7 @@ func newFileWorker(names ...string) *fileWorker {
 
 func (fc *fileWorker) work(base *Base) (err error) {
 	for _, name := range fc.names {
-		if re := os.Remove(name); nil != re {
+		if re := os.RemoveAll(name); nil != re {
 			err = re
 			base.Warn("执行文件清理出错", field.New("filename", name), field.Error(re))
 		} else {
