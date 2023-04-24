@@ -8,15 +8,15 @@ import (
 
 func (b *bootstrap) run() (err error) {
 	// 设置整体超时时间
-	ctx, cancel := context.WithTimeout(context.Background(), b.Timeout)
-	defer cancel()
+	b.ctx, b.cancel = context.WithTimeout(context.Background(), b.Timeout)
+	defer b.cancel()
 	// 开始卡片信息写入
 	go b.startCard()
 
 	// 执行插件
 	wg := new(sync.WaitGroup)
 	for _, step := range b.plugin.Steps() {
-		if err = b.execStep(ctx, step, wg); nil != err && step.options.br {
+		if err = b.execStep(b.ctx, step, wg); nil != err && step.options.br {
 			return
 		}
 	}

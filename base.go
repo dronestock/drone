@@ -1,6 +1,7 @@
 package drone
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"time"
@@ -44,6 +45,8 @@ type Base struct {
 	Commands []string `default:"${COMMANDS}"`
 
 	started  time.Time
+	ctx context.Context
+	cancel context.CancelFunc
 	cleanups []*cleanup
 	http     *resty.Client
 }
@@ -70,6 +73,7 @@ func (b *Base) Elapsed() time.Duration {
 
 func (b *Base) Command(command string) (builder *commandBuilder) {
 	builder = gex.New(command)
+	builder.Context(b.ctx)
 	if nil == b.Pwe || *b.Pwe {
 		builder.Pwe()
 	}
