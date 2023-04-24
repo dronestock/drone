@@ -1,6 +1,8 @@
 package drone
 
 import (
+	"time"
+
 	"github.com/goexl/gox/field"
 	"github.com/goexl/mengpo"
 	"github.com/goexl/simaqian"
@@ -27,6 +29,7 @@ func (b *bootstrap) setup() (err error) {
 	}
 
 	b.Base = config.base()
+	b.started = time.Now() // ! 只能在这里设置开始时间，因为早于这个时间点，设置的开始时间会被重置
 	builder := simaqian.New()
 	// 设置日志级别
 	builder.Level(simaqian.ParseLevel(b.Level))

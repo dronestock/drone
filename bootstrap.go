@@ -1,8 +1,6 @@
 package drone
 
 import (
-	"time"
-
 	"github.com/goexl/gox/field"
 	"github.com/goexl/simaqian"
 )
@@ -49,7 +47,6 @@ func (b *bootstrap) Boot() {
 	var err error
 	defer b.finally(&err)
 
-	b.started = time.Now()
 	if pe := b.prepared(); nil != pe {
 		err = pe
 		b.Error("准备插件出错", field.Error(pe))

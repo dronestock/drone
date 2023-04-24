@@ -65,7 +65,7 @@ func (b *Base) Cleanup() *cleanupBuilder {
 }
 
 func (b *Base) Elapsed() time.Duration {
-	return time.Since(b.started)
+	return time.Since(b.started).Truncate(time.Second)
 }
 
 func (b *Base) Command(command string) (builder *commandBuilder) {
