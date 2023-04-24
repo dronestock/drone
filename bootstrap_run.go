@@ -6,7 +6,10 @@ import (
 	"sync"
 )
 
-func (b *bootstrap) run(ctx context.Context) (err error) {
+func (b *bootstrap) run() (err error) {
+	// 设置整体超时时间
+	ctx, cancel := context.WithTimeout(context.Background(), b.Timeout)
+	defer cancel()
 	// 开始卡片信息写入
 	go b.startCard()
 
