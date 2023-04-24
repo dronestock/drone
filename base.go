@@ -33,6 +33,8 @@ type Base struct {
 	Counts int `default:"${COUNTS=5}"`
 	// 重试间隔
 	Backoff time.Duration `default:"${BACKOFF=5s}"`
+	// 超时时间
+	Timeout time.Duration `default:"${TIMEOUT=60m}"`
 
 	// 代理
 	Proxy *proxy `default:"${PROXY}"`
@@ -41,6 +43,7 @@ type Base struct {
 	// 命令列表
 	Commands []string `default:"${COMMANDS}"`
 
+	started  time.Time
 	cleanups []*cleanup
 	http     *resty.Client
 }
@@ -59,6 +62,10 @@ func (b *Base) Setup() (err error) {
 
 func (b *Base) Cleanup() *cleanupBuilder {
 	return newCleanupBuilder(b)
+}
+
+func (b *Base) Elapsed() time.Duration {
+	return time.Now().Sub(b.started)
 }
 
 func (b *Base) Command(command string) (builder *commandBuilder) {

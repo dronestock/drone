@@ -6,13 +6,12 @@ import (
 	"sync"
 )
 
-func (b *bootstrap) run() (err error) {
+func (b *bootstrap) run(ctx context.Context) (err error) {
 	// 开始卡片信息写入
 	go b.startCard()
 
 	// 执行插件
 	wg := new(sync.WaitGroup)
-	ctx := context.Background()
 	for _, step := range b.plugin.Steps() {
 		if err = b.execStep(ctx, step, wg); nil != err && step.options.br {
 			return

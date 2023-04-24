@@ -1,6 +1,7 @@
 package drone
 
 import (
+	"context"
 	"time"
 
 	"github.com/goexl/gox/field"
@@ -17,8 +18,6 @@ type bootstrap struct {
 	plugin    Plugin
 	name      string
 	aliases   []*alias
-
-	started time.Time
 }
 
 func New(constructor constructor) (boot *bootstrap) {
@@ -52,13 +51,16 @@ func (b *bootstrap) Boot() {
 	defer b.finally(&err)
 
 	b.started = time.Now()
+	ctx, cancel := context.WithTimeout(context.Background(), b.Timeout)
+	defer cancel()
+
 	if pe := b.prepared(); nil != pe {
 		err = pe
 		b.Error("准备插件出错", field.Error(pe))
 	} else if se := b.setup(); nil != se {
 		err = se
 		b.Error("配置插件出错", field.Error(se))
-	} else if ee := b.run(); nil != ee {
+	} else if ee := b.run(ctx); nil != ee {
 		err = ee
 		b.Error("执行插件出错", field.Error(ee))
 	}
