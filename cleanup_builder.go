@@ -1,5 +1,9 @@
 package drone
 
+import (
+	"os"
+)
+
 type cleanupBuilder struct {
 	base    *Base
 	name    string
@@ -22,6 +26,12 @@ func (cb *cleanupBuilder) Name(name string) *cleanupBuilder {
 
 func (cb *cleanupBuilder) File(names ...string) *cleanupBuilder {
 	cb.workers = append(cb.workers, newFileWorker(names...))
+
+	return cb
+}
+
+func (cb *cleanupBuilder) Write(filename string, data []byte, mode os.FileMode) *cleanupBuilder {
+	cb.workers = append(cb.workers, newWriteWorker(filename, data, mode))
 
 	return cb
 }
