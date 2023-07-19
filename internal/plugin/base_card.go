@@ -10,7 +10,7 @@ import (
 	"github.com/goexl/exc"
 )
 
-func (b *Base) WriteCard(url string, _card any) (err error) {
+func (b *Base) writeCard(url string, _card any) (err error) {
 	if nil == _card {
 		return
 	}

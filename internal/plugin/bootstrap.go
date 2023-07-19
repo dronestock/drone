@@ -6,8 +6,6 @@ import (
 	"github.com/goexl/simaqian"
 )
 
-var _ = New
-
 type Bootstrap struct {
 	*Base
 

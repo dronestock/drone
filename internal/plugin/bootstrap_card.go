@@ -32,7 +32,7 @@ func (b *Bootstrap) writeCard() (err error) {
 	if _card, ce := b.plugin.Carding(); nil != ce {
 		err = ce
 	} else {
-		err = b.Base.WriteCard(scheme, _card)
+		err = b.Base.writeCard(scheme, _card)
 	}
 
 	return
