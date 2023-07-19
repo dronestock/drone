@@ -10,6 +10,7 @@ import (
 	"github.com/antonmedv/expr/vm"
 	"github.com/drone/envsubst"
 	"github.com/dronestock/drone/internal"
+	"github.com/go-resty/resty/v2"
 	"github.com/goexl/env"
 	"github.com/goexl/exc"
 	"github.com/goexl/gox"
@@ -20,17 +21,17 @@ import (
 
 type Getter struct {
 	simaqian.Logger
-	// plugin.Plugin
-	// base.Base
 
 	vm      *vm.VM
+	resty   *resty.Client
 	options []expr.Option
 }
 
-func NewGetter(logger simaqian.Logger) (getter *Getter) {
+func NewGetter(logger simaqian.Logger, resty *resty.Client, expressions Expressions) (getter *Getter) {
 	getter = new(Getter)
 	getter.Logger = logger
 	getter.vm = new(vm.VM)
+	getter.resty = resty
 	getter.options = []expr.Option{
 		expr.AllowUndefinedVariables(),
 		expr.Function(internal.FuncFile, getter.file),
@@ -38,9 +39,9 @@ func NewGetter(logger simaqian.Logger) (getter *Getter) {
 		expr.Function(internal.FuncHttp, getter.url),
 		expr.Function(internal.FuncMatch, getter.match),
 	}
-	/*for _, expression := range bootstrap.Expressions() {
+	for _, expression := range expressions {
 		getter.options = append(getter.options, expr.Function(expression.Name(), expression.Exec))
-	}*/
+	}
 
 	return
 }
@@ -248,10 +249,10 @@ func (g *Getter) url(args ...any) (result any, err error) {
 		return
 	}
 
-	/*fields := gox.Fields[any]{
+	fields := gox.Fields[any]{
 		field.New("url", url),
 	}
-	if rsp, re := g.Http().Get(url); nil != re {
+	if rsp, re := g.resty.R().Get(url); nil != re {
 		g.Error("读取端点出错", fields.Add(field.Error(re))...)
 	} else if rsp.IsError() {
 		httpFields := gox.Fields[any]{
@@ -262,7 +263,7 @@ func (g *Getter) url(args ...any) (result any, err error) {
 	} else {
 		result = string(rsp.Body())
 		g.Debug("读取端点成功", fields.Add(field.New("content", result))...)
-	}*/
+	}
 
 	return
 }

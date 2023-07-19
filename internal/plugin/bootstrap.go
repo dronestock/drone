@@ -23,7 +23,7 @@ func New(constructor Constructor) (bootstrap *Bootstrap) {
 	bootstrap = new(Bootstrap)
 	bootstrap.Base = base
 	bootstrap.plugin = constructor()
-	bootstrap.getter = core.NewGetter(bootstrap.Logger)
+	bootstrap.getter = core.NewGetter(bootstrap.Logger, base.http, base.Expressions())
 	bootstrap.processor = core.NewProcessor()
 
 	return
