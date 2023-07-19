@@ -4,25 +4,26 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/dronestock/drone/internal/step/stepper"
 	"github.com/goexl/gox"
 )
 
 var (
 	_     = NewBuilder
-	_     = NewDelayStep
-	_     = NewDebugStep
+	_     = NewDelay
+	_     = NewDebug
 	steps = 1
 )
 
 // Step 步骤
 type Step struct {
-	gox.CannotCopy
-
-	Stepper Stepper
+	Stepper stepper.Stepper
 	Options *Options
+
+	_ gox.CannotCopy
 }
 
-func New(stepper Stepper, options *Options) *Step {
+func New(stepper stepper.Stepper, options *Options) *Step {
 	if "" == options.Name {
 		options.Name = fmt.Sprintf("第%d步", steps)
 		steps++
@@ -34,12 +35,12 @@ func New(stepper Stepper, options *Options) *Step {
 	}
 }
 
-// NewDelayStep 创建延迟步骤，调试使用
-func NewDelayStep(delay time.Duration) *Step {
-	return NewBuilder(NewDelay(delay)).Name("延迟步骤").Build()
+// NewDelay 创建延迟步骤，调试使用
+func NewDelay(delay time.Duration) *Step {
+	return NewBuilder(stepper.NewDelay(delay)).Name("延迟步骤").Build()
 }
 
-// NewDebugStep 创建延迟步骤，调试使用
-func NewDebugStep() *Step {
-	return NewDelayStep(time.Hour)
+// NewDebug 创建延迟步骤，调试使用
+func NewDebug() *Step {
+	return NewDelay(time.Hour)
 }

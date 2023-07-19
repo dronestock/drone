@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/dronestock/drone/internal/step"
+	"github.com/dronestock/drone/internal/step/stepper"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
 	"github.com/goexl/gox/rand"
@@ -38,7 +39,7 @@ func (b *Bootstrap) execStepAsync(ctx context.Context, step *step.Step, wg *sync
 	return
 }
 
-func (b *Bootstrap) execStepper(ctx context.Context, stepper step.Stepper, options *step.Options) (err error) {
+func (b *Bootstrap) execStepper(ctx context.Context, stepper stepper.Stepper, options *step.Options) (err error) {
 	if !stepper.Runnable() {
 		return
 	}

@@ -1,11 +1,15 @@
 package step
 
+import (
+	stepper2 "github.com/dronestock/drone/internal/step/stepper"
+)
+
 type Builder struct {
-	stepper Stepper
+	stepper stepper2.Stepper
 	options *Options
 }
 
-func NewBuilder(stepper Stepper) *Builder {
+func NewBuilder(stepper stepper2.Stepper) *Builder {
 	return &Builder{
 		stepper: stepper,
 		options: &Options{
