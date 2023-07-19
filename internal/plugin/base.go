@@ -9,7 +9,7 @@ import (
 	"github.com/dronestock/drone/internal/cleanup"
 	"github.com/dronestock/drone/internal/command"
 	"github.com/dronestock/drone/internal/config"
-	"github.com/dronestock/drone/internal/expr"
+	"github.com/dronestock/drone/internal/core"
 	"github.com/go-resty/resty/v2"
 	"github.com/goexl/gex"
 	"github.com/goexl/gox"
@@ -88,7 +88,7 @@ func (b *Base) Command(command string) (builder *command.Builder) {
 	return
 }
 
-func (b *Base) Expressions() (expressions expr.Expressions) {
+func (b *Base) Expressions() (expressions core.Expressions) {
 	return
 }
 

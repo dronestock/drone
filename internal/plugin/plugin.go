@@ -1,7 +1,7 @@
 package plugin
 
 import (
-	"github.com/dronestock/drone/internal/expr"
+	"github.com/dronestock/drone/internal/core"
 	"github.com/dronestock/drone/internal/step"
 )
 
@@ -20,5 +20,5 @@ type Plugin interface {
 	Steps() step.Steps
 
 	// Expressions 表达式
-	Expressions() expr.Expressions
+	Expressions() core.Expressions
 }

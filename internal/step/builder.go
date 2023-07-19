@@ -5,7 +5,6 @@ type Builder struct {
 	options *Options
 }
 
-// NewBuilder 创建一个步骤
 func NewBuilder(stepper Stepper) *Builder {
 	return &Builder{
 		stepper: stepper,
