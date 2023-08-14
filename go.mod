@@ -3,7 +3,7 @@ module github.com/dronestock/drone
 go 1.19
 
 require (
-	github.com/antonmedv/expr v1.12.7
+	github.com/antonmedv/expr v1.13.0
 	github.com/drone/envsubst v1.0.3
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/goexl/env v0.0.2
