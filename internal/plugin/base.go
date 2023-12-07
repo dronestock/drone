@@ -14,14 +14,14 @@ import (
 	"github.com/goexl/gex"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
-	"github.com/goexl/simaqian"
+	"github.com/goexl/log"
 )
 
 var _ Config = (*Base)(nil)
 
 // Base 插件基础
 type Base struct {
-	simaqian.Logger
+	log.Logger
 
 	// 是否启用默认配置
 	Defaults *bool `default:"${DEFAULT=true}"`

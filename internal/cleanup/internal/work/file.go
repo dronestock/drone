@@ -3,8 +3,9 @@ package work
 import (
 	"os"
 
+	"github.com/goexl/log"
+
 	"github.com/goexl/gox/field"
-	"github.com/goexl/simaqian"
 )
 
 var _ Worker = (*File)(nil)
@@ -19,7 +20,7 @@ func NewFile(names ...string) *File {
 	}
 }
 
-func (f *File) Work(logger simaqian.Logger) (err error) {
+func (f *File) Work(logger log.Logger) (err error) {
 	for _, name := range f.names {
 		if re := os.RemoveAll(name); nil != re {
 			err = re

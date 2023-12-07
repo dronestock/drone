@@ -1,9 +1,9 @@
 package work
 
 import (
-	"github.com/goexl/simaqian"
+	"github.com/goexl/log"
 )
 
 type Worker interface {
-	Work(logger simaqian.Logger) (err error)
+	Work(logger log.Logger) (err error)
 }

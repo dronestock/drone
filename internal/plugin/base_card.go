@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/dronestock/drone/internal/config"
-	"github.com/goexl/exc"
+	"github.com/goexl/exception"
 )
 
 func (b *Base) writeCard(url string, _card any) (err error) {
@@ -28,7 +28,7 @@ func (b *Base) writeCard(url string, _card any) (err error) {
 		case "/dev/stderr":
 			err = b.writeCardTo(os.Stderr, data)
 		case "":
-			err = exc.NewMessage(`卡片写入路径为空`)
+			err = exception.New().Message(`卡片写入路径为空`).Build()
 		default:
 			err = os.WriteFile(b.Card.Path, data, 0600)
 		}

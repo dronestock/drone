@@ -1,9 +1,10 @@
 package plugin
 
 import (
+	"github.com/goexl/log"
+
 	"github.com/dronestock/drone/internal/core"
 	"github.com/goexl/gox/field"
-	"github.com/goexl/simaqian"
 )
 
 type Bootstrap struct {
@@ -18,7 +19,7 @@ type Bootstrap struct {
 
 func New(constructor Constructor) (bootstrap *Bootstrap) {
 	base := new(Base)
-	base.Logger = simaqian.Default()
+	base.Logger = log.New().Apply()
 
 	bootstrap = new(Bootstrap)
 	bootstrap.Base = base

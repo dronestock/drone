@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/goexl/gox/field"
+	"github.com/goexl/log"
 	"github.com/goexl/mengpo"
-	"github.com/goexl/simaqian"
 	"github.com/goexl/xiren"
 )
 
@@ -30,12 +30,10 @@ func (b *Bootstrap) setup() (err error) {
 
 	b.Base = config.base()
 	b.started = time.Now() // ! 只能在这里设置开始时间，因为早于这个时间点，设置的开始时间会被重置
-	builder := simaqian.New()
+	builder := log.New()
 	// 设置日志级别
-	builder.Level(simaqian.ParseLevel(b.Level))
-	// 向标准输出流输出日志
-	zap := builder.Zap().Output(simaqian.Stdout())
-	if logger, be := zap.Build(); nil != be {
+	builder.Level(log.ParseLevel(b.Level))
+	if logger, be := builder.Build(); nil != be {
 		err = be
 		b.Warn("配置日志失败", field.Error(be))
 	} else {

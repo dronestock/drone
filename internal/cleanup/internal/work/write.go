@@ -3,7 +3,7 @@ package work
 import (
 	"os"
 
-	"github.com/goexl/simaqian"
+	"github.com/goexl/log"
 )
 
 var _ Worker = (*Write)(nil)
@@ -22,6 +22,6 @@ func NewWrite(filename string, data []byte, mode os.FileMode) *Write {
 	}
 }
 
-func (w *Write) Work(_ simaqian.Logger) error {
+func (w *Write) Work(_ log.Logger) error {
 	return os.WriteFile(w.filename, w.data, w.mode)
 }

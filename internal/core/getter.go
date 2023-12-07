@@ -6,28 +6,28 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/antonmedv/expr"
-	"github.com/antonmedv/expr/vm"
 	"github.com/drone/envsubst"
 	"github.com/dronestock/drone/internal"
+	"github.com/expr-lang/expr"
+	"github.com/expr-lang/expr/vm"
 	"github.com/go-resty/resty/v2"
 	"github.com/goexl/env"
 	"github.com/goexl/exc"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/check"
 	"github.com/goexl/gox/field"
-	"github.com/goexl/simaqian"
+	"github.com/goexl/log"
 )
 
 type Getter struct {
-	simaqian.Logger
+	log.Logger
 
 	vm      *vm.VM
 	resty   *resty.Client
 	options []expr.Option
 }
 
-func NewGetter(logger simaqian.Logger, resty *resty.Client, expressions Expressions) (getter *Getter) {
+func NewGetter(logger log.Logger, resty *resty.Client, expressions Expressions) (getter *Getter) {
 	getter = new(Getter)
 	getter.Logger = logger
 	getter.vm = new(vm.VM)

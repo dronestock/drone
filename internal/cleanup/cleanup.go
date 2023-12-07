@@ -2,7 +2,7 @@ package cleanup
 
 import (
 	"github.com/dronestock/drone/internal/cleanup/internal/work"
-	"github.com/goexl/simaqian"
+	"github.com/goexl/log"
 )
 
 type Cleanup struct {
@@ -17,7 +17,7 @@ func New(name string, workers ...work.Worker) *Cleanup {
 	}
 }
 
-func (c *Cleanup) Clean(logger simaqian.Logger) (err error) {
+func (c *Cleanup) Clean(logger log.Logger) (err error) {
 	for _, worker := range c.Workers {
 		err = worker.Work(logger)
 	}
