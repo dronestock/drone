@@ -240,10 +240,10 @@ func (g *Getter) file(args ...any) (result any, err error) {
 func (g *Getter) url(args ...any) (result any, err error) {
 	url := ""
 	if 0 == len(args) {
-		err = exc.NewField("必须传入参数", field.New("args", args))
+		err = exception.New().Message("必须传入参数").Field(field.New("args", args)).Build()
 	} else {
 		url = gox.ToString(args[0])
-		err = gox.If(g.isHttp(url), exc.NewField("必须是URL地址", field.New("url", url)))
+		err = gox.If(g.isHttp(url), exception.New().Message("必须是URL地址").Field(field.New("url", url)).Build())
 	}
 	if nil != err {
 		return
@@ -270,7 +270,7 @@ func (g *Getter) url(args ...any) (result any, err error) {
 
 func (g *Getter) match(args ...any) (result any, err error) {
 	if 2 != len(args) {
-		err = exc.NewFields("参数错误", field.New("args", args), field.New("need", 2), field.New("real", 1))
+		err = exception.New().Message("参数错误").Field(field.New("args", args)).Build()
 	}
 	if nil != err {
 		return
