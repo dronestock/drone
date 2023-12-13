@@ -12,7 +12,7 @@ import (
 	"github.com/expr-lang/expr/vm"
 	"github.com/go-resty/resty/v2"
 	"github.com/goexl/env"
-	"github.com/goexl/exc"
+	"github.com/goexl/exception"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/check"
 	"github.com/goexl/gox/field"
@@ -216,7 +216,7 @@ func (g *Getter) recover() {
 func (g *Getter) file(args ...any) (result any, err error) {
 	name := ""
 	if 0 == len(args) {
-		err = exc.NewField("必须传入参数", field.New("args", args))
+		err = exception.New().Message("必须传入参数").Field(field.New("args", args)).Build()
 	} else {
 		name = gox.ToString(args[0])
 	}
