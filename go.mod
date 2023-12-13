@@ -7,7 +7,6 @@ require (
 	github.com/expr-lang/expr v1.15.6
 	github.com/go-resty/resty/v2 v2.10.0
 	github.com/goexl/env v0.0.2
-	github.com/goexl/exc v0.0.5
 	github.com/goexl/exception v0.0.1
 	github.com/goexl/gex v0.3.1
 	github.com/goexl/gox v0.3.8
@@ -22,6 +21,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.16.0 // indirect
 	github.com/goexl/baozheng v0.0.1 // indirect
+	github.com/goexl/exc v0.0.5 // indirect
 	github.com/goexl/guc v0.0.7 // indirect
 	github.com/google/uuid v1.4.0 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
