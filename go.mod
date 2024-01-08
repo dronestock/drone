@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/drone/envsubst v1.0.3
-	github.com/expr-lang/expr v1.15.7
+	github.com/expr-lang/expr v1.15.8
 	github.com/go-resty/resty/v2 v2.11.0
 	github.com/goexl/env v0.0.2
 	github.com/goexl/exception v0.0.1
