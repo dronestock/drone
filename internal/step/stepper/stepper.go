@@ -7,5 +7,5 @@ import (
 type Stepper interface {
 	Runnable() bool
 
-	Run(ctx context.Context) (err error)
+	Run(ctx *context.Context) (err error)
 }

@@ -19,6 +19,6 @@ func (d *Delay) Runnable() bool {
 	return true
 }
 
-func (d *Delay) Run(_ context.Context) (err error) {
+func (d *Delay) Run(_ *context.Context) (err error) {
 	return
 }
