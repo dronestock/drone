@@ -12,6 +12,6 @@ func (d *Default) Runnable() bool {
 	return true
 }
 
-func (d *Default) Run(_ context.Context) (err error) {
+func (d *Default) Run(_ *context.Context) (err error) {
 	return
 }

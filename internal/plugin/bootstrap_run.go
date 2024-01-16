@@ -16,7 +16,7 @@ func (b *Bootstrap) run() (err error) {
 	// 执行插件
 	wg := new(sync.WaitGroup)
 	for _, step := range b.plugin.Steps() {
-		if err = b.execStep(b.ctx, step, wg); nil != err && step.Options.Break {
+		if err = b.execStep(&b.ctx, step, wg); nil != err && step.Options.Break {
 			return
 		}
 	}

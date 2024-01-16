@@ -13,7 +13,7 @@ import (
 	"github.com/goexl/gox/rand"
 )
 
-func (b *Bootstrap) execStep(ctx context.Context, step *step.Step, wg *sync.WaitGroup) (err error) {
+func (b *Bootstrap) execStep(ctx *context.Context, step *step.Step, wg *sync.WaitGroup) (err error) {
 	if step.Options.Async {
 		err = b.execStepAsync(ctx, step, wg)
 	} else {
@@ -23,11 +23,11 @@ func (b *Bootstrap) execStep(ctx context.Context, step *step.Step, wg *sync.Wait
 	return
 }
 
-func (b *Bootstrap) execStepSync(ctx context.Context, step *step.Step) error {
+func (b *Bootstrap) execStepSync(ctx *context.Context, step *step.Step) error {
 	return b.execStepper(ctx, step.Stepper, step.Options)
 }
 
-func (b *Bootstrap) execStepAsync(ctx context.Context, step *step.Step, wg *sync.WaitGroup) (err error) {
+func (b *Bootstrap) execStepAsync(ctx *context.Context, step *step.Step, wg *sync.WaitGroup) (err error) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -39,7 +39,7 @@ func (b *Bootstrap) execStepAsync(ctx context.Context, step *step.Step, wg *sync
 	return
 }
 
-func (b *Bootstrap) execStepper(ctx context.Context, stepper stepper.Stepper, options *step.Options) (err error) {
+func (b *Bootstrap) execStepper(ctx *context.Context, stepper stepper.Stepper, options *step.Options) (err error) {
 	if !stepper.Runnable() {
 		return
 	}
