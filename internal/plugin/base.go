@@ -10,6 +10,8 @@ import (
 	"github.com/dronestock/drone/internal/command"
 	"github.com/dronestock/drone/internal/config"
 	"github.com/dronestock/drone/internal/core"
+	"github.com/dronestock/drone/internal/internal"
+	"github.com/dronestock/drone/internal/internal/constant"
 	"github.com/go-resty/resty/v2"
 	"github.com/goexl/gex"
 	"github.com/goexl/gox"
@@ -65,6 +67,10 @@ func (b *Base) Carding() (card any, err error) {
 
 func (b *Base) Setup() (err error) {
 	return
+}
+
+func (b *Base) Value(key string) *internal.Value {
+	return internal.NewValue(os.Getenv(gox.StringBuilder(constant.DroneEnv, key).String()))
 }
 
 func (b *Base) Cleanup() *cleanup.Builder {
