@@ -69,6 +69,10 @@ func (b *Base) Setup() (err error) {
 	return
 }
 
+func (b *Base) Elapsed() time.Duration {
+	return b.Value("BUILD_FINISHED").Time().Sub(b.Value("BUILD_STARTED").Time())
+}
+
 func (b *Base) Value(key string) *internal.Value {
 	return internal.NewValue(os.Getenv(gox.StringBuilder(constant.DroneEnv, key).String()))
 }
@@ -77,7 +81,7 @@ func (b *Base) Cleanup() *cleanup.Builder {
 	return cleanup.NewBuilder(&b.cleanups)
 }
 
-func (b *Base) Elapsed() time.Duration {
+func (b *Base) Since() time.Duration {
 	return time.Since(b.started).Truncate(time.Second)
 }
 
