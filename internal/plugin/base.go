@@ -70,7 +70,7 @@ func (b *Base) Setup() (err error) {
 }
 
 func (b *Base) Elapsed() time.Duration {
-	return b.Value("BUILD_FINISHED").Time().Sub(b.Value("BUILD_STARTED").Time())
+	return b.Value("BUILD_FINISHED").Time().Sub(b.Value("BUILD_CREATED").Time())
 }
 
 func (b *Base) Value(key string) *internal.Value {
