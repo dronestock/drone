@@ -19,11 +19,15 @@ func (v *Value) String() string {
 	return v.content
 }
 
-func (v *Value) Timestamp() (stamp string) {
-	if created, pie := strconv.ParseInt(v.content, 10, 64); nil == pie {
-		stamp = time.Unix(created, 0).Format(time.RFC3339)
+func (v *Value) Timestamp() string {
+	return v.Time().Format(time.RFC3339)
+}
+
+func (v *Value) Time() (timestamp time.Time) {
+	if value, pie := strconv.ParseInt(v.content, 10, 64); nil == pie {
+		timestamp = time.Unix(value, 0)
 	} else {
-		stamp = time.Now().Format(time.RFC3339)
+		timestamp = time.Now()
 	}
 
 	return
