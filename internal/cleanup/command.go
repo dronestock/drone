@@ -1,6 +1,8 @@
 package cleanup
 
 import (
+	"context"
+
 	"github.com/dronestock/drone/internal/cleanup/internal/work"
 	"github.com/goexl/gex"
 	"github.com/goexl/gox/args"
@@ -9,6 +11,21 @@ import (
 type Command struct {
 	gex     *gex.Builder
 	builder *Builder
+}
+
+func NewCommand(ctx context.Context, builder *Builder, pwe *bool, verbose bool, name string) (command *Command) {
+	command = new(Command)
+	command.gex = gex.New(name)
+	command.builder = builder
+	command.gex.Context(ctx)
+	if nil == pwe || *pwe {
+		command.gex.Pwe()
+	}
+	if verbose {
+		command.gex.Echo()
+	}
+
+	return
 }
 
 func (c *Command) Args(args *args.Args) (command *Command) {

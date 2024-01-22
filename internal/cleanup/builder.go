@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/dronestock/drone/internal/cleanup/internal/work"
-	"github.com/goexl/gex"
 )
 
 type Builder struct {
@@ -48,18 +47,8 @@ func (b *Builder) Write(filename string, data []byte, mode os.FileMode) *Builder
 	return b
 }
 
-func (b *Builder) Command(command string) (builder *Command) {
-	builder = new(Command)
-	builder.gex = gex.New(command)
-	builder.gex.Context(b.ctx)
-	if nil == b.pwe || *b.pwe {
-		builder.gex.Pwe()
-	}
-	if b.verbose {
-		builder.gex.Echo()
-	}
-
-	return
+func (b *Builder) Command(name string) *Command {
+	return NewCommand(b.ctx, b, b.pwe, b.verbose, name)
 }
 
 func (b *Builder) Build() {

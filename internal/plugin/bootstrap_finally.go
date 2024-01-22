@@ -14,6 +14,7 @@ import (
 
 func (b *Bootstrap) finally(err *error) {
 	if finally := recover(); nil != finally {
+		fmt.Println(finally)
 		fmt.Println(b.stack())
 		os.Exit(internal.ExitCodeFailed)
 	}
