@@ -78,7 +78,7 @@ func (b *Base) Value(key string) *internal.Value {
 }
 
 func (b *Base) Cleanup() *cleanup.Builder {
-	return cleanup.NewBuilder(&b.cleanups)
+	return cleanup.NewBuilder(b.ctx, b.Pwe, b.Verbose, &b.cleanups)
 }
 
 func (b *Base) Since() time.Duration {
