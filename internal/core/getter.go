@@ -10,12 +10,12 @@ import (
 	"github.com/dronestock/drone/internal"
 	"github.com/expr-lang/expr"
 	"github.com/expr-lang/expr/vm"
-	"github.com/go-resty/resty/v2"
 	"github.com/goexl/env"
 	"github.com/goexl/exception"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/check"
 	"github.com/goexl/gox/field"
+	"github.com/goexl/http"
 	"github.com/goexl/log"
 )
 
@@ -23,11 +23,11 @@ type Getter struct {
 	log.Logger
 
 	vm      *vm.VM
-	resty   *resty.Client
+	resty   *http.Client
 	options []expr.Option
 }
 
-func NewGetter(logger log.Logger, resty *resty.Client, expressions Expressions) (getter *Getter) {
+func NewGetter(logger log.Logger, resty *http.Client, expressions Expressions) (getter *Getter) {
 	getter = new(Getter)
 	getter.Logger = logger
 	getter.vm = new(vm.VM)
