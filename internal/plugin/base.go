@@ -12,10 +12,10 @@ import (
 	"github.com/dronestock/drone/internal/core"
 	"github.com/dronestock/drone/internal/internal"
 	"github.com/dronestock/drone/internal/internal/constant"
-	"github.com/go-resty/resty/v2"
 	"github.com/goexl/gex"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
+	"github.com/goexl/http"
 	"github.com/goexl/log"
 )
 
@@ -45,6 +45,8 @@ type Base struct {
 
 	// 代理
 	Proxy *config.Proxy `default:"${PROXY}"`
+	// 多个代理
+	Proxies []*config.Proxy `default:"${PROXIES}"`
 	// 卡片
 	Card config.Card `default:"${CARD}"`
 	// 命令列表
@@ -54,7 +56,7 @@ type Base struct {
 	ctx      context.Context
 	cancel   context.CancelFunc
 	cleanups []*cleanup.Cleanup
-	http     *resty.Client
+	http     *http.Client
 }
 
 func (b *Base) Scheme() (scheme string) {
