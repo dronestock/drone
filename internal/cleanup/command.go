@@ -28,8 +28,8 @@ func NewCommand(ctx context.Context, builder *Builder, pwe *bool, verbose bool, 
 	return
 }
 
-func (c *Command) Args(args *args.Args) (command *Command) {
-	c.gex.Args(args)
+func (c *Command) Arguments(arguments *args.Arguments) (command *Command) {
+	c.gex.Args(arguments)
 	command = c
 
 	return
