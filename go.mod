@@ -1,15 +1,16 @@
 module github.com/dronestock/drone
 
-go 1.21
+go 1.22
 
 require (
 	github.com/drone/envsubst v1.0.3
 	github.com/expr-lang/expr v1.16.5
 	github.com/go-resty/resty/v2 v2.12.0
+	github.com/goexl/args v0.0.1
 	github.com/goexl/env v0.0.2
 	github.com/goexl/exception v0.0.1
-	github.com/goexl/gex v0.3.2
-	github.com/goexl/gox v0.4.3
+	github.com/goexl/gex v0.3.3
+	github.com/goexl/gox v0.4.4
 	github.com/goexl/http v0.1.9
 	github.com/goexl/log v0.0.7
 	github.com/goexl/mengpo v0.2.5

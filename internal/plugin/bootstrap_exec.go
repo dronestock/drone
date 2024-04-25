@@ -4,7 +4,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/goexl/gox/args"
+	"github.com/goexl/args"
 	"github.com/goexl/gox/field"
 )
 

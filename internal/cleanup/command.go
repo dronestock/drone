@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/dronestock/drone/internal/cleanup/internal/work"
+	"github.com/goexl/args"
 	"github.com/goexl/gex"
-	"github.com/goexl/gox/args"
 )
 
 type Command struct {
