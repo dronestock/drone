@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dronestock/drone/internal"
+	"github.com/dronestock/drone/internal/internal/constant"
 	"github.com/goexl/gox/field"
 )
 
@@ -25,8 +25,8 @@ func (b *Bootstrap) startCard() {
 
 func (b *Bootstrap) writeCard() (err error) {
 	scheme := b.plugin.Scheme()
-	if strings.HasPrefix(scheme, internal.Github) {
-		scheme = fmt.Sprintf("%s%s", internal.GhProxy, scheme)
+	if strings.HasPrefix(scheme, constant.Github) {
+		scheme = fmt.Sprintf("%s%s", constant.GhProxy, scheme)
 	}
 
 	if _card, ce := b.plugin.Carding(); nil != ce {

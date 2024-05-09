@@ -1,3 +1,7 @@
 package constant
 
-const Common = ","
+const (
+	Common       = ","
+	Dollar       = "$"
+	SpecialChars = "!@#$%^&*()_+{}[]|\\\\:\\\"<>?,./~`"
+)

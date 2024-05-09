@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/dronestock/drone/internal"
+	"github.com/dronestock/drone/internal/internal/constant"
 )
 
 type Processor struct{}
@@ -39,5 +39,5 @@ func (b *Processor) Process(tag string, field reflect.StructField) (to string, e
 func (b *Processor) canConvert(from string, field reflect.StructField) bool {
 	return "" != strings.TrimSpace(from) && // 不能是空字符串
 		reflect.Slice == field.Type.Kind() && // 只能是列表
-		!(strings.HasPrefix(from, internal.JsonArrayStart) && strings.HasSuffix(from, internal.JsonArrayEnd)) // 不能是数组
+		!(strings.HasPrefix(from, constant.JsonArrayStart) && strings.HasSuffix(from, constant.JsonArrayEnd)) // 不能是数组
 }

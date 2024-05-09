@@ -8,6 +8,7 @@ import (
 
 	"github.com/drone/envsubst"
 	"github.com/dronestock/drone/internal"
+	"github.com/dronestock/drone/internal/internal/constant"
 	"github.com/expr-lang/expr"
 	"github.com/expr-lang/expr/vm"
 	"github.com/goexl/env"
@@ -34,10 +35,11 @@ func NewGetter(logger log.Logger, resty *http.Client, expressions Expressions) (
 	getter.resty = resty
 	getter.options = []expr.Option{
 		expr.AllowUndefinedVariables(),
-		expr.Function(internal.FuncFile, getter.file),
-		expr.Function(internal.FuncUrl, getter.url),
-		expr.Function(internal.FuncHttp, getter.url),
-		expr.Function(internal.FuncMatch, getter.match),
+		expr.Function(constant.FuncFile, getter.file),
+		expr.Function(constant.FuncUrl, getter.url),
+		expr.Function(constant.FuncHttp, getter.url),
+		expr.Function(constant.FuncMatch, getter.match),
+		expr.Function(constant.FuncConcat, getter.concat),
 	}
 	for _, expression := range expressions {
 		getter.options = append(getter.options, expr.Function(expression.Name(), expression.Exec))
@@ -59,11 +61,11 @@ func (g *Getter) Get(key string) (value string) {
 	}
 
 	size := len(value)
-	if internal.JsonObjectStart == (value)[0:1] && internal.JsonObjectEnd == (value)[size-1:size] {
+	if constant.JsonObjectStart == (value)[0:1] && constant.JsonObjectEnd == (value)[size-1:size] {
 		value = g.fixJsonObject(value)
-	} else if internal.JsonArrayStart == (value)[0:1] && internal.JsonArrayEnd == (value)[size-1:size] {
+	} else if constant.JsonArrayStart == (value)[0:1] && constant.JsonArrayEnd == (value)[size-1:size] {
 		value = g.fixJsonArray(value)
-	} else {
+	} else if strings.ContainsAny(value, constant.SpecialChars) {
 		value = g.expr(value)
 	}
 
@@ -77,7 +79,11 @@ func (g *Getter) Get(key string) (value string) {
 
 func (g *Getter) expr(from string) (to string) {
 	fields := gox.Fields[any]{
-		field.New("Expression", from),
+		field.New("expression", from),
+	}
+
+	if strings.Contains(from, constant.FuncMatch) { // ! 处理转义字符
+		from = strings.ReplaceAll(from, `\`, `\\`)
 	}
 	if program, ce := expr.Compile(from, g.options...); nil != ce {
 		to = from
@@ -159,14 +165,14 @@ func (g *Getter) fixObjectExpr(object map[string]any) {
 
 func (g *Getter) env(key string) (value string) {
 	key = strings.ToUpper(key)
-	if value = os.Getenv(key); "" != value {
-		return
-	}
-	if value = env.Get(internal.DroneEnv(key)); "" != value {
-		return
-	}
-	if value = env.Get(key); "" != value {
-		return
+	if osEnvironment := os.Getenv(key); "" != osEnvironment {
+		value = osEnvironment
+	} else if droneEnvironment := env.Get(internal.CIEnvironment(key)); "" != droneEnvironment {
+		value = droneEnvironment
+	} else if droneEnvironment := env.Get(internal.DroneEnvironment(key)); "" != droneEnvironment {
+		value = droneEnvironment
+	} else if defaultEnvironment := env.Get(key); "" != defaultEnvironment {
+		value = defaultEnvironment
 	}
 
 	return
@@ -174,7 +180,7 @@ func (g *Getter) env(key string) (value string) {
 
 func (g *Getter) eval(from string) (to string) {
 	to = from
-	if !strings.Contains(to, internal.Dollar) {
+	if !strings.Contains(to, constant.Dollar) {
 		return
 	}
 
@@ -184,10 +190,10 @@ func (g *Getter) eval(from string) (to string) {
 			to = value
 		}
 
-		if count >= 2 || !strings.Contains(to, internal.Dollar) {
+		if count >= 2 || !strings.Contains(to, constant.Dollar) {
 			break
 		}
-		if strings.Contains(to, internal.Dollar) {
+		if strings.Contains(to, constant.Dollar) {
 			count++
 		}
 	}
@@ -199,7 +205,7 @@ func (g *Getter) isHttp(url string) bool {
 	return check.New().
 		Any().
 		String(url).
-		Items(internal.PrefixHttpProtocol, internal.PrefixHttpsProtocol).
+		Items(constant.PrefixHttpProtocol, constant.PrefixHttpsProtocol).
 		Prefix().
 		Check()
 }
@@ -278,6 +284,12 @@ func (g *Getter) match(args ...any) (result any, err error) {
 
 	reg := regexp.MustCompile(args[1].(string))
 	result = reg.FindStringSubmatch(args[0].(string))
+
+	return
+}
+
+func (g *Getter) concat(args ...any) (result any, err error) {
+	result = gox.StringBuilder(args...).String()
 
 	return
 }
