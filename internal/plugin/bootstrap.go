@@ -53,8 +53,14 @@ func (b *Bootstrap) Boot() {
 	} else if se := b.setup(); nil != se {
 		err = se
 		b.Error("配置插件出错", field.Error(se))
+	} else if be := b.plugin.Before(); nil != be {
+		err = be
+		b.Error("执行插件前置操作出错", field.Error(be))
 	} else if ee := b.run(); nil != ee {
 		err = ee
 		b.Error("执行插件出错", field.Error(ee))
+	} else if ae := b.plugin.After(); nil != ae {
+		err = ae
+		b.Error("执行插件后置操作出错", field.Error(ae))
 	}
 }

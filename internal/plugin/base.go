@@ -71,6 +71,14 @@ func (b *Base) Setup() (err error) {
 	return
 }
 
+func (b *Base) Before() (err error) {
+	return
+}
+
+func (b *Base) After() (err error) {
+	return
+}
+
 func (b *Base) Elapsed() time.Duration {
 	return b.Value("BUILD_STARTED").Time().Sub(b.Value("BUILD_CREATED").Time())
 }

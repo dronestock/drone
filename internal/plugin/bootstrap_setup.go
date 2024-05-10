@@ -44,7 +44,7 @@ func (b *Bootstrap) setup() (err error) {
 	}
 
 	// 设置配置信息
-	if se := config.Setup(); nil != se {
+	if se := b.plugin.Setup(); nil != se {
 		b.Error("设置配置信息出错", config.Fields().Add(field.Error(err))...)
 		err = se
 	} else {
@@ -59,9 +59,6 @@ func (b *Bootstrap) setup() (err error) {
 		b.Error("配置验证未通过", config.Fields().Add(field.Error(err))...)
 	} else {
 		b.Info("配置验证通过，继续执行")
-	}
-	if nil != err {
-		return
 	}
 
 	return

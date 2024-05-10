@@ -16,8 +16,17 @@ type Plugin interface {
 	// Config 加载配置
 	Config() (config Config)
 
+	// Setup 设置配置信息
+	Setup() (err error)
+
+	// Before 插件运行前执行
+	Before() (err error)
+
 	// Steps 插件运行步骤
 	Steps() step.Steps
+
+	// After 插件运行后执行
+	After() (err error)
 
 	// Expressions 表达式
 	Expressions() core.Expressions
