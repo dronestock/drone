@@ -4,11 +4,12 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/dronestock/drone/internal/command"
 	"github.com/goexl/args"
 	"github.com/goexl/gox/field"
 )
 
-func (b *Bootstrap) exec() (code int, err error) {
+func (b *Bootstrap) exec() (handler command.Handler, err error) {
 	if 0 == len(b.Commands) {
 		return
 	}
@@ -16,28 +17,28 @@ func (b *Bootstrap) exec() (code int, err error) {
 	b.Info("执行命令开始", field.New("commands", b.Commands))
 	switch runtime.GOOS {
 	case "windows":
-		code, err = b.windows()
+		handler, err = b.windows()
 	case "linux":
-		code, err = b.linux()
+		handler, err = b.linux()
 	}
 
 	return
 }
 
-func (b *Bootstrap) linux() (code int, err error) {
+func (b *Bootstrap) linux() (handler command.Handler, err error) {
 	name := "/bin/sh"
-	ab := args.New().Build()
-	ab.Option("c", strings.Join(b.Commands, ";"))
-	code, err = b.Command(name).Args(ab.Build()).Build().Exec()
+	arguments := args.New().Build()
+	arguments.Option("c", strings.Join(b.Commands, ";"))
+	handler, err = b.Command(name).Arguments(arguments.Build()).Build().Exec()
 
 	return
 }
 
-func (b *Bootstrap) windows() (code int, err error) {
+func (b *Bootstrap) windows() (handler command.Handler, err error) {
 	name := "cmd"
-	ab := args.New().Short("/").Long("/").Build()
-	ab.Option("C", strings.Join(b.Commands, "&&"))
-	code, err = b.Command(name).Args(ab.Build()).Build().Exec()
+	arguments := args.New().Short("/").Long("/").Build()
+	arguments.Option("C", strings.Join(b.Commands, "&&"))
+	handler, err = b.Command(name).Arguments(arguments.Build()).Build().Exec()
 
 	return
 }

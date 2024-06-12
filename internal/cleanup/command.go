@@ -9,34 +9,34 @@ import (
 )
 
 type Command struct {
-	gex     *gex.Builder
+	command *gex.Command
 	builder *Builder
 }
 
 func NewCommand(ctx context.Context, builder *Builder, pwe *bool, verbose bool, name string) (command *Command) {
 	command = new(Command)
-	command.gex = gex.New(name)
+	command.command = gex.New(name)
 	command.builder = builder
-	command.gex.Context(ctx)
+	command.command.Context(ctx)
 	if nil == pwe || *pwe {
-		command.gex.Pwe()
+		command.command.Pwe()
 	}
 	if verbose {
-		command.gex.Echo()
+		command.command.Echo()
 	}
 
 	return
 }
 
 func (c *Command) Arguments(arguments *args.Arguments) (command *Command) {
-	c.gex.Args(arguments)
+	c.command.Arguments(arguments)
 	command = c
 
 	return
 }
 
 func (c *Command) Build() (builder *Builder) {
-	c.builder.workers = append(c.builder.workers, work.NewCommand(c.gex))
+	c.builder.workers = append(c.builder.workers, work.NewCommand(c.command))
 	builder = c.builder
 
 	return

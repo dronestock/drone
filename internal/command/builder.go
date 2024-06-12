@@ -4,4 +4,4 @@ import (
 	"github.com/goexl/gex"
 )
 
-type Builder = gex.Builder
+type Builder = gex.Command

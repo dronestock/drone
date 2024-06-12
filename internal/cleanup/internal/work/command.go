@@ -9,17 +9,17 @@ import (
 var _ Worker = (*Command)(nil)
 
 type Command struct {
-	builder *gex.Builder
+	command *gex.Command
 }
 
-func NewCommand(builder *gex.Builder) *Command {
+func NewCommand(command *gex.Command) *Command {
 	return &Command{
-		builder: builder,
+		command: command,
 	}
 }
 
 func (c *Command) Work(logger log.Logger) (err error) {
-	if code, ee := c.builder.Build().Exec(); nil != ee {
+	if code, ee := c.command.Build().Exec(); nil != ee {
 		err = ee
 		logger.Warn("命令执行出错", field.New("code", code), field.Error(err))
 	} else {
