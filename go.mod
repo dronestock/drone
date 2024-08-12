@@ -9,7 +9,7 @@ require (
 	github.com/goexl/args v0.0.1
 	github.com/goexl/env v0.0.2
 	github.com/goexl/exception v0.0.1
-	github.com/goexl/gex v0.4.3
+	github.com/goexl/gex v0.4.4
 	github.com/goexl/gox v0.5.2
 	github.com/goexl/http v0.1.9
 	github.com/goexl/log v0.0.7
