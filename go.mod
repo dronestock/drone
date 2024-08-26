@@ -12,7 +12,7 @@ require (
 	github.com/goexl/exception v0.0.1
 	github.com/goexl/gex v0.4.6
 	github.com/goexl/gox v0.6.3
-	github.com/goexl/http v0.1.9
+	github.com/goexl/http v0.2.0
 	github.com/goexl/log v0.0.7
 	github.com/goexl/mengpo v0.2.6
 	github.com/goexl/xiren v0.0.6
@@ -28,8 +28,8 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/rs/xid v1.5.0 // indirect
-	golang.org/x/crypto v0.25.0 // indirect
-	golang.org/x/net v0.27.0 // indirect
-	golang.org/x/sys v0.22.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
+	golang.org/x/crypto v0.26.0 // indirect
+	golang.org/x/net v0.28.0 // indirect
+	golang.org/x/sys v0.23.0 // indirect
+	golang.org/x/text v0.17.0 // indirect
 )
