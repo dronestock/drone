@@ -11,7 +11,7 @@ require (
 	github.com/goexl/env v0.0.2
 	github.com/goexl/exception v0.0.1
 	github.com/goexl/gex v0.4.6
-	github.com/goexl/gox v0.6.3
+	github.com/goexl/gox v1.8.5
 	github.com/goexl/http v0.2.0
 	github.com/goexl/log v0.0.7
 	github.com/goexl/mengpo v0.2.6
