@@ -20,7 +20,7 @@ type Step struct {
 	Stepper stepper.Stepper
 	Options *Options
 
-	_ gox.CannotCopy
+	_ gox.Pointerized
 }
 
 func New(stepper stepper.Stepper, options *Options) *Step {

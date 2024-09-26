@@ -1,7 +1,6 @@
 module github.com/dronestock/drone
 
-go 1.22
-toolchain go1.23.0
+go 1.23
 
 require (
 	github.com/drone/envsubst v1.0.3
@@ -27,7 +26,7 @@ require (
 	github.com/goexl/guc v0.1.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
-	github.com/rs/xid v1.5.0 // indirect
+	github.com/rs/xid v1.6.0 // indirect
 	golang.org/x/crypto v0.27.0 // indirect
 	golang.org/x/net v0.29.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
