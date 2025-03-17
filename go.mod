@@ -5,7 +5,7 @@ toolchain go1.24.1
 
 require (
 	github.com/drone/envsubst v1.0.3
-	github.com/expr-lang/expr v1.16.9
+	github.com/expr-lang/expr v1.17.0
 	github.com/go-resty/resty/v2 v2.16.5
 	github.com/goexl/args v0.0.3
 	github.com/goexl/env v0.0.2
