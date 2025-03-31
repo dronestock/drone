@@ -1,11 +1,9 @@
 module github.com/dronestock/drone
 
 go 1.23
-toolchain go1.24.1
-
 require (
 	github.com/drone/envsubst v1.0.3
-	github.com/expr-lang/expr v1.17.0
+	github.com/expr-lang/expr v1.17.2
 	github.com/go-resty/resty/v2 v2.16.5
 	github.com/goexl/args v0.0.3
 	github.com/goexl/env v0.0.2
