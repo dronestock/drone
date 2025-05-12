@@ -1,6 +1,7 @@
 module github.com/dronestock/drone
 
-go 1.23
+go 1.24
+
 require (
 	github.com/drone/envsubst v1.0.3
 	github.com/expr-lang/expr v1.17.2
@@ -12,7 +13,7 @@ require (
 	github.com/goexl/gox v1.9.2
 	github.com/goexl/http v0.2.1
 	github.com/goexl/log v0.0.9
-	github.com/goexl/mengpo v0.2.6
+	github.com/goexl/mengpo v0.3.1
 	github.com/goexl/xiren v0.0.8
 )
 
