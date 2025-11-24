@@ -5,7 +5,7 @@ go 1.24
 require (
 	github.com/drone/envsubst v1.0.3
 	github.com/expr-lang/expr v1.17.6
-	github.com/go-resty/resty/v2 v2.16.5
+	github.com/go-resty/resty/v2 v2.17.0
 	github.com/goexl/args v0.0.3
 	github.com/goexl/env v0.0.2
 	github.com/goexl/exception v0.0.4
@@ -27,8 +27,8 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/rs/xid v1.6.0 // indirect
-	golang.org/x/crypto v0.38.0 // indirect
-	golang.org/x/net v0.40.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/text v0.25.0 // indirect
+	golang.org/x/crypto v0.41.0 // indirect
+	golang.org/x/net v0.43.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
+	golang.org/x/text v0.28.0 // indirect
 )
