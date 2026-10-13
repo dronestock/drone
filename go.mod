@@ -13,7 +13,7 @@ require (
 	github.com/goexl/gox v1.9.3
 	github.com/goexl/http v0.3.5
 	github.com/goexl/log v0.1.0
-	github.com/goexl/mengpo v0.3.2
+	github.com/goexl/mengpo v0.3.3
 	github.com/goexl/xiren v0.0.9
 )
 
